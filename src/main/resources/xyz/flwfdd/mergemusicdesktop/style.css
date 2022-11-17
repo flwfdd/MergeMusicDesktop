@@ -1,0 +1,38 @@
+*{
+    -font-family: "System";
+}
+
+/********************
+Text Filed
+********************/
+
+.mfx-text-field {
+    -mfx-main: #00ABD6;
+    -fx-font-family: -font-family;
+}
+.mfx-text-field .floating-text {
+    -fx-text-fill: #aaa;
+    -fx-font-family: -font-family;
+}
+
+
+/********************
+Table Rows
+********************/
+.mfx-table-row {
+    -fx-background-color: transparent;
+}
+
+.mfx-table-row:hover {
+    -fx-background-color: #F5FDFF;
+}
+
+.mfx-table-row:selected {
+    -fx-background-color: #E3F9FF;
+}
+
+.mfx-table-row .mfx-ripple-generator {
+    -mfx-ripple-radius: 30;
+    -mfx-ripple-color: #C2F3FF;
+}
+

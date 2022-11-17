@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="384.0" prefWidth="675.0" spacing="20.0" style="-fx-background-color: #efefef;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.MainController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <MFXTextField fx:id="searchKey" floatingText="关键词" floatingTextGap="2.0" maxWidth="1.7976931348623157E308"
+                    prefColumnCount="24" prefHeight="42.0" prefWidth="311.0" stylesheets="@style.css" textLimit="42">
+         <textFill>
+            <Color green="0.3348333239555359" blue="0.4099999964237213" opacity="0.8399999737739563"/>
+         </textFill>
+         <HBox.margin>
+            <Insets right="4.0"/>
+         </HBox.margin>
+         <opaqueInsets>
+            <Insets/>
+         </opaqueInsets>
+      </MFXTextField>
+      <MFXComboBox fx:id="searchPlatform" floatingText="平台" prefHeight="42.0" prefWidth="118.0">
+         <HBox.margin>
+            <Insets left="4.0" right="2.0"/>
+         </HBox.margin>
+      </MFXComboBox>
+      <MFXComboBox fx:id="searchType" floatingText="类型" prefHeight="42.0" prefWidth="118.0">
+         <HBox.margin>
+            <Insets left="2.0" right="4.0"/>
+         </HBox.margin>
+      </MFXComboBox>
+      <MFXButton depthLevel="LEVEL0" onAction="#onSearch" prefHeight="42.0" prefWidth="64.0" rippleColor="#e3f9ff"
+                 style="-fx-background-color: #aef; -fx-background-radius: 11%;" text="🔍">
+         <font>
+            <Font size="20.0"/>
+         </font>
+         <HBox.margin>
+            <Insets left="4.0"/>
+         </HBox.margin>
+      </MFXButton>
+   </HBox>
+   <MFXTableView fx:id="searchTable" footerVisible="false" prefHeight="217.0" prefWidth="384.0" stylesheets="@style.css" />
+</VBox>
