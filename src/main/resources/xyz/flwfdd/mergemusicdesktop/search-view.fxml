@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="425.0" prefWidth="666.0" spacing="20.0" style="-fx-background-color: #fff; -fx-font-size: 14px;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.SearchController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <MFXTextField fx:id="searchKey" floatingText="关键词" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefColumnCount="17" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px;" stylesheets="@style.css" textLimit="42">
+         <textFill>
+            <Color green="0.6639999747276306" blue="0.8299999833106995" />
+         </textFill>
+         <HBox.margin>
+            <Insets right="4.0" />
+         </HBox.margin>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </MFXTextField>
+      <MFXComboBox fx:id="searchPlatform" floatingText="平台" floatingTextGap="0.0" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px;" stylesheets="@style.css">
+         <HBox.margin>
+            <Insets left="4.0" right="2.0" />
+         </HBox.margin>
+      </MFXComboBox>
+      <MFXComboBox fx:id="searchType" floatingText="类型" floatingTextGap="0.0" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px;" stylesheets="@style.css">
+         <HBox.margin>
+            <Insets left="2.0" right="4.0" />
+         </HBox.margin>
+      </MFXComboBox>
+      <MFXButton depthLevel="LEVEL0" onAction="#onSearch" prefHeight="50.0" prefWidth="62.0" rippleBackgroundOpacity="0.42" rippleColor="#c2f3ff" style="-fx-background-color: #fff; -fx-background-radius: 11%; -fx-border-width: 0.5px; -fx-border-color: #00313D; -fx-border-radius: 11%;" text="🔍" textFill="#00abd6">
+         <font>
+            <Font size="20.0" />
+         </font>
+         <HBox.margin>
+            <Insets left="4.0" />
+         </HBox.margin>
+      </MFXButton>
+   </HBox>
+   <MFXTableView fx:id="searchTable" footerVisible="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="2333.0" prefWidth="618.0" style="-fx-border-width: 0; -fx-background-color: #fff; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.24), 20, 0.12, -1.0, 2.0);" stylesheets="@style.css" />
+</VBox>

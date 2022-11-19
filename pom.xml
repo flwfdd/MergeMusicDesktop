@@ -30,6 +30,11 @@
             <artifactId>materialfx</artifactId>
             <version>11.13.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>19-ea+7</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>

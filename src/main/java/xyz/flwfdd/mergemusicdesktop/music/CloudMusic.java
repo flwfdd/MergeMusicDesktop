@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * @author flwfdd
  * @version 1.0
  * @date 2022/11/17 19:48
- * 网易云音乐模块
+ * @implNote 网易云音乐模块
  */
 
 class CloudMusic extends Music {
@@ -24,16 +24,19 @@ class CloudMusic extends Music {
         this.type = type;
         this.mid = mid;
         id = mid.substring(1);
-        this.load();
+        initOptions();
     }
 
     CloudMusic(Type type, String mid, String name, List<String> artists, String albumName) {
-        this.type = type;
-        this.mid = mid;
+        this(type,mid);
         this.name = name;
         this.artists = artists;
         this.albumName = albumName;
-        id = mid.substring(1);
+    }
+
+    void initOptions(){
+        operations.add(new Operation("▶",this::play,"播放"));
+        operations.add(new Operation("+", ()-> System.out.println("Add:"+ this),"添加到播放列表"));
     }
 
     static Map<Type, String> type_map = new HashMap<>(Map.of(Type.MUSIC, "1", Type.LYRIC, "1006", Type.LIST, "1000", Type.USER, "1002"));
@@ -167,7 +170,6 @@ class CloudMusic extends Music {
             return null;
         }
     }
-
 
     @Override
     public String toString() {

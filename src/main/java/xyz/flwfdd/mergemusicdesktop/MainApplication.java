@@ -7,6 +7,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * @author flwfdd
+ * @version 1.0
+ * @date 2022/11/5 14:52
+ * @implNote 主程序入口
+ */
+
 public class MainApplication extends Application {
 
     public Stage mainStage;
@@ -16,13 +23,11 @@ public class MainApplication extends Application {
         mainStage=stage;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 666, 420);
+        Scene scene = new Scene(fxmlLoader.load(), 888, 666);
         stage.setTitle("MergeMusic");
         stage.setScene(scene);
         stage.show();
 
-        MainController controller=fxmlLoader.getController();
-        controller.setMain(this,stage);
     }
 
     public static void main(String[] args) {

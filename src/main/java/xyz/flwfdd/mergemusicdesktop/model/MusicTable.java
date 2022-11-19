@@ -20,6 +20,8 @@ public class MusicTable {
     int offset;
     boolean loading=false; //保证单个搜索线程
 
+    boolean haveNext=false; //是否可以加载更多
+
     ObservableList<Music> musicList;
 
     public ObservableList<Music> getMusicList() {
@@ -38,16 +40,17 @@ public class MusicTable {
         searchType=type;
         offset=0;
         musicList.clear();
+        haveNext=true;
         searchNext();
     }
 
     public void searchNext(){ //获取下一页
-        if(loading)return;
+        if(loading||!haveNext)return;
+        loading=true;
         new Thread(new Task<Void>() {
             List<Music>l;
             @Override
             protected Void call(){
-                loading=true;
                 l=Music.search(searchKey,searchPlatform,searchType,limit,offset);
                 return null;
             }
@@ -55,6 +58,8 @@ public class MusicTable {
             @Override
             protected void succeeded() {
                 musicList.addAll(l);
+                haveNext=(l.size()!=0);
+                offset++;
                 loading=false;
             }
         }).start();

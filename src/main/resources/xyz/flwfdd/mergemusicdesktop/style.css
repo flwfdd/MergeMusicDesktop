@@ -1,5 +1,6 @@
 *{
     -font-family: "System";
+    -mfx-main: #00ABD6;
 }
 
 /********************
@@ -7,12 +8,15 @@ Text Filed
 ********************/
 
 .mfx-text-field {
-    -mfx-main: #00ABD6;
     -fx-font-family: -font-family;
 }
 .mfx-text-field .floating-text {
     -fx-text-fill: #aaa;
     -fx-font-family: -font-family;
+}
+
+.mfx-text-field .text-field {
+    -fx-highlight-fill: #E3F9FF; /* Selected text highlight */
 }
 
 
@@ -36,3 +40,67 @@ Table Rows
     -mfx-ripple-color: #C2F3FF;
 }
 
+/********************
+Combo Box
+********************/
+
+.mfx-combo-box .caret .mfx-ripple-generator {
+    -mfx-ripple-color: rgba(41, 212, 255, 0.1);
+}
+
+.mfx-combo-box-cell {
+    -mfx-hover: rgba(41, 212, 255, 0.1);
+    -mfx-selected: rgba(41, 212, 255, 0.2);
+    -fx-font-family: System;
+}
+.mfx-combo-box-cell .data-label {
+    -fx-font-family: "System";
+}
+
+/********************
+Slider
+********************/
+
+#playSlider {
+    -mfx-main-color: rgb(41, 212, 255);
+    -mfx-main-color-hover: rgba(41, 212, 255, 0.1);
+    -mfx-main-color-pressed: rgba(41, 212, 255, 0.3);
+    -mfx-disabled-color: rgb(158, 158, 158);
+}
+
+#playSlider .track{
+    -fx-fill: derive(-mfx-main-color, 84%);
+}
+
+#playSliderPopupContent {
+    -fx-background-color: rgba(194, 243, 255, 0.24);
+    -fx-background-radius: 6;
+}
+
+#playSliderPopupText {
+    -fx-font-family: "System";
+    -fx-font-size: 13;
+    -fx-text-fill: #29D4FF;
+}
+
+#playSliderPopupCaret {
+    -mfx-color: rgba(194, 243, 255, 0.24);
+}
+
+/********************
+Tooltip
+********************/
+
+.mfx-tooltip .container {
+    /*-fx-background-color: rgba(194, 243, 255, 0.24);*/
+    -fx-background-color: #fff;
+    -fx-background-radius: 5;
+    -fx-border-color: #aef;
+    -fx-border-radius: 5;
+}
+
+.mfx-tooltip .container .label {
+    -fx-font-size: 12;
+    -fx-font-family: "System";
+    -fx-text-fill: #3992A8;
+}

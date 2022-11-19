@@ -1,6 +1,7 @@
 module xyz.flwfdd.mergemusicdesktop {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
     requires MaterialFX;
     requires VirtualizedFX;
     requires okhttp3;
