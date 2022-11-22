@@ -35,8 +35,8 @@ class CloudMusic extends Music {
     }
 
     void initOptions(){
-        operations.add(new Operation("▶",this::play,"播放"));
-        operations.add(new Operation("+", ()-> System.out.println("Add:"+ this),"添加到播放列表"));
+        operations.add(new Operation("mdrmz-play_arrow",this::play,"播放"));
+        operations.add(new Operation("mdral-add", ()-> System.out.println("Add:"+ this),"添加到播放列表"));
     }
 
     static Map<Type, String> type_map = new HashMap<>(Map.of(Type.MUSIC, "1", Type.LYRIC, "1006", Type.LIST, "1000", Type.USER, "1002"));

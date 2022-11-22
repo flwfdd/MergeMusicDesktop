@@ -118,11 +118,11 @@ public abstract class Music {
     }
 
     public class Operation{
-        public String text,tooltip;
+        public String icon,tooltip;
         public Runnable func;
 
-        Operation(String text,Runnable func,String tooltip){
-            this.text=text;
+        Operation(String icon,Runnable func,String tooltip){
+            this.icon=icon;
             this.func=func;
             this.tooltip=tooltip;
         }

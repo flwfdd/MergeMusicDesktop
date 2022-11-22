@@ -1,6 +1,9 @@
 *{
     -font-family: "System";
     -mfx-main: #00ABD6;
+    -fx-text-fill: #004354;
+    -mfx-auto-clip: true;
+    -fx-icon-color: #004354;
 }
 
 /********************
@@ -28,7 +31,7 @@ Table Rows
 }
 
 .mfx-table-row:hover {
-    -fx-background-color: #F5FDFF;
+    -fx-background-color: #F0FCFF;
 }
 
 .mfx-table-row:selected {
@@ -36,7 +39,6 @@ Table Rows
 }
 
 .mfx-table-row .mfx-ripple-generator {
-    -mfx-ripple-radius: 30;
     -mfx-ripple-color: #C2F3FF;
 }
 
@@ -73,7 +75,7 @@ Slider
 }
 
 #playSliderPopupContent {
-    -fx-background-color: rgba(194, 243, 255, 0.24);
+    -fx-background-color: rgba(194, 243, 255, 0.42);
     -fx-background-radius: 6;
 }
 
@@ -84,7 +86,7 @@ Slider
 }
 
 #playSliderPopupCaret {
-    -mfx-color: rgba(194, 243, 255, 0.24);
+    -mfx-color: rgba(194, 243, 255, 0.42);
 }
 
 /********************
@@ -92,15 +94,32 @@ Tooltip
 ********************/
 
 .mfx-tooltip .container {
-    /*-fx-background-color: rgba(194, 243, 255, 0.24);*/
-    -fx-background-color: #fff;
+    -fx-background-color: rgba(255,255,255,0.95);
     -fx-background-radius: 5;
-    -fx-border-color: #aef;
+    -fx-border-color: #A3CCD6;
     -fx-border-radius: 5;
+    -fx-border-width: 0.5;
 }
 
 .mfx-tooltip .container .label {
     -fx-font-size: 12;
     -fx-font-family: "System";
     -fx-text-fill: #3992A8;
+}
+
+/********************
+Option button in Table View
+********************/
+
+.option-button{
+    -fx-border-width: 0;
+    -fx-border-radius: 11%;
+    -fx-background-radius:11%;
+    -fx-background-color: transparent;
+    -fx-content-display: graphic-only;
+    -fx-min-width: 0;
+}
+
+.option-button:hover{
+    -fx-background-color: #C2F3FF;
 }
