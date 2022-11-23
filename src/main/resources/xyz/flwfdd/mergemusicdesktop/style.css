@@ -1,5 +1,4 @@
 *{
-    -font-family: "System";
     -mfx-main: #00ABD6;
     -fx-text-fill: #004354;
     -mfx-auto-clip: true;
@@ -11,22 +10,59 @@ Text Filed
 ********************/
 
 .mfx-text-field {
-    -fx-font-family: -font-family;
+    -fx-font-family: "Source Han Serif CN";
+    -fx-font-size: 14;
 }
+
+.search-text-field{
+    -fx-border-color: #00313D;
+    -fx-border-width: 0.5;
+    -fx-background-color: #fffa;
+
+}
+
 .mfx-text-field .floating-text {
     -fx-text-fill: #aaa;
-    -fx-font-family: -font-family;
     -fx-background-color: transparent;
+    -fx-font-family: "Source Han Serif CN";
+    -fx-font-size: 12;
 }
 
 .mfx-text-field .text-field {
     -fx-highlight-fill: #E3F9FF; /* Selected text highlight */
 }
 
+.mfx-text-field:focus-within {
+    -fx-border-color: #00ABD6AA;
+    -fx-border-insets: -0.5;
+    -fx-border-width: 1;
+}
+
+
+/********************
+Combo Box
+********************/
+
+.mfx-combo-box .caret .mfx-ripple-generator {
+    -mfx-ripple-color: rgba(41, 212, 255, 0.1);
+}
+
+.mfx-combo-box-cell {
+    -mfx-hover: rgba(41, 212, 255, 0.1);
+    -mfx-selected: rgba(41, 212, 255, 0.2);
+}
+.mfx-combo-box-cell .data-label {
+    -fx-font-family: "Source Han Serif CN";
+}
+
 
 /********************
 Table Rows
 ********************/
+.mfx-table-view{
+    -fx-font-family: "Source Han Serif CN";
+}
+
 .mfx-table-row {
     -fx-background-color: transparent;
 }
@@ -43,22 +79,6 @@ Table Rows
     -mfx-ripple-color: #FFF6;
 }
 
-/********************
-Combo Box
-********************/
-
-.mfx-combo-box .caret .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(41, 212, 255, 0.1);
-}
-
-.mfx-combo-box-cell {
-    -mfx-hover: rgba(41, 212, 255, 0.1);
-    -mfx-selected: rgba(41, 212, 255, 0.2);
-    -fx-font-family: System;
-}
-.mfx-combo-box-cell .data-label {
-    -fx-font-family: "System";
-}
 
 /********************
 Slider
@@ -81,8 +101,8 @@ Slider
 }
 
 #playSliderPopupText {
-    -fx-font-family: "System";
-    -fx-font-size: 13;
+    -fx-font-family: "Source Han Serif CN";
+    -fx-font-size: 12;
     -fx-text-fill: #29D4FF;
 }
 
@@ -104,7 +124,7 @@ Tooltip
 
 .mfx-tooltip .container .label {
     -fx-font-size: 12;
-    -fx-font-family: "System";
+    -fx-font-family: "Source Han Serif CN";
     -fx-text-fill: #3992A8;
 }
 
@@ -138,4 +158,27 @@ Progress Bar
 .mfx-progress-bar .bar1,
 .mfx-progress-bar .bar2{
     -fx-fill: #29D4FF66;
+}
+
+
+.mfx-rectangle-toggle-node{
+    -fx-background-color: #29D4FF11;
+    -fx-background-radius: 0 11 11 0;
+    -fx-border-width: 0;
+    -fx-alignment: center-left;
+    -fx-font-family: "Source Han Serif CN";
+    -fx-font-size: 14;
+    -fx-padding: 0 0 0 42;
+}
+
+.mfx-rectangle-toggle-node:hover{
+    -fx-background-color: #29D4FF33;
+}
+
+.mfx-rectangle-toggle-node:selected {
+    -fx-background-color: #29D4FF55;
+}
+
+.mfx-rectangle-toggle-node .mfx-ripple-generator {
+    -mfx-paused:true;
 }

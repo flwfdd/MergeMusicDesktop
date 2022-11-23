@@ -15,6 +15,7 @@ import java.util.Stack;
  * @author flwfdd
  * @version 1.0
  * @date 2022/11/23 10:44
+ * @implNote 搜索列表的数据模型
  */
 public class SearchTable extends MusicTable{
     final int limit;
@@ -119,5 +120,13 @@ public class SearchTable extends MusicTable{
         tableView.setOnScroll(scrollEvent -> {
             if(scrollEvent.getDeltaY()<0)this.searchNext();
         });
+    }
+
+    @Override
+    List<Operation> getMenus(Music music){
+        if(music.getType()== Music.Type.MUSIC)return super.getMenus(music);
+        List<Operation> menus=new ArrayList<>();
+        menus.add(new MusicTable.Operation("mdral-info",()->System.out.println("List Detail:"+music), "详细信息"));
+        return menus;
     }
 }

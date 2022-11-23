@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.enums.SliderEnums;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
 import io.github.palexdev.materialfx.utils.others.loader.MFXLoader;
 import io.github.palexdev.materialfx.utils.others.loader.MFXLoaderBean;
 import javafx.beans.binding.Bindings;
@@ -17,6 +18,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextBoundsType;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
 import java.util.List;
@@ -37,34 +39,34 @@ public class MainController {
     @FXML
     MFXSlider playSlider; //播放进度条
 
-    final ToggleGroup toggleGroup=new ToggleGroup();
+    ToggleGroup toggleGroup;
 
     URL loadURL(String path){
         return MainApplication.class.getResource(path);
     }
 
-    ToggleButton createToggle(String text){
-        MFXRectangleToggleNode toggleNode=new MFXRectangleToggleNode(text);
+    ToggleButton createToggle(String icon,String text){
+        MFXRectangleToggleNode toggleNode=new MFXRectangleToggleNode(text,new FontIcon(icon+":24"));
         toggleNode.setToggleGroup(toggleGroup);
         return toggleNode;
     }
 
     void initNevBar(){
+        toggleGroup=new ToggleGroup();
+        ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
         MFXLoader loader=new MFXLoader();
-        loader.addView(MFXLoaderBean.of("Search",loadURL("search-view.fxml")).setBeanToNodeMapper(()->createToggle("搜索")).setDefaultRoot(true).get());
+        loader.addView(MFXLoaderBean.of("Search",loadURL("search-view.fxml")).setBeanToNodeMapper(()->createToggle("mdomz-search","搜索")).setDefaultRoot(true).get());
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream()
                     .map(bean -> {
                         ToggleButton toggle = (ToggleButton) bean.getBeanToNodeMapper().get();
                         toggle.setOnAction(event -> mainPane.getChildren().setAll(bean.getRoot()));
-                        toggle.setStyle("-fx-background-color: #C2F3FF;-fx-border-width: 0;-fx-pref-width: 2333;-fx-background-radius: 11%;-fx-font-size: 16px;-fx-background-insets: 4px");
                         if (bean.isDefaultView()) {
                             mainPane.getChildren().setAll(bean.getRoot());
                             toggle.setSelected(true);
                         }
                         return toggle;
-                    })
-                    .toList();
+                    }).toList();
             navBar.getChildren().setAll(nodes);
         });
         loader.start();

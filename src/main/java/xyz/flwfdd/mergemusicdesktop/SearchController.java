@@ -35,16 +35,16 @@ public class SearchController {
     MFXProgressBar loadingBar;
 
     @FXML
-    void onSearch() {
+    void onSearch() { //搜索按钮
         searchTableModel.search(searchKey.getText(),searchPlatform.getSelectedItem(),searchType.getSelectedItem());
     }
 
     @FXML
-    void onBack(){
+    void onBack(){ //返回按钮
         searchTableModel.back();
     }
 
-    void initSearchTable(){
+    void initSearchTable(){ //初始化歌曲表
         searchTableModel.bind(searchTable);
     }
 
@@ -58,7 +58,7 @@ public class SearchController {
         searchType.selectFirst();
     }
 
-    void initLoadingBar(){
+    void initLoadingBar(){ //初始化加载条
         loadingBar.visibleProperty().bind(searchTableModel.loadingProperty());
     }
 

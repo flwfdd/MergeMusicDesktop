@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXSlider?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -8,7 +9,10 @@
 
 <VBox prefHeight="514.0" prefWidth="665.0" style="-fx-background-position: center; -fx-background-size: 150%;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.MainController">
    <HBox prefHeight="453.0" VBox.vgrow="ALWAYS">
-      <VBox fx:id="navBar" prefWidth="124.0" style="-fx-background-color: #fafafaaa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: #80A0A8; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;" />
+      <VBox fx:id="navBar" prefWidth="124.0" style="-fx-background-color: #fafafaaa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: #80A0A8; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
+         <padding>
+            <Insets bottom="11.0" right="11.0" top="11.0" />
+         </padding></VBox>
       <StackPane fx:id="mainPane" style="-fx-background-color: #fff4;" HBox.hgrow="ALWAYS" />
    </HBox>
    <HBox maxHeight="84.0" minHeight="84.0" prefHeight="84.0" prefWidth="600.0" style="-fx-border-color: #80A0A8; -fx-border-width: 0.5 0.5 0 0; -fx-background-color: #fffe; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
