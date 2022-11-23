@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="514.0" prefWidth="665.0" style="-fx-background-position: center; -fx-background-size: 150%;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.MainController">
+<VBox prefHeight="514.0" prefWidth="665.0" style="-fx-background-position: center; -fx-background-size: 100%;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.MainController">
    <HBox prefHeight="453.0" VBox.vgrow="ALWAYS">
       <VBox fx:id="navBar" prefWidth="124.0" style="-fx-background-color: #fafafaaa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: #80A0A8; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
          <padding>

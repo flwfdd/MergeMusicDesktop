@@ -6,33 +6,51 @@
 }
 
 /********************
-Text Filed
+Button 按钮
 ********************/
 
-.mfx-text-field {
-    -fx-font-family: "Source Han Serif CN";
+.custom-button{
+    -fx-font-family: "Source Han Serif CN Medium";
+    -fx-background-color: #fffa;
+    -fx-background-radius: 6;
+    -fx-border-width: 0.5;
+    -fx-border-color: #00313D;
+    -fx-border-radius: 6;
+    -fx-font-size:15;
+}
+
+.custom-button .mfx-ripple-generator{
+    -mfx-ripple-color:#94EAFFAA;
+}
+
+/********************
+Text Filed 文本输入框
+********************/
+
+.custom-text-field {
+    -fx-font-family: "Source Han Serif CN Medium";
     -fx-font-size: 14;
 }
 
-.search-text-field{
+.custom-text-field{
     -fx-border-color: #00313D;
     -fx-border-width: 0.5;
     -fx-background-color: #fffa;
 
 }
 
-.mfx-text-field .floating-text {
+.custom-text-field .floating-text {
     -fx-text-fill: #aaa;
     -fx-background-color: transparent;
-    -fx-font-family: "Source Han Serif CN";
-    -fx-font-size: 12;
+    -fx-font-family: "Source Han Serif CN Medium";
+    -fx-font-size: 13;
 }
 
-.mfx-text-field .text-field {
-    -fx-highlight-fill: #E3F9FF; /* Selected text highlight */
+.custom-text-field .text-field {
+    -fx-highlight-fill: #94EAFF44; /* Selected text highlight */
 }
 
-.mfx-text-field:focus-within {
+.custom-text-field:focus-within {
     -fx-border-color: #00ABD6AA;
     -fx-border-insets: -0.5;
     -fx-border-width: 1;
@@ -40,7 +58,7 @@ Text Filed
 
 
 /********************
-Combo Box
+Combo Box 多选框
 ********************/
 
 .mfx-combo-box .caret .mfx-ripple-generator {
@@ -52,15 +70,16 @@ Combo Box
     -mfx-selected: rgba(41, 212, 255, 0.2);
 }
 .mfx-combo-box-cell .data-label {
-    -fx-font-family: "Source Han Serif CN";
+    -fx-font-family: "Source Han Serif CN Medium";
 }
 
 
 /********************
-Table Rows
+Table 歌曲表格
 ********************/
 .mfx-table-view{
-    -fx-font-family: "Source Han Serif CN";
+    -fx-font-family: "Source Han Serif CN Medium";
+    -fx-font-size: 15;
 }
 
 .mfx-table-row {
@@ -79,9 +98,17 @@ Table Rows
     -mfx-ripple-color: #FFF6;
 }
 
+.mfx-table-column {
+    -fx-border-color: transparent;
+}
+
+.mfx-table-column:hover{
+    -fx-border-color: transparent;
+}
+
 
 /********************
-Slider
+Slider 进度条
 ********************/
 
 #playSlider {
@@ -101,8 +128,8 @@ Slider
 }
 
 #playSliderPopupText {
-    -fx-font-family: "Source Han Serif CN";
-    -fx-font-size: 12;
+    -fx-font-family: "Source Han Serif CN Medium";
+    -fx-font-size: 13;
     -fx-text-fill: #29D4FF;
 }
 
@@ -111,7 +138,7 @@ Slider
 }
 
 /********************
-Tooltip
+Tooltip 悬浮提示
 ********************/
 
 .mfx-tooltip .container {
@@ -123,13 +150,13 @@ Tooltip
 }
 
 .mfx-tooltip .container .label {
-    -fx-font-size: 12;
-    -fx-font-family: "Source Han Serif CN";
+    -fx-font-size: 13;
+    -fx-font-family: "Source Han Serif CN Medium";
     -fx-text-fill: #3992A8;
 }
 
 /********************
-Option button in Table View
+Option button in Table View 表格操作栏
 ********************/
 
 .option-button{
@@ -147,7 +174,7 @@ Option button in Table View
 
 
 /********************
-Progress Bar
+Progress Bar 加载条
 ********************/
 
 .mfx-progress-bar .track {
@@ -166,10 +193,14 @@ Progress Bar
     -fx-background-radius: 0 11 11 0;
     -fx-border-width: 0;
     -fx-alignment: center-left;
-    -fx-font-family: "Source Han Serif CN";
-    -fx-font-size: 14;
+    -fx-font-family: "Source Han Serif CN Medium";
+    -fx-font-size: 15;
     -fx-padding: 0 0 0 42;
 }
+
+/********************
+Rectangle Toggle Node 导航栏按钮
+********************/
 
 .mfx-rectangle-toggle-node:hover{
     -fx-background-color: #29D4FF33;
@@ -181,4 +212,22 @@ Progress Bar
 
 .mfx-rectangle-toggle-node .mfx-ripple-generator {
     -mfx-paused:true;
+}
+
+/********************
+Scroll pane 设置滚动面板
+********************/
+
+.mfx-scroll-pane {
+    -track-color: #00ABD611;
+    -thumb-color: #00ABD633;
+    -thumb-hover-color: #00ABD655;
+}
+
+.header-button{
+    -fx-icon-color: #00ABD644;
+}
+
+.header-button:hover{
+    -fx-icon-color: #00ABD6DD;
 }

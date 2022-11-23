@@ -27,7 +27,6 @@ public class MainApplication extends Application {
         stage.setTitle("MergeMusic");
         stage.setScene(scene);
         stage.show();
-
     }
 
     public static void main(String[] args) {
