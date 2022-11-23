@@ -16,6 +16,7 @@ Text Filed
 .mfx-text-field .floating-text {
     -fx-text-fill: #aaa;
     -fx-font-family: -font-family;
+    -fx-background-color: transparent;
 }
 
 .mfx-text-field .text-field {
@@ -31,15 +32,15 @@ Table Rows
 }
 
 .mfx-table-row:hover {
-    -fx-background-color: #F0FCFF;
+    -fx-background-color: #29D4FF22;
 }
 
 .mfx-table-row:selected {
-    -fx-background-color: #E3F9FF;
+    -fx-background-color: #29D4FF44;
 }
 
 .mfx-table-row .mfx-ripple-generator {
-    -mfx-ripple-color: #C2F3FF;
+    -mfx-ripple-color: #FFF6;
 }
 
 /********************
@@ -71,7 +72,7 @@ Slider
 }
 
 #playSlider .track{
-    -fx-fill: derive(-mfx-main-color, 84%);
+    -fx-fill: derive(-mfx-main-color, 66%);
 }
 
 #playSliderPopupContent {
@@ -121,5 +122,20 @@ Option button in Table View
 }
 
 .option-button:hover{
-    -fx-background-color: #C2F3FF;
+    -fx-background-color: #29D4FF44;
+}
+
+
+/********************
+Progress Bar
+********************/
+
+.mfx-progress-bar .track {
+    -fx-fill: #29D4FF22;
+}
+
+
+.mfx-progress-bar .bar1,
+.mfx-progress-bar .bar2{
+    -fx-fill: #29D4FF66;
 }

@@ -4,7 +4,7 @@ import io.github.palexdev.materialfx.controls.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
-import xyz.flwfdd.mergemusicdesktop.model.MusicTable;
+import xyz.flwfdd.mergemusicdesktop.model.SearchTable;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.util.Arrays;
@@ -19,33 +19,33 @@ import java.util.Arrays;
 public class SearchController {
 
     @FXML
-    private MFXTextField searchKey;
+    MFXTextField searchKey;
 
     @FXML
-    private MFXComboBox<Music.Platform> searchPlatform;
+    MFXComboBox<Music.Platform> searchPlatform;
 
     @FXML
-    private MFXComboBox<Music.Type> searchType;
+    MFXComboBox<Music.Type> searchType;
 
     @FXML
-    private MFXButton searchButton;
+    MFXTableView<Music> searchTable;
+    SearchTable searchTableModel=new SearchTable();
 
     @FXML
-    private MFXTableView<Music> searchTable;
-    MusicTable searchTableModel=new MusicTable();
+    MFXProgressBar loadingBar;
 
     @FXML
-    protected void onSearch() {
+    void onSearch() {
         searchTableModel.search(searchKey.getText(),searchPlatform.getSelectedItem(),searchType.getSelectedItem());
     }
 
+    @FXML
+    void onBack(){
+        searchTableModel.back();
+    }
+
     void initSearchTable(){
-        MusicTable.initView(searchTable);
         searchTableModel.bind(searchTable);
-        // 设置滚动监听自动搜索
-        searchTable.setOnScroll(scrollEvent -> {
-            if(scrollEvent.getDeltaY()<0)searchTableModel.searchNext();
-        });
     }
 
     void initSearchInput(){ //初始化搜索栏和多选框
@@ -58,8 +58,13 @@ public class SearchController {
         searchType.selectFirst();
     }
 
+    void initLoadingBar(){
+        loadingBar.visibleProperty().bind(searchTableModel.loadingProperty());
+    }
+
     public void initialize() {
         initSearchTable();
         initSearchInput();
+        initLoadingBar();
     }
 }

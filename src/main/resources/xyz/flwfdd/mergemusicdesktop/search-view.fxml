@@ -2,6 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
 <?import io.github.palexdev.materialfx.controls.MFXTableView?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -11,33 +12,44 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox alignment="CENTER" prefHeight="425.0" prefWidth="754.0" spacing="20.0" style="-fx-background-color: #fff; -fx-font-size: 14px;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.SearchController">
+<VBox alignment="CENTER" prefHeight="466.0" prefWidth="754.0" spacing="11.0" style="-fx-font-size: 14px; -fx-background-color: #fff0;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.SearchController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="69.0" style="-fx-background-color: rgba(255,255,255,0.42); -fx-background-radius: 11;">
-      <MFXTextField fx:id="searchKey" floatingText="关键词" floatingTextGap="0.0" prefColumnCount="17" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px; -fx-background-color: rgba(255,255,255,0.84);" stylesheets="@style.css" textLimit="42">
+   <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="69.0" prefWidth="633.0" style="-fx-background-color: #fff6; -fx-background-radius: 11; -fx-padding: 11;">
+      <MFXButton contentDisplay="GRAPHIC_ONLY" depthLevel="LEVEL0" ellipsisString="" graphicTextGap="0.0" minWidth="-Infinity" onAction="#onBack" prefHeight="47.0" prefWidth="47.0" rippleBackgroundOpacity="0.42" rippleColor="#c2f3ff" style="-fx-background-color: #fffa; -fx-background-radius: 11%; -fx-border-width: 0.5px; -fx-border-color: #00313D; -fx-border-radius: 11%;" textFill="#00abd6">
+         <font>
+            <Font size="20.0" />
+         </font>
+         <graphic>
+            <FontIcon iconLiteral="mdral-keyboard_arrow_left" iconSize="24" selectionEnd="0" selectionStart="0" />
+         </graphic>
+         <HBox.margin>
+            <Insets right="4.0" />
+         </HBox.margin>
+      </MFXButton>
+      <MFXTextField fx:id="searchKey" floatingText="关键词" floatingTextGap="0.0" prefColumnCount="14" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px; -fx-background-color: #fffa;" stylesheets="@style.css" textLimit="42">
          <textFill>
             <Color green="0.6639999747276306" blue="0.8299999833106995" />
          </textFill>
          <HBox.margin>
-            <Insets right="4.0" />
+            <Insets left="4.0" right="4.0" />
          </HBox.margin>
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
       </MFXTextField>
-      <MFXComboBox fx:id="searchPlatform" floatingText="平台" floatingTextGap="0.0" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px; -fx-background-color: rgba(255,255,255,0.84);" stylesheets="@style.css">
+      <MFXComboBox fx:id="searchPlatform" floatingText="平台" floatingTextGap="0.0" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px; -fx-background-color: #fffa;" stylesheets="@style.css">
          <HBox.margin>
             <Insets left="4.0" right="2.0" />
          </HBox.margin>
       </MFXComboBox>
-      <MFXComboBox fx:id="searchType" floatingText="类型" floatingTextGap="0.0" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px; -fx-background-color: rgba(255,255,255,0.84);" stylesheets="@style.css">
+      <MFXComboBox fx:id="searchType" floatingText="类型" floatingTextGap="0.0" prefHeight="50.0" style="-fx-border-color: #00313D; -fx-border-width: 0.5px; -fx-background-color: #fffa;" stylesheets="@style.css">
          <HBox.margin>
             <Insets left="2.0" right="4.0" />
          </HBox.margin>
       </MFXComboBox>
-      <MFXButton fx:id="searchButton" contentDisplay="GRAPHIC_ONLY" depthLevel="LEVEL0" ellipsisString="" onAction="#onSearch" prefHeight="50.0" prefWidth="62.0" rippleBackgroundOpacity="0.42" rippleColor="#c2f3ff" style="-fx-background-color: rgba(255,255,255,0.84); -fx-background-radius: 11%; -fx-border-width: 0.5px; -fx-border-color: #00313D; -fx-border-radius: 11%;" textFill="#00abd6">
+      <MFXButton contentDisplay="GRAPHIC_ONLY" depthLevel="LEVEL0" ellipsisString="" minWidth="-Infinity" onAction="#onSearch" prefHeight="47.0" prefWidth="47.0" rippleBackgroundOpacity="0.42" rippleColor="#c2f3ff" style="-fx-background-color: #fffa; -fx-background-radius: 11%; -fx-border-width: 0.5px; -fx-border-color: #00313D; -fx-border-radius: 11%;" textFill="#00abd6">
          <font>
             <Font size="20.0" />
          </font>
@@ -49,5 +61,6 @@
          </graphic>
       </MFXButton>
    </HBox>
-   <MFXTableView fx:id="searchTable" footerVisible="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="2333.0" prefWidth="618.0" style="-fx-border-width: 0; -fx-effect: dropshadow(gaussian,#666,4.2,0,0,0);" stylesheets="@style.css" />
+   <MFXProgressBar fx:id="loadingBar" minHeight="-Infinity" prefHeight="4.0" prefWidth="618.0" stylesheets="@style.css" />
+   <MFXTableView fx:id="searchTable" footerVisible="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="2333.0" prefWidth="618.0" style="-fx-border-width: 0.84; -fx-background-color: #fffc; -fx-border-color: #C9D4D6;" stylesheets="@style.css" />
 </VBox>

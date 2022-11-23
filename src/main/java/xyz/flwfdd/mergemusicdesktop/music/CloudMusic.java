@@ -24,7 +24,6 @@ class CloudMusic extends Music {
         this.type = type;
         this.mid = mid;
         id = mid.substring(1);
-        initOptions();
     }
 
     CloudMusic(Type type, String mid, String name, List<String> artists, String albumName) {
@@ -34,18 +33,13 @@ class CloudMusic extends Music {
         this.albumName = albumName;
     }
 
-    void initOptions(){
-        operations.add(new Operation("mdrmz-play_arrow",this::play,"播放"));
-        operations.add(new Operation("mdral-add", ()-> System.out.println("Add:"+ this),"添加到播放列表"));
-    }
-
     static Map<Type, String> type_map = new HashMap<>(Map.of(Type.MUSIC, "1", Type.LYRIC, "1006", Type.LIST, "1000", Type.USER, "1002"));
 
-    static List<Music> search(String keyword, Type type, int limit, int offset) {
+    static List<Music> search(String keyword, Type type, int limit, int page) {
         if(keyword.isEmpty())return new ArrayList<>();
         String url = api_url + "/cloudsearch?keywords=%s&type=%s&limit=%d&offset=%d";
         if (!type_map.containsKey(type)) type = Type.MUSIC;
-        url = String.format(url, keyword, type_map.get(type), limit, limit * offset);
+        url = String.format(url, keyword, type_map.get(type), limit, limit * page);
         try {
             String s = httpGet(url);
             JSONObject data = JSON.parseObject(s).getJSONObject("result");
@@ -160,7 +154,7 @@ class CloudMusic extends Music {
         else throw new RuntimeException("Can only load music.");
     }
 
-    public List<Music> loadList() {
+    public List<Music> unfold() {
         try {
             if (type.equals(Type.LIST)) return loadPlayList();
             else if (type.equals(Type.USER)) return loadUserList();

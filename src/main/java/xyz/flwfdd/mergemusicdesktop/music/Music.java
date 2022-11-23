@@ -5,7 +5,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,10 +52,10 @@ public abstract class Music {
         }
     }
 
-    public static List<Music> search(String keyword, Platform platform, Type type, int limit, int offset) {
-        // 注意offset是页数 从0开始
+    public static List<Music> search(String keyword, Platform platform, Type type, int limit, int page) {
+        // page从0开始
         List<Music> music_list = null;
-        if (platform.equals(Platform.CLOUD)) music_list = CloudMusic.search(keyword, type, limit, offset);
+        if (platform.equals(Platform.CLOUD)) music_list = CloudMusic.search(keyword, type, limit, page);
         return music_list;
     }
 
@@ -73,9 +72,9 @@ public abstract class Music {
         }
     }
 
-    abstract void load(); //加载音乐详细信息、封面图、播放链接等
+    public abstract void load(); //加载音乐详细信息、封面图、播放链接等
 
-    abstract List<Music> loadList(); //展开音乐列表
+    public abstract List<Music> unfold(); //展开音乐列表
 
     String mid, id, name, src, img, lrc, translateLrc, albumName;
     Type type;
@@ -113,23 +112,8 @@ public abstract class Music {
         return artists;
     }
 
-    public void play(){
-        System.out.println("Play:"+ this);
-    }
-
-    public class Operation{
-        public String icon,tooltip;
-        public Runnable func;
-
-        Operation(String icon,Runnable func,String tooltip){
-            this.icon=icon;
-            this.func=func;
-            this.tooltip=tooltip;
-        }
-    }
-    List<Operation> operations=new ArrayList<>();
-    public List<Operation> getOperations(){
-        return operations;
+    public Type getType(){
+        return type;
     }
 
 }

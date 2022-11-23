@@ -15,10 +15,10 @@ class MusicTest {
         var users = Music.search("范滇东", Music.Platform.CLOUD, Music.Type.USER, 24, 0);
         System.out.println(users.size());
         System.out.println(users);
-        var lists = users.get(0).loadList();
+        var lists = users.get(0).unfold();
         System.out.println(lists.size());
         System.out.println(lists);
-        var musics = lists.get(0).loadList();
+        var musics = lists.get(0).unfold();
         System.out.println(musics.size());
         System.out.println(musics);
         var m = musics.get(5);
