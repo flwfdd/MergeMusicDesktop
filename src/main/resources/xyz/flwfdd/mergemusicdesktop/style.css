@@ -3,6 +3,7 @@
     -fx-text-fill: #004354;
     -mfx-auto-clip: true;
     -fx-icon-color: #004354;
+    -mfx-ripple-color:#94EAFFAA;
 }
 
 /********************
@@ -224,10 +225,37 @@ Scroll pane 设置滚动面板
     -thumb-hover-color: #00ABD655;
 }
 
-.header-button{
-    -fx-icon-color: #00ABD644;
+/********************
+Control button 播放控件
+********************/
+
+.control-button{
+    -fx-background-radius: 24%;
+    -fx-background-color: #94EAFF22;
 }
 
-.header-button:hover{
-    -fx-icon-color: #00ABD6DD;
+.control-button:hover{
+    -fx-background-color: #94EAFF66;
+    -fx-background-insets: -2;
+}
+
+
+/********************
+Slider 进度条
+********************/
+
+#volumeSlider {
+    -mfx-main-color: rgb(41, 212, 255);
+    -mfx-main-color-hover: rgba(41, 212, 255, 0.1);
+    -mfx-main-color-pressed: rgba(41, 212, 255, 0.3);
+    -mfx-disabled-color: rgb(158, 158, 158);
+}
+
+#volumeSlider .track{
+    -fx-fill: derive(-mfx-main-color, 66%);
+}
+
+#volumeSlider PopupContent {
+    -fx-background-color: rgba(194, 243, 255, 0.42);
+    -fx-background-radius: 6;
 }

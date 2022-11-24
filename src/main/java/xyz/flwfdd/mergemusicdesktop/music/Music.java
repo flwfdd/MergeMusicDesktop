@@ -76,7 +76,7 @@ public abstract class Music {
 
     public abstract List<Music> unfold(); //展开音乐列表
 
-    String mid, id, name, src, img, lrc, translateLrc, albumName;
+    String mid, id, name="", src="", img="", lrc="", translateLrc="", albumName="";
     Type type;
     List<String> artists;
 

@@ -161,8 +161,8 @@ public class MusicTable {
 
     List<Operation> getOperations(Music music){ //操作栏
         List<Operation> operations=new ArrayList<>();
-        operations.add(new MusicTable.Operation("mdrmz-play_arrow",()->PlayList.getInstance().play(music), "播放"));
-        operations.add(new MusicTable.Operation("mdral-add", ()->PlayList.getInstance().add(music), "添加到播放列表"));
+        operations.add(new MusicTable.Operation("mdrmz-play_arrow",()-> Player.getInstance().play(music), "播放"));
+        operations.add(new MusicTable.Operation("mdral-add", ()-> Player.getInstance().add(music), "添加到播放列表"));
         return operations;
     }
 

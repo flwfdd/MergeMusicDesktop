@@ -45,3 +45,13 @@ void createTooltip(MFXTableRowCell<Music,String> rowCell){
 }
 ```
 
+### 条件 Bingding 没有更新
+实现音量控制模块时，想要做一个一键静音功能，而最终的音量在没有静音时与音量条一致，静音时则设置为0。开始时我这样写：
+```java
+realVolume=new When(mute).then(showVolume).otherwise(0);
+```
+却发现静音按钮可以使用，但是当拖动进度条也就是改变`showVolume`时，`realVolume`并没有更新，看来是只会绑定到条件语句上。最后更换为这样的写法就可以了：
+```java
+realVolume=showVolume.multiply(new When(mute).then(0).otherwise(1));
+```
+

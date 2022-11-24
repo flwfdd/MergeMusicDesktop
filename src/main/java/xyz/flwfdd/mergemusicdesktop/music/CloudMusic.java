@@ -108,13 +108,8 @@ class CloudMusic extends Music {
 
     void loadMusic() {
         try {
-            String s = httpGet(getApiUrl() + "/song/url/?id=" + id);
-            JSONObject data = JSON.parseObject(s);
-            src = data.getJSONArray("data").getJSONObject(0).getString("url");
-            if (src == null) throw new RuntimeException("Can't get src!");
-
-            s = httpGet(getApiUrl() + "/song/detail/?ids=" + id);
-            data = JSON.parseObject(s).getJSONArray("songs").getJSONObject(0);
+            String s = httpGet(getApiUrl() + "/song/detail/?ids=" + id);
+            JSONObject data = JSON.parseObject(s).getJSONArray("songs").getJSONObject(0);
             name = data.getString("name");
             artists = data.getJSONArray("ar").stream()
                     .map(obj -> ((JSONObject) obj).getString("name")).collect(Collectors.toList());
@@ -125,6 +120,12 @@ class CloudMusic extends Music {
             data = JSON.parseObject(s);
             lrc = data.getJSONObject("lrc").getString("lyric");
             if (data.containsKey("tlyric")) translateLrc = data.getJSONObject("tlyric").getString("lyric");
+
+            s = httpGet(getApiUrl() + "/song/url/?id=" + id);
+            data = JSON.parseObject(s);
+            src = data.getJSONArray("data").getJSONObject(0).getString("url");
+            if (src == null) throw new RuntimeException("Can't get src!");
+
         } catch (Exception e) {
             System.out.println("cloud music load music error: " + e);
         }
