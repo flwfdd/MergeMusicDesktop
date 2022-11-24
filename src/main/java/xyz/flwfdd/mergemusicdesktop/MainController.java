@@ -3,6 +3,7 @@ package xyz.flwfdd.mergemusicdesktop;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXSlider;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import io.github.palexdev.materialfx.enums.SliderEnums;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
@@ -10,18 +11,21 @@ import io.github.palexdev.materialfx.utils.others.loader.MFXLoader;
 import io.github.palexdev.materialfx.utils.others.loader.MFXLoaderBean;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableDoubleValue;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextBoundsType;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
+import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.net.URL;
 import java.util.List;
@@ -67,6 +71,21 @@ public class MainController {
     @FXML
     ImageView playImage;
 
+    @FXML
+    Label playName;
+
+    @FXML
+    Label playArtists;
+
+    @FXML
+    Label playAlbum;
+
+    @FXML
+    AnchorPane infoPane;
+
+    @FXML
+    Pane backgroundPane;
+
     ToggleGroup toggleGroup;
     Player playerInstance;
 
@@ -86,7 +105,8 @@ public class MainController {
         toggleGroup=new ToggleGroup();
         ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
         MFXLoader loader=new MFXLoader();
-        loader.addView(MFXLoaderBean.of("Search",loadURL("search-view.fxml")).setBeanToNodeMapper(()->createToggle("mdomz-search","搜索")).setDefaultRoot(true).get());
+        loader.addView(MFXLoaderBean.of("Search",loadURL("search-view.fxml")).setBeanToNodeMapper(()->createToggle("mdomz-search","搜索")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("Playing",loadURL("playing-view.fxml")).setBeanToNodeMapper(()->createToggle("mdral-graphic_eq","播放")).setDefaultRoot(true).get());
         loader.addView(MFXLoaderBean.of("Config",loadURL("config-view.fxml")).setBeanToNodeMapper(()->createToggle("mdrmz-settings","设置")).setDefaultRoot(false).get());
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream()
@@ -201,7 +221,44 @@ public class MainController {
     }
 
     void initPlayInfoPane(){ //播放中信息
-        playerInstance.imageUrlProperty().addListener(observable -> playImage.setImage(new Image(playerInstance.imageUrlProperty().get())));
+        var tooltip=new MFXTooltip(infoPane);
+        tooltip.setText("MergeMusic!");
+        tooltip.install();
+
+        playerInstance.playingMusicProperty().addListener(observable -> {
+            Music music=playerInstance.playingMusicProperty().get();
+
+            playName.setText(music.getName());
+            playAlbum.setText(music.getAlbumName());
+            playArtists.setText(String.join(",",music.getArtists()));
+            tooltip.setText(playName.getText()+System.lineSeparator()+
+                    "作者："+playArtists.getText()+System.lineSeparator()+
+                    "专辑："+playAlbum.getText());
+
+            new Thread(new Task<Void>() {
+                Image image;
+                @Override
+                protected Void call(){
+                    image=new Image(music.getImg());
+                    return null;
+                }
+
+                @Override
+                protected void succeeded() {
+                    playImage.setImage(image);
+                    if(image.getHeight()>image.getWidth()){
+                        playImage.setX(playImage.getFitWidth()*(1-image.getWidth()/image.getHeight())/2);
+                    } else {
+                        playImage.setY(playImage.getFitHeight()*(1-image.getHeight()/image.getWidth())/2);
+                    }
+
+                    var ratio=Math.max(backgroundPane.getWidth()/image.getWidth(),backgroundPane.getHeight()/image.getHeight());
+                    backgroundPane.setBackground(new Background(new BackgroundImage(new Image(music.getImg()),BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT,BackgroundPosition.CENTER,new BackgroundSize(image.getWidth()*ratio,image.getHeight()*ratio,false,false,false,false))));
+                    backgroundPane.setEffect(new GaussianBlur(11));
+                }
+            }).start();
+        });
+
     }
 
     void initPlayer(){

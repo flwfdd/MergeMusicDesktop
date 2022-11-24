@@ -3,11 +3,15 @@ package xyz.flwfdd.mergemusicdesktop.model;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author flwfdd
@@ -27,17 +31,20 @@ public class Player {
     SimpleDoubleProperty totalTime;
     SimpleDoubleProperty nowTime;
     SimpleBooleanProperty playing;
+    SimpleObjectProperty<Music>playingMusic;
+    SimpleListProperty<Double> spectrum;
 
-    public SimpleStringProperty imageUrlProperty() {
-        return imageUrl;
+    public SimpleListProperty<Double> spectrumProperty() {
+        return spectrum;
     }
 
-    SimpleStringProperty imageUrl;
+    public SimpleObjectProperty<Music> playingMusicProperty() {
+        return playingMusic;
+    }
 
     public SimpleBooleanProperty playingProperty() {
         return playing;
     }
-
 
     public SimpleDoubleProperty totalTimeProperty() {
         return totalTime;
@@ -77,7 +84,8 @@ public class Player {
         totalTime=new SimpleDoubleProperty(320);
         nowTime=new SimpleDoubleProperty(0);
         playing=new SimpleBooleanProperty(false);
-        imageUrl=new SimpleStringProperty("");
+        playingMusic=new SimpleObjectProperty<>();
+        spectrum=new SimpleListProperty<>();
     }
 
     public static Player getInstance(){
@@ -92,7 +100,6 @@ public class Player {
     public void play(){
         if(player!=null)player.play();
     }
-
 
     boolean loading=false;
     public void play(Music music){
@@ -114,12 +121,22 @@ public class Player {
             @Override
             protected void succeeded() {
                 try{
-                    imageUrl.set(music.getImg());
+                    playingMusic.set(music);
                     media=new Media(music.getSrc());
                     player=new MediaPlayer(media);
 
                     player.muteProperty().bind(mute);
                     player.volumeProperty().bind(realVolume.divide(100));
+
+                    //音频可视化设置
+                    player.setAudioSpectrumNumBands(Config.getInstance().getInt("spectrum_num_bands"));
+                    player.setAudioSpectrumInterval(Config.getInstance().getDouble("spectrum_interval"));
+                    player.setAudioSpectrumThreshold(-Config.getInstance().getInt("spectrum_threshold"));
+                    player.setAudioSpectrumListener((timestamp, duration, magnitudes, phases) -> {
+                        List<Double>l=new ArrayList<>();
+                        for (float magnitude : magnitudes) l.add((double) magnitude);
+                        spectrum.set(FXCollections.observableList(l));
+                    });
 
                     player.play();
                     player.setOnReady(()->{
@@ -128,10 +145,17 @@ public class Player {
                     });
                     playing.bind(player.statusProperty().isEqualTo(MediaPlayer.Status.PLAYING));
                     player.setOnEndOfMedia(()-> player.stop());
+
+                    player.setOnError(()-> System.out.println(player.getError().toString()));
                 }
                 catch (Exception e){
                     System.out.println("Media Error"+e);
                 }
+                loading=false;
+            }
+
+            @Override
+            protected void failed(){
                 loading=false;
             }
         }).start();

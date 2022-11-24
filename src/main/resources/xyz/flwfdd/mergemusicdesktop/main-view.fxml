@@ -7,61 +7,103 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox prefHeight="514.0" prefWidth="665.0" style="-fx-background-position: center; -fx-background-size: 100%;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.MainController">
-   <HBox prefHeight="453.0" VBox.vgrow="ALWAYS">
-      <VBox fx:id="navBar" prefWidth="124.0" style="-fx-background-color: #fafafaaa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: #80A0A8; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
-         <padding>
-            <Insets bottom="11.0" right="11.0" top="11.0" />
-         </padding></VBox>
-      <StackPane fx:id="mainPane" style="-fx-background-color: #fff4;" HBox.hgrow="ALWAYS" />
-   </HBox>
-   <HBox maxHeight="84.0" minHeight="84.0" prefHeight="84.0" prefWidth="600.0" style="-fx-border-color: #80A0A8; -fx-border-width: 0.5 0.5 0 0; -fx-background-color: #fffe; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
-      <AnchorPane minWidth="-Infinity" prefWidth="200.0">
-         <ImageView fx:id="playImage" fitHeight="84.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" />
-      </AnchorPane>
-      <VBox alignment="CENTER" maxHeight="84.0" minHeight="84.0" prefHeight="84.0" prefWidth="446.0" spacing="6.0">
-         <HBox alignment="CENTER">
-            <Label fx:id="nowTimeLabel" text="0:00">
-               <HBox.margin>
-                  <Insets left="4.0" right="11.0" />
-               </HBox.margin>
-            </Label>
-            <MFXSlider fx:id="playSlider" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-            <Label fx:id="totalTimeLabel" text="5:20">
-               <HBox.margin>
-                  <Insets left="11.0" right="4.0" />
-               </HBox.margin>
-            </Label>
-         </HBox>
-         <HBox alignment="CENTER" prefHeight="39.0" prefWidth="512.0" spacing="24.0">
-            <MFXButton fx:id="prefButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" styleClass="control-button">
-               <graphic>
-                  <FontIcon iconLiteral="mdrmz-skip_previous" iconSize="24" />
-               </graphic>
-            </MFXButton>
-            <MFXButton fx:id="playButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="control-button">
-               <graphic>
-                  <FontIcon iconLiteral="mdrmz-play_arrow" iconSize="24" />
-               </graphic>
-            </MFXButton>
-            <MFXButton fx:id="nextButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" styleClass="control-button">
-               <graphic>
-                  <FontIcon iconLiteral="mdrmz-skip_next" iconSize="24" />
-               </graphic>
-            </MFXButton>
-         </HBox>
-      </VBox>
-      <HBox alignment="CENTER" minWidth="-Infinity" prefWidth="142.0" spacing="11.0">
-         <MFXButton fx:id="muteButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="24.0" styleClass="control-button">
-            <graphic>
-               <FontIcon iconLiteral="mdrmz-volume_up" iconSize="17" />
-            </graphic>
-         </MFXButton>
-         <MFXSlider fx:id="volumeSlider" />
+<AnchorPane prefHeight="556.0" prefWidth="788.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="xyz.flwfdd.mergemusicdesktop.MainController">
+   <Pane fx:id="backgroundPane" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0"
+         AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+   <VBox style="-fx-background-color: #fff4;" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0"
+         AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox prefHeight="453.0" VBox.vgrow="ALWAYS">
+         <VBox fx:id="navBar" prefWidth="124.0"
+               style="-fx-background-color: #fafafaaa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: #80A0A8; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
+            <padding>
+               <Insets bottom="11.0" right="11.0" top="11.0"/>
+            </padding>
+         </VBox>
+         <StackPane fx:id="mainPane" style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS"/>
       </HBox>
-   </HBox>
-</VBox>
+      <HBox maxHeight="84.0" minHeight="84.0" prefHeight="84.0" prefWidth="600.0"
+            style="-fx-border-color: #80A0A8; -fx-border-width: 0.5 0.5 0 0; -fx-background-color: #fffb; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
+         <AnchorPane fx:id="infoPane" minWidth="-Infinity" prefWidth="224.0">
+            <ImageView fx:id="playImage" fitHeight="84.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true"
+                       AnchorPane.leftAnchor="0.0"/>
+            <Label fx:id="playName" layoutX="100.0" layoutY="33.0" prefHeight="22.0" prefWidth="142.0"
+                   styleClass="custom-font" text="MergeMusic" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="4.0">
+               <font>
+                  <Font size="14.0"/>
+               </font>
+            </Label>
+            <Label fx:id="playArtists" layoutX="90.0" layoutY="23.0" opacity="0.42" prefHeight="22.0" prefWidth="134.0"
+                   styleClass="custom-font" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="24.0">
+               <font>
+                  <Font size="14.0"/>
+               </font>
+            </Label>
+            <Label fx:id="playAlbum" layoutX="90.0" layoutY="50.0" opacity="0.42" prefHeight="22.0" prefWidth="134.0"
+                   styleClass="custom-font" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="42.0">
+               <font>
+                  <Font size="14.0"/>
+               </font>
+            </Label>
+         </AnchorPane>
+         <VBox alignment="CENTER" maxHeight="84.0" minHeight="84.0" prefHeight="84.0" prefWidth="446.0" spacing="6.0"
+               HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" prefHeight="39.0" prefWidth="512.0" spacing="24.0">
+               <MFXButton fx:id="prefButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
+                          minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0"
+                          styleClass="control-button">
+                  <graphic>
+                     <FontIcon iconLiteral="mdrmz-skip_previous" iconSize="24"/>
+                  </graphic>
+               </MFXButton>
+               <MFXButton fx:id="playButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
+                          minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0"
+                          styleClass="control-button">
+                  <graphic>
+                     <FontIcon iconLiteral="mdrmz-play_arrow" iconSize="24"/>
+                  </graphic>
+               </MFXButton>
+               <MFXButton fx:id="nextButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
+                          minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0"
+                          styleClass="control-button">
+                  <graphic>
+                     <FontIcon iconLiteral="mdrmz-skip_next" iconSize="24"/>
+                  </graphic>
+               </MFXButton>
+            </HBox>
+            <HBox alignment="CENTER">
+               <Label fx:id="nowTimeLabel" text="0:00">
+                  <HBox.margin>
+                     <Insets left="4.0" right="11.0"/>
+                  </HBox.margin>
+               </Label>
+               <MFXSlider fx:id="playSlider" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+               <Label fx:id="totalTimeLabel" text="5:20">
+                  <HBox.margin>
+                     <Insets left="11.0" right="4.0"/>
+                  </HBox.margin>
+               </Label>
+            </HBox>
+         </VBox>
+         <HBox alignment="CENTER" minWidth="-Infinity" prefWidth="142.0" spacing="11.0">
+            <MFXButton fx:id="muteButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
+                       minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="24.0"
+                       styleClass="control-button">
+               <graphic>
+                  <FontIcon iconLiteral="mdrmz-volume_up" iconSize="17"/>
+               </graphic>
+            </MFXButton>
+            <MFXSlider fx:id="volumeSlider"/>
+            <padding>
+               <Insets right="11.0"/>
+            </padding>
+         </HBox>
+      </HBox>
+   </VBox>
+</AnchorPane>

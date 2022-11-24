@@ -22,7 +22,7 @@ public class Config {
     Properties properties;
 
     public enum Type{
-        TEXT
+        TEXT,INT,DOUBLE
     }
 
     public static class ConfigItem{
@@ -52,6 +52,11 @@ public class Config {
         configItems=new ArrayList<>();
         initConfigItem("cloud_music_api_url", "http://148.70.105.159:3000","网易云音乐API",true,Type.TEXT);
         initConfigItem("cloud_music_cookie", "","网易云音乐Cookie",true,Type.TEXT);
+        initConfigItem("spectrum_num_bands", "16","音频可视化通道数",false,Type.INT);
+        initConfigItem("spectrum_threshold", "100","音频可视化阈值(>0,dB)",false,Type.INT);
+        initConfigItem("spectrum_interval", "0.04","音频可视化时间窗口(s)",false,Type.DOUBLE);
+        initConfigItem("spectrum_delay", "0.42","音频可视化延迟时间(s)",false,Type.DOUBLE);
+        initConfigItem("spectrum_smooth_ratio", "0.24","平滑比例(0~1)",false,Type.DOUBLE);
     }
 
     public void resetConfigItems(){
@@ -91,6 +96,14 @@ public class Config {
 
     public String get(String key) {
         return properties.getProperty(key);
+    }
+
+    public int getInt(String key){
+        return (int) Math.round(getDouble(key));
+    }
+
+    public double getDouble(String key){
+        return Double.parseDouble(get(key));
     }
 
     public void set(String key,String value) {

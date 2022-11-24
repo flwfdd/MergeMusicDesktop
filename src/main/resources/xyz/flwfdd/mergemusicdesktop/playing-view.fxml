@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<VBox alignment="TOP_CENTER" prefHeight="564.0" prefWidth="780.0" spacing="11.0" style="-fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.PlayingController">
+   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: transparent;">
+      <Circle fx:id="c0" fill="#ffffffe5" layoutX="200.0" layoutY="200.0" radius="125.0" stroke="#00d0ff3d" strokeType="INSIDE" />
+      <Circle fx:id="c1" fill="#00d0ff54" layoutX="200.0" layoutY="200.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Circle fx:id="c2" fill="#00d0ff54" layoutX="200.0" layoutY="200.0" radius="75.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Circle fx:id="c3" fill="#00d0ff54" layoutX="200.0" layoutY="200.0" radius="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+   </AnchorPane>
+   <VBox alignment="CENTER" maxWidth="-Infinity" prefWidth="666.0" spacing="11.0" style="-fx-background-radius: 24 24 0 0; -fx-background-color: #fff9;" VBox.vgrow="ALWAYS">
+      <padding>
+         <Insets left="11.0" right="11.0" />
+      </padding>
+      <TextFlow textAlignment="CENTER">
+         <Text fx:id="lrcText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="MergeMusic" textAlignment="CENTER">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Text>
+      </TextFlow>
+      <TextFlow textAlignment="CENTER">
+         <Text fx:id="translateLrcText" opacity="0.84" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" textAlignment="CENTER">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Text>
+      </TextFlow>
+   </VBox>
+</VBox>

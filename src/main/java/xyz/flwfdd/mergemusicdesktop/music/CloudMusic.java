@@ -121,7 +121,7 @@ class CloudMusic extends Music {
             lrc = data.getJSONObject("lrc").getString("lyric");
             if (data.containsKey("tlyric")) translateLrc = data.getJSONObject("tlyric").getString("lyric");
 
-            s = httpGet(getApiUrl() + "/song/url/?id=" + id);
+            s = httpGet(getApiUrl() + "/song/url/?br=320000&id=" + id);
             data = JSON.parseObject(s);
             src = data.getJSONArray("data").getJSONObject(0).getString("url");
             if (src == null) throw new RuntimeException("Can't get src!");

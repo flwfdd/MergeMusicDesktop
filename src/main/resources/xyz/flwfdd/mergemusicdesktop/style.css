@@ -6,6 +6,11 @@
     -mfx-ripple-color:#94EAFFAA;
 }
 
+.custom-font{
+    -fx-font-family: "Source Han Serif CN Medium";
+    -fx-fill: #004354;
+}
+
 /********************
 Button 按钮
 ********************/
@@ -113,18 +118,18 @@ Slider 进度条
 ********************/
 
 #playSlider {
-    -mfx-main-color: rgb(41, 212, 255);
+    -mfx-main-color: rgb(41, 212, 255,0.84);
     -mfx-main-color-hover: rgba(41, 212, 255, 0.1);
     -mfx-main-color-pressed: rgba(41, 212, 255, 0.3);
     -mfx-disabled-color: rgb(158, 158, 158);
 }
 
 #playSlider .track{
-    -fx-fill: derive(-mfx-main-color, 66%);
+    -fx-fill: #00CCFF22;
 }
 
 #playSliderPopupContent {
-    -fx-background-color: rgba(194, 243, 255, 0.42);
+    -fx-background-color: #C2F2FF88;
     -fx-background-radius: 6;
 }
 
@@ -145,7 +150,7 @@ Tooltip 悬浮提示
 .mfx-tooltip .container {
     -fx-background-color: rgba(255,255,255,0.95);
     -fx-background-radius: 5;
-    -fx-border-color: #A3CCD6;
+    -fx-border-color: #00CCFF11;
     -fx-border-radius: 5;
     -fx-border-width: 0.5;
 }
@@ -153,7 +158,7 @@ Tooltip 悬浮提示
 .mfx-tooltip .container .label {
     -fx-font-size: 13;
     -fx-font-family: "Source Han Serif CN Medium";
-    -fx-text-fill: #3992A8;
+    -fx-text-fill: #00ABD6;
 }
 
 /********************
@@ -231,11 +236,11 @@ Control button 播放控件
 
 .control-button{
     -fx-background-radius: 24%;
-    -fx-background-color: #94EAFF22;
+    -fx-background-color: #00CCFF22;
 }
 
 .control-button:hover{
-    -fx-background-color: #94EAFF66;
+    -fx-background-color: #29D4FF66;
     -fx-background-insets: -2;
 }
 
@@ -245,17 +250,12 @@ Slider 进度条
 ********************/
 
 #volumeSlider {
-    -mfx-main-color: rgb(41, 212, 255);
+    -mfx-main-color: rgb(41, 212, 255,0.84);
     -mfx-main-color-hover: rgba(41, 212, 255, 0.1);
     -mfx-main-color-pressed: rgba(41, 212, 255, 0.3);
     -mfx-disabled-color: rgb(158, 158, 158);
 }
 
 #volumeSlider .track{
-    -fx-fill: derive(-mfx-main-color, 66%);
-}
-
-#volumeSlider PopupContent {
-    -fx-background-color: rgba(194, 243, 255, 0.42);
-    -fx-background-radius: 6;
+    -fx-fill: #00CCFF22
 }

@@ -55,3 +55,5 @@ realVolume=new When(mute).then(showVolume).otherwise(0);
 realVolume=showVolume.multiply(new When(mute).then(0).otherwise(1));
 ```
 
+### Image 类异步加载
+发现点击播放歌曲时会稍稍卡一下，但是获取歌曲的部分已经做了异步了，后来发现是因为执行`new Image(url)`初始化时不是异步的，造成了几百毫秒的阻塞，将图片加载部分扔到异步里就行了。
