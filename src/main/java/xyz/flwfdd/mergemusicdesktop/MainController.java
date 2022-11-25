@@ -81,7 +81,7 @@ public class MainController {
     Label playAlbum;
 
     @FXML
-    AnchorPane infoPane;
+    HBox infoPane;
 
     @FXML
     Pane backgroundPane;
@@ -202,7 +202,7 @@ public class MainController {
         });
     }
 
-    void initVolumeController(){
+    void initVolumeController(){ //初始化音量控制部分
         volumeSlider.setPopupSupplier(Region::new);
         volumeSlider.valueProperty().bindBidirectional(playerInstance.showVolumeProperty());
         muteButton.setOnAction(e-> playerInstance.setMute(!playerInstance.isMute()));
@@ -236,25 +236,21 @@ public class MainController {
                     "专辑："+playAlbum.getText());
 
             new Thread(new Task<Void>() {
-                Image image;
                 @Override
                 protected Void call(){
-                    image=new Image(music.getImg());
-                    return null;
-                }
-
-                @Override
-                protected void succeeded() {
+                    Image image=new Image(music.getImg());
                     playImage.setImage(image);
                     if(image.getHeight()>image.getWidth()){
                         playImage.setX(playImage.getFitWidth()*(1-image.getWidth()/image.getHeight())/2);
+                        playImage.setY(0);
                     } else {
+                        playImage.setX(0);
                         playImage.setY(playImage.getFitHeight()*(1-image.getHeight()/image.getWidth())/2);
                     }
-
                     var ratio=Math.max(backgroundPane.getWidth()/image.getWidth(),backgroundPane.getHeight()/image.getHeight());
                     backgroundPane.setBackground(new Background(new BackgroundImage(new Image(music.getImg()),BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT,BackgroundPosition.CENTER,new BackgroundSize(image.getWidth()*ratio,image.getHeight()*ratio,false,false,false,false))));
                     backgroundPane.setEffect(new GaussianBlur(11));
+                    return null;
                 }
             }).start();
         });

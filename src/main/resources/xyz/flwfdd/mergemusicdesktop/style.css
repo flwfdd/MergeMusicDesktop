@@ -3,7 +3,7 @@
     -fx-text-fill: #004354;
     -mfx-auto-clip: true;
     -fx-icon-color: #004354;
-    -mfx-ripple-color:#94EAFFAA;
+    -mfx-ripple-color:#C2F3FFAA;
 }
 
 .custom-font{
@@ -23,10 +23,6 @@ Button 按钮
     -fx-border-color: #00313D;
     -fx-border-radius: 6;
     -fx-font-size:15;
-}
-
-.custom-button .mfx-ripple-generator{
-    -mfx-ripple-color:#94EAFFAA;
 }
 
 /********************
@@ -143,6 +139,10 @@ Slider 进度条
     -mfx-color: rgba(194, 243, 255, 0.42);
 }
 
+#playSlider .mfx-ripple-generator {
+    -mfx-paused:true;
+}
+
 /********************
 Tooltip 悬浮提示
 ********************/
@@ -194,6 +194,10 @@ Progress Bar 加载条
 }
 
 
+/********************
+Rectangle Toggle Node 导航栏按钮
+********************/
+
 .mfx-rectangle-toggle-node{
     -fx-background-color: #29D4FF11;
     -fx-background-radius: 0 11 11 0;
@@ -203,10 +207,6 @@ Progress Bar 加载条
     -fx-font-size: 15;
     -fx-padding: 0 0 0 42;
 }
-
-/********************
-Rectangle Toggle Node 导航栏按钮
-********************/
 
 .mfx-rectangle-toggle-node:hover{
     -fx-background-color: #29D4FF33;
@@ -246,7 +246,7 @@ Control button 播放控件
 
 
 /********************
-Slider 进度条
+Volume slider 音量条
 ********************/
 
 #volumeSlider {
@@ -258,4 +258,23 @@ Slider 进度条
 
 #volumeSlider .track{
     -fx-fill: #00CCFF22
+}
+
+#volumeSlider .mfx-ripple-generator {
+    -mfx-paused:true;
+}
+
+/********************
+Context menu 右键菜单
+********************/
+
+.mfx-menu-item{
+    -fx-font-family: "Source Han Serif CN Medium";
+}
+
+.tooltip{
+    -fx-background-color: rgba(255,255,255,0.95);
+    -fx-font-size: 13;
+    -fx-font-family: "Source Han Serif CN Medium";
+    -fx-text-fill: #00ABD6;
 }

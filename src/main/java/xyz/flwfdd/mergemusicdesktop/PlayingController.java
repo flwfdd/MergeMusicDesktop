@@ -28,6 +28,9 @@ public class PlayingController {
     Circle c3;
 
     @FXML
+    Circle c4;
+
+    @FXML
     Text lrcText;
 
     @FXML
@@ -44,7 +47,7 @@ public class PlayingController {
 
     Player player;
 
-    void update(double a,double b,double c,double d){
+    void updateCircle(double a,double b,double c,double d){ //更新音频可视化
         history_a.add(a);
         history_b.add(b);
         history_c.add(c);
@@ -65,21 +68,25 @@ public class PlayingController {
             d=history_d.get(0);
             history_d.remove(0);
         }
+        var e=(a+b+c+d)/4;
+        e=(e+threshold)*100/threshold+200;
         a=(a+threshold)*100/threshold+100;
         b=(b+threshold)*100/threshold+75;
         c=(c+threshold)*100/threshold+50;
         d=(d+threshold)*100/threshold+25;
-        a=c0.getRadius()*ratio+a*(1-ratio);
-        b=c1.getRadius()*ratio+b*(1-ratio);
-        c=c2.getRadius()*ratio+c*(1-ratio);
-        d=c3.getRadius()*ratio+d*(1-ratio);
-        c0.setRadius(a);
-        c1.setRadius(b);
-        c2.setRadius(c);
-        c3.setRadius(d);
+        e=c0.getRadius()*0.84+e*(1-0.84);
+        a=c1.getRadius()*ratio+a*(1-ratio);
+        b=c2.getRadius()*ratio+b*(1-ratio);
+        c=c3.getRadius()*ratio+c*(1-ratio);
+        d=c4.getRadius()*ratio+d*(1-ratio);
+        c0.setRadius(e);
+        c1.setRadius(a);
+        c2.setRadius(b);
+        c3.setRadius(c);
+        c4.setRadius(d);
     }
 
-    SortedMap<Double, String> decodeLyrics(String lrcString){
+    SortedMap<Double, String> decodeLyrics(String lrcString){ //解析歌词
         SortedMap<Double,String>lrcMap=new TreeMap<>(Comparator.reverseOrder());
         if(lrcString==null)return lrcMap;
         Arrays.asList(lrcString.split("\n")).forEach(s -> {
@@ -106,7 +113,7 @@ public class PlayingController {
         player.spectrumProperty().addListener((InvalidationListener) observable -> {
             var l=Player.getInstance().spectrumProperty();
             int sz=l.size();
-            update(l.get(sz/16),l.get(sz/8),l.get(sz/4),l.get(sz/2));
+            updateCircle(l.get(sz/16),l.get(sz/8),l.get(sz/4),l.get(sz/2));
         });
 
         //初始化歌词

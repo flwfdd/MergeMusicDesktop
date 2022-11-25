@@ -36,7 +36,7 @@ public class SearchController {
 
     @FXML
     void onSearch() { //搜索按钮
-        searchTableModel.search(searchKey.getText(),searchPlatform.getSelectedItem(),searchType.getSelectedItem());
+        searchTableModel.search();
     }
 
     @FXML
@@ -56,6 +56,9 @@ public class SearchController {
         searchType.setItems(FXCollections.observableList(Arrays.stream(Music.Type.values()).toList()));
         searchPlatform.selectFirst();
         searchType.selectFirst();
+        searchTableModel.searchKeyProperty().bindBidirectional(searchKey.textProperty());
+        searchTableModel.searchPlatformProperty().bindBidirectional(searchPlatform.valueProperty());
+        searchTableModel.searchTypeProperty().bindBidirectional(searchType.valueProperty());
     }
 
     void initLoadingBar(){ //初始化加载条

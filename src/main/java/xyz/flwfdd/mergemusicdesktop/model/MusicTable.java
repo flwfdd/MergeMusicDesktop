@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -30,7 +31,7 @@ public class MusicTable {
         public String icon, text;
         public Runnable func;
 
-        Operation(String icon,Runnable func,String text){
+        Operation(String icon,String text,Runnable func){
             this.icon=icon;
             this.func=func;
             this.text= text;
@@ -49,6 +50,22 @@ public class MusicTable {
         var tooltip=new MFXTooltip(rowCell);
         tooltip.textProperty().bind(rowCell.textProperty());
         tooltip.install();
+    }
+
+    static MFXContextMenuItem createMenuItem(Operation menu){
+        String s=menu.text;
+        // 太长会显示溢出 而且调节样式无果 就手动裁剪文字
+        if(s.length()>10)s=s.substring(0,11)+"…";
+        MFXContextMenuItem menuItem=new MFXContextMenuItem(s,new FontIcon(menu.icon));
+        menuItem.setTooltipSupplier(() -> {
+            var tooltip = new Tooltip();
+            tooltip.setText(menu.text);
+            return tooltip;
+        });
+        // 不知道为什么有一些显示左边会凸出去 只能这样硬调一下
+        menuItem.setPadding(new Insets(0,0,0,11));
+        menuItem.setOnAction(e-> menu.func.run());
+        return menuItem;
     }
 
     void initView(MFXTableView<Music> tableView){ //初始化视图
@@ -124,18 +141,10 @@ public class MusicTable {
 
             // 右键菜单
             MFXContextMenu contextMenu=new MFXContextMenu(row);
-            getMenus(music).forEach(menu->{
-                MFXContextMenuItem menuItem=new MFXContextMenuItem(menu.text,new FontIcon(menu.icon));
-                menuItem.setOnAction(e-> menu.func.run());
-                contextMenu.addItem(menuItem);
-            });
+            getMenus(music).forEach(menu-> contextMenu.addItem(createMenuItem(menu)));
             row.dataProperty().addListener((observableValue, oldMusic, newMusic) -> {
                 contextMenu.getItems().clear();
-                getMenus(newMusic).forEach(menu->{
-                    MFXContextMenuItem menuItem=new MFXContextMenuItem(menu.text,new FontIcon(menu.icon));
-                    menuItem.setOnAction(e-> menu.func.run());
-                    contextMenu.addItem(menuItem);
-                });
+                getMenus(newMusic).forEach(menu-> contextMenu.addItem(createMenuItem(menu)));
             });
             contextMenu.install();
             return row;
@@ -147,9 +156,9 @@ public class MusicTable {
     }
 
     public void bind(MFXTableView<Music> tableView){
+        // 将视图与数据绑定起来
         this.tableView=tableView;
         initView(tableView);
-        // 绑定数据
         var musicList=this.getMusicList();
         if(musicList.isEmpty()){
             musicList.add(null);
@@ -161,14 +170,14 @@ public class MusicTable {
 
     List<Operation> getOperations(Music music){ //操作栏
         List<Operation> operations=new ArrayList<>();
-        operations.add(new MusicTable.Operation("mdrmz-play_arrow",()-> Player.getInstance().play(music), "播放"));
-        operations.add(new MusicTable.Operation("mdral-add", ()-> Player.getInstance().add(music), "添加到播放列表"));
+        operations.add(new MusicTable.Operation("mdrmz-play_arrow", "播放",()-> Player.getInstance().play(music)));
+        operations.add(new MusicTable.Operation("mdral-add", "添加到播放列表", ()-> Player.getInstance().add(music)));
         return operations;
     }
 
     List<Operation> getMenus(Music music){ //右键菜单
         List<Operation> menus=new ArrayList<>();
-        menus.add(new MusicTable.Operation("mdral-info",()->System.out.println("Detail:"+music), "详细信息"));
+        menus.add(new MusicTable.Operation("mdral-info", "详细信息",()->System.out.println("Detail:"+music)));
         return menus;
     }
 
