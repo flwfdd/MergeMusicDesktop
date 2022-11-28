@@ -1,6 +1,7 @@
 package xyz.flwfdd.mergemusicdesktop.model;
 
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,12 +19,37 @@ import java.util.*;
  * @implNote 搜索列表的数据模型
  */
 public class SearchTable extends MusicTable{
+
+    public static class SearchCase{ //搜索实例
+        public int page;
+        public boolean haveNext;
+        public String key;
+        public Music.Platform platform;
+        public Music.Type type;
+        public ObservableList<Music> list;
+        public InvalidationListener musicTableListener;
+
+        SearchCase(List<Music> l){
+            haveNext=false;
+            list=FXCollections.observableArrayList();
+            list.addAll(l);
+        }
+
+        SearchCase(String key, Music.Platform platform, Music.Type type){
+            this.key=key;
+            this.platform=platform;
+            this.type=type;
+            page=0;
+            haveNext=true;
+            list=FXCollections.observableArrayList();
+        }
+    }
+
     final int limit;
     SimpleStringProperty searchKey;
     SimpleObjectProperty<Music.Platform> searchPlatform;
     SimpleObjectProperty<Music.Type> searchType;
-
-    int page;
+    SimpleObjectProperty<SearchCase> nowSearchCase;
 
     public SimpleBooleanProperty loadingProperty() {
         return loading;
@@ -31,60 +57,56 @@ public class SearchTable extends MusicTable{
 
     SimpleBooleanProperty loading=new SimpleBooleanProperty(false); //保证单个搜索线程
 
-    boolean haveNext=false; //是否可以加载更多
-
-    Deque<ObservableList<Music>> historyMusicList;
-
-    public SimpleStringProperty searchKeyProperty() {
-        return searchKey;
-    }
-
-    public SimpleObjectProperty<Music.Platform> searchPlatformProperty() {
-        return searchPlatform;
-    }
-
-    public SimpleObjectProperty<Music.Type> searchTypeProperty() {
-        return searchType;
-    }
+    Deque<SearchCase> historySearchCase;
 
     public SearchTable(){
         super();
         limit=24;
-        historyMusicList=new LinkedList<>();
+        historySearchCase=new LinkedList<>();
         searchKey=new SimpleStringProperty();
         searchPlatform=new SimpleObjectProperty<>();
         searchType=new SimpleObjectProperty<>();
+
+        nowSearchCase=new SimpleObjectProperty<>();
+        nowSearchCase.addListener((observableValue, oldCase, newCase) -> {
+            if(oldCase!=null)oldCase.list.removeListener(oldCase.musicTableListener);
+            musicList.setAll(newCase.list);
+            newCase.musicTableListener=observable->musicList.setAll(newCase.list);
+            newCase.list.addListener(newCase.musicTableListener);
+        });
     }
 
     void pushHistory(){
-        historyMusicList.addLast(FXCollections.observableList(musicList.stream().toList()));
-        if(historyMusicList.size()>24)historyMusicList.removeFirst();
+        if(nowSearchCase.get()==null||nowSearchCase.get().list.isEmpty())return;
+//        historySearchCase.addLast(FXCollections.observableList(musicList.stream().toList()));
+        historySearchCase.addLast(nowSearchCase.get());
+        if(historySearchCase.size()>24)historySearchCase.removeFirst();
     }
 
     public void search(){
         if(loading.get())return;
-        page=0;
-        musicList.clear();
-        haveNext=true;
+        pushHistory();
+        nowSearchCase.set(new SearchCase(searchKey.get(),searchPlatform.get(),searchType.get()));
         searchNext();
     }
 
     public void searchNext(){ //获取下一页
-        if(loading.get()||!haveNext)return;
+        if(loading.get()||!nowSearchCase.get().haveNext)return;
         loading.set(true);
         new Thread(new Task<Void>() {
             List<Music> l;
             @Override
             protected Void call(){
-                l=Music.search(searchKey.get(),searchPlatform.get(),searchType.get(),limit,page);
+                l=Music.search(nowSearchCase.get().key,nowSearchCase.get().platform,nowSearchCase.get().type,limit,nowSearchCase.get().page);
                 return null;
             }
 
             @Override
             protected void succeeded() {
-                musicList.addAll(l);
-                haveNext=(l.size()!=0);
-                page++;
+                nowSearchCase.get().list.addAll(l);
+                nowSearchCase.get().haveNext=(l.size()!=0);
+                nowSearchCase.get().page++;
+                tableView.getSelectionModel().clearSelection();
                 loading.set(false);
             }
         }).start();
@@ -104,7 +126,7 @@ public class SearchTable extends MusicTable{
             @Override
             protected void succeeded() {
                 pushHistory();
-                musicList.setAll(l);
+                nowSearchCase.set(new SearchCase(l));
                 tableView.getSelectionModel().clearSelection();
                 loading.set(false);
             }
@@ -112,8 +134,8 @@ public class SearchTable extends MusicTable{
     }
 
     public void back(){
-        if(historyMusicList.isEmpty())return;
-        musicList.setAll(historyMusicList.removeLast());
+        if(historySearchCase.isEmpty())return;
+        nowSearchCase.set(historySearchCase.removeLast());
         tableView.getSelectionModel().clearSelection();
     }
 
@@ -142,18 +164,28 @@ public class SearchTable extends MusicTable{
     @Override
     List<Operation> getMenus(Music music){
         List<Operation> menus=new ArrayList<>();
-        music.getArtists().forEach(artist-> menus.add(new Operation("mdomz-search",artist,()->{
-            searchKey.set(artist);
-            pushHistory();
+        Set<String>keySet=new LinkedHashSet<>();
+        keySet.add(music.getName());
+        keySet.addAll(music.getArtists());
+        if(!music.getAlbumName().isBlank())keySet.add(music.getAlbumName());
+        keySet.forEach(key-> menus.add(new Operation("mdomz-search",key,()->{
+            searchKey.set(key);
             search();
         })));
-        if(!music.getAlbumName().isBlank())menus.add(new MusicTable.Operation("mdomz-search",music.getAlbumName(),()->{
-            searchKey.set(music.getAlbumName());
-            pushHistory();
-            search();
-        }));
         if(music.getType()== Music.Type.MUSIC)menus.addAll(super.getMenus(music));
         else menus.add(new MusicTable.Operation("mdral-info", "详细信息",()->System.out.println("List Detail:"+music)));
         return menus;
+    }
+
+    public SimpleStringProperty searchKeyProperty() {
+        return searchKey;
+    }
+
+    public SimpleObjectProperty<Music.Platform> searchPlatformProperty() {
+        return searchPlatform;
+    }
+
+    public SimpleObjectProperty<Music.Type> searchTypeProperty() {
+        return searchType;
     }
 }

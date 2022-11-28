@@ -28,7 +28,9 @@ import xyz.flwfdd.mergemusicdesktop.model.Player;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author flwfdd
@@ -94,6 +96,11 @@ public class MainController {
         return MainApplication.class.getResource(path);
     }
 
+    Map<String,Runnable>toggleFunc=new HashMap<>();
+    void toggle(String name){
+        toggleFunc.get(name).run();
+    }
+
     ToggleButton createToggle(String icon,String text){
         MFXRectangleToggleNode toggleNode=new MFXRectangleToggleNode(text,new FontIcon(icon+":24"));
         toggleNode.setToggleGroup(toggleGroup);
@@ -113,6 +120,10 @@ public class MainController {
                     .map(bean -> {
                         ToggleButton toggle = (ToggleButton) bean.getBeanToNodeMapper().get();
                         toggle.setOnAction(event -> mainPane.getChildren().setAll(bean.getRoot()));
+                        toggleFunc.put(bean.getViewName(),()->{
+                            mainPane.getChildren().setAll(bean.getRoot());
+                            toggle.setSelected(true);
+                        });
                         if (bean.isDefaultView()) {
                             mainPane.getChildren().setAll(bean.getRoot());
                             toggle.setSelected(true);
@@ -224,6 +235,7 @@ public class MainController {
         var tooltip=new MFXTooltip(infoPane);
         tooltip.setText("MergeMusic!");
         tooltip.install();
+        playImage.setOnMouseClicked(e->toggle("Playing"));
 
         playerInstance.playingMusicProperty().addListener(observable -> {
             Music music=playerInstance.playingMusicProperty().get();
