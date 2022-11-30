@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import xyz.flwfdd.mergemusicdesktop.model.table.PlayTable;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.util.ArrayList;
@@ -22,8 +23,8 @@ public class Player {
     private static Player instance;
 
     BooleanProperty mute;
-    SimpleDoubleProperty showVolume;
-    NumberBinding realVolume;
+    SimpleDoubleProperty showVolume; // 显示音量 0~100
+    NumberBinding realVolume; // 实际音量 0~100
 
     Media media;
     MediaPlayer player;
@@ -103,10 +104,11 @@ public class Player {
 
     boolean loading=false;
     public void play(Music music){
-        System.out.println("Play:"+music);
-
         if(player!=null){
-            if(player.getMedia().getSource().equals(music.getSrc()))return;
+            if(player.getMedia().getSource().equals(music.getSrc())){
+                play();
+                return;
+            }
             player.stop();
         }
         if(loading)return;
@@ -122,6 +124,9 @@ public class Player {
             protected void succeeded() {
                 try{
                     playingMusic.set(music);
+//                    var t= System.currentTimeMillis();
+//                    Saver.download(music.getSrc(),"D:/test.mp3");
+//                    System.out.println(System.currentTimeMillis()-t);
                     media=new Media(music.getSrc());
                     player=new MediaPlayer(media);
 
@@ -144,7 +149,10 @@ public class Player {
                         player.currentTimeProperty().addListener((observableValue, t0, t1) -> nowTime.set(t1.toSeconds()));
                     });
                     playing.bind(player.statusProperty().isEqualTo(MediaPlayer.Status.PLAYING));
-                    player.setOnEndOfMedia(()-> player.stop());
+                    player.setOnEndOfMedia(()-> {
+                        player.stop();
+                        PlayTable.getInstance().playNext();
+                    });
 
                     player.setOnError(()-> System.out.println(player.getError().toString()));
                 }
@@ -159,9 +167,5 @@ public class Player {
                 loading=false;
             }
         }).start();
-    }
-
-    public void add(Music music){
-        System.out.println("Add:"+music);
     }
 }

@@ -24,6 +24,7 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 888, 666);
+        ((MainController)fxmlLoader.getController()).setScene(scene);
         stage.setTitle("MergeMusic");
         stage.setScene(scene);
         stage.show();

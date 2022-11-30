@@ -72,7 +72,7 @@
          </HBox>
          <VBox alignment="CENTER" maxWidth="555.0" minWidth="242.0" spacing="11.0" GridPane.columnIndex="1">
             <HBox alignment="CENTER" spacing="24.0">
-               <MFXButton fx:id="prefButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" styleClass="control-button">
+               <MFXButton contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onPlayPref" prefHeight="32.0" prefWidth="32.0" styleClass="control-button">
                   <graphic>
                      <FontIcon iconLiteral="mdrmz-skip_previous" iconSize="24" />
                   </graphic>
@@ -81,8 +81,11 @@
                   <graphic>
                      <FontIcon iconLiteral="mdrmz-play_arrow" iconSize="24" />
                   </graphic>
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
                </MFXButton>
-               <MFXButton fx:id="nextButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" styleClass="control-button">
+               <MFXButton contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onPlayNext" prefHeight="32.0" prefWidth="32.0" styleClass="control-button">
                   <graphic>
                      <FontIcon iconLiteral="mdrmz-skip_next" iconSize="24" />
                   </graphic>
@@ -103,6 +106,11 @@
             </HBox>
          </VBox>
          <HBox alignment="CENTER" spacing="11.0" GridPane.columnIndex="2">
+            <MFXButton fx:id="loopButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="24.0" styleClass="control-button">
+               <graphic>
+                  <FontIcon iconLiteral="mdral-east" iconSize="17" />
+               </graphic>
+            </MFXButton>
             <MFXButton fx:id="muteButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="24.0" styleClass="control-button">
                <graphic>
                   <FontIcon iconLiteral="mdrmz-volume_up" iconSize="17" />

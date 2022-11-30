@@ -1,4 +1,4 @@
-package xyz.flwfdd.mergemusicdesktop.model;
+package xyz.flwfdd.mergemusicdesktop.model.table;
 
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.beans.InvalidationListener;
@@ -91,7 +91,7 @@ public class SearchTable extends MusicTable{
     }
 
     public void searchNext(){ //获取下一页
-        if(loading.get()||!nowSearchCase.get().haveNext)return;
+        if(nowSearchCase.get()==null||loading.get()||!nowSearchCase.get().haveNext)return;
         loading.set(true);
         new Thread(new Task<Void>() {
             List<Music> l;
@@ -103,10 +103,12 @@ public class SearchTable extends MusicTable{
 
             @Override
             protected void succeeded() {
-                nowSearchCase.get().list.addAll(l);
-                nowSearchCase.get().haveNext=(l.size()!=0);
-                nowSearchCase.get().page++;
-                tableView.getSelectionModel().clearSelection();
+                if(l!=null){
+                    nowSearchCase.get().list.addAll(l);
+                    nowSearchCase.get().haveNext=(l.size()!=0);
+                    nowSearchCase.get().page++;
+                    tableView.getSelectionModel().clearSelection();
+                }
                 loading.set(false);
             }
         }).start();
@@ -125,9 +127,11 @@ public class SearchTable extends MusicTable{
 
             @Override
             protected void succeeded() {
-                pushHistory();
-                nowSearchCase.set(new SearchCase(l));
-                tableView.getSelectionModel().clearSelection();
+                if(l!=null){
+                    pushHistory();
+                    nowSearchCase.set(new SearchCase(l));
+                    tableView.getSelectionModel().clearSelection();
+                }
                 loading.set(false);
             }
         }).start();

@@ -12,19 +12,23 @@ import io.github.palexdev.materialfx.utils.others.loader.MFXLoaderBean;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextBoundsType;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
+import xyz.flwfdd.mergemusicdesktop.model.table.PlayTable;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.net.URL;
@@ -65,12 +69,6 @@ public class MainController {
     MFXButton playButton; //播放暂停
 
     @FXML
-    MFXButton prefButton; //上一首
-
-    @FXML
-    MFXButton nextButton; //下一首
-
-    @FXML
     ImageView playImage;
 
     @FXML
@@ -87,6 +85,19 @@ public class MainController {
 
     @FXML
     Pane backgroundPane;
+
+    @FXML
+    MFXButton loopButton;
+
+    @FXML
+    void onPlayPref(){
+        PlayTable.getInstance().playPref();
+    }
+
+    @FXML
+    void onPlayNext(){
+        PlayTable.getInstance().playNext();
+    }
 
     ToggleGroup toggleGroup;
     Player playerInstance;
@@ -112,8 +123,9 @@ public class MainController {
         toggleGroup=new ToggleGroup();
         ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
         MFXLoader loader=new MFXLoader();
-        loader.addView(MFXLoaderBean.of("Search",loadURL("search-view.fxml")).setBeanToNodeMapper(()->createToggle("mdomz-search","搜索")).setDefaultRoot(false).get());
-        loader.addView(MFXLoaderBean.of("Playing",loadURL("playing-view.fxml")).setBeanToNodeMapper(()->createToggle("mdral-graphic_eq","播放")).setDefaultRoot(true).get());
+        loader.addView(MFXLoaderBean.of("Search",loadURL("search-view.fxml")).setBeanToNodeMapper(()->createToggle("mdomz-search","搜索")).setDefaultRoot(true).get());
+        loader.addView(MFXLoaderBean.of("PlayList",loadURL("playlist-view.fxml")).setBeanToNodeMapper(()->createToggle("mdrmz-queue_music","列表")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("Playing",loadURL("playing-view.fxml")).setBeanToNodeMapper(()->createToggle("mdral-graphic_eq","播放")).setDefaultRoot(false).get());
         loader.addView(MFXLoaderBean.of("Config",loadURL("config-view.fxml")).setBeanToNodeMapper(()->createToggle("mdrmz-settings","设置")).setDefaultRoot(false).get());
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream()
@@ -211,6 +223,15 @@ public class MainController {
             if(playerInstance.playingProperty().get())icon.setIconLiteral("mdrmz-pause");
             else icon.setIconLiteral("mdrmz-play_arrow");
         });
+
+        // 初始化播放顺序
+        var loopType=PlayTable.getInstance().loopTypeProperty();
+        loopType.addListener(observable -> {
+            FontIcon icon=(FontIcon) loopButton.getGraphic();
+            icon.setIconLiteral(loopType.get().getIcon());
+        });
+
+        loopButton.setOnAction(e-> loopType.set(loopType.get().getNext()));
     }
 
     void initVolumeController(){ //初始化音量控制部分
@@ -271,6 +292,19 @@ public class MainController {
 
     void initPlayer(){
         playerInstance=Player.getInstance();
+    }
+
+    public void setScene(Scene scene){
+        scene.addEventHandler(KeyEvent.KEY_RELEASED,keyEvent -> {
+            var player=Player.getInstance();
+            switch (keyEvent.getCode()){
+                case SPACE -> playButton.getOnAction().handle(new ActionEvent());
+                case UP -> player.showVolumeProperty().set(Math.min(100,player.showVolumeProperty().get()+10));
+                case DOWN -> player.showVolumeProperty().set(Math.max(0,player.showVolumeProperty().get()-10));
+                case LEFT -> player.seek(player.nowTimeProperty().get()-10);
+                case RIGHT -> player.seek(player.nowTimeProperty().get()+10);
+            }
+        });
     }
 
     public void initialize() {

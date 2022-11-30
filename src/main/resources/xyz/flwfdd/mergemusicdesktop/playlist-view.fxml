@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox alignment="CENTER" minWidth="666.0" prefHeight="445.0" prefWidth="740.0"
+      style="-fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.PlayListController">
+   <MFXTableView fx:id="playTable" footerVisible="false" maxWidth="-Infinity" prefHeight="23333.0" prefWidth="666.0"
+                 style="-fx-border-width: 1 1 0 1; -fx-background-color: #fffc; -fx-border-color: #C9D4D6; -fx-border-radius: 11 11 0 0; -fx-background-radius: 11 11 0 0;">
+      <VBox.margin>
+         <Insets top="42.0"/>
+      </VBox.margin>
+   </MFXTableView>
+</VBox>

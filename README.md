@@ -18,6 +18,15 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 
 最后可谓是「众里寻他千百度，蓦然回首」，发现 Java FX 还有一个叫做 `javafx-media`的模块，几乎和浏览器中的`Web Audio API`别无二致（甚至我怀疑他们共享了同样的底层实现），查阅[文档](https://docs.oracle.com/javafx/2/api/javafx/scene/media/package-summary.html)发现可以满足需求（除了无法播放`.flac`，不过无损音乐的功能本来就不是特别常用，也可以通过再加一个包来解决），而且还可以直接使用链接播放，甚至还自带了频谱（都不用自己想办法做傅里叶分解了）！
 
+## 打包与分发
+开始时尝试了 IntelliJ 的 artifacts 导出 JavaFX Application 的方案以及其他的一些 maven 插件，但是都遇到了各种各样的报错，最终发现`JDK`中的`jpackage`一行命令就能搞定....
+
+```
+jpackage --name MergeMusic --input .\MergeMusicDesktop_jar\ --vendor raven --main-jar .\MergeMusicDesktop.jar --type app-image
+```
+
+果然还是应该先把官方的东西吃透。感觉 Java 生态和之前比较了解的前端生态的一大不同之处就是 Java 的生态还是官方主导的，大部分会用到的东西官方都已经做好了，反而是社区的东西很多情况下不如官方的好使。这点前端生态就跟更加去中心化一些，
+
 ## 问题
 
 ### TableView 数据不同步

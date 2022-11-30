@@ -1,4 +1,4 @@
-package xyz.flwfdd.mergemusicdesktop.model;
+package xyz.flwfdd.mergemusicdesktop.model.table;
 
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -130,8 +130,8 @@ public class MusicTable {
             colName.setMinWidth(w);
             colArtists.setMinWidth(w);
             colAlbum.setMinWidth(w);
+            System.out.println(tableView.getWidth());
         });
-
 
         // 设置行
         tableView.setTableRowFactory(music->{
@@ -170,8 +170,8 @@ public class MusicTable {
 
     List<Operation> getOperations(Music music){ //操作栏
         List<Operation> operations=new ArrayList<>();
-        operations.add(new MusicTable.Operation("mdrmz-play_arrow", "播放",()-> Player.getInstance().play(music)));
-        operations.add(new MusicTable.Operation("mdral-add", "添加到播放列表", ()-> Player.getInstance().add(music)));
+        operations.add(new MusicTable.Operation("mdrmz-play_arrow", "播放",()->PlayTable.getInstance().play(music)));
+        operations.add(new MusicTable.Operation("mdral-add", "添加到播放列表", ()-> PlayTable.getInstance().add(music)));
         return operations;
     }
 
