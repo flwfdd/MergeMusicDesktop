@@ -47,7 +47,7 @@ class MusicTest {
         System.out.println(l);
         l = Music.search("", Music.Platform.CLOUD, Music.Type.MUSIC, 4, 0);
         System.out.println(l);
-        l = Music.search("赤羽", Music.Platform.CLOUD, Music.Type.MUSIC, 4, 0);
+        l = Music.search("&", Music.Platform.CLOUD, Music.Type.MUSIC, 4, 0);
         System.out.println(l);
         l = Music.search("赤羽", Music.Platform.CLOUD, Music.Type.MUSIC, 2, 1);
         System.out.println(l);

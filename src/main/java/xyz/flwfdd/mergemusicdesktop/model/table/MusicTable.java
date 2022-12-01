@@ -130,7 +130,6 @@ public class MusicTable {
             colName.setMinWidth(w);
             colArtists.setMinWidth(w);
             colAlbum.setMinWidth(w);
-            System.out.println(tableView.getWidth());
         });
 
         // 设置行

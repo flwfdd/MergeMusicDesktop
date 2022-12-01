@@ -2,10 +2,8 @@ package xyz.flwfdd.mergemusicdesktop;
 
 import io.github.palexdev.materialfx.controls.*;
 import javafx.collections.FXCollections;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import xyz.flwfdd.mergemusicdesktop.model.table.SearchTable;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
@@ -54,7 +52,6 @@ public class SearchController {
         searchKey.setOnKeyPressed(e->{ //回车搜索
             if(e.getCode()==KeyCode.ENTER)onSearch();
         });
-        searchKey.addEventHandler(KeyEvent.KEY_RELEASED, Event::consume); //消费事件
         searchPlatform.setItems(FXCollections.observableList(Arrays.stream(Music.Platform.values()).toList()));
         searchType.setItems(FXCollections.observableList(Arrays.stream(Music.Type.values()).toList()));
         searchPlatform.selectFirst();

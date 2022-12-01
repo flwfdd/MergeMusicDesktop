@@ -3,6 +3,7 @@ package xyz.flwfdd.mergemusicdesktop.model;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class Config {
     public String getRootPath() {
         if (rootPath == null) {
             String path = Config.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-            path=java.net.URLDecoder.decode(path, StandardCharsets.UTF_8);
+            path=URLDecoder.decode(path, StandardCharsets.UTF_8);
             if (System.getProperty("os.name").contains("dows")) {
                 path = path.substring(1);
             }

@@ -41,7 +41,7 @@ public class PlayTable extends MusicTable{
 
     SimpleObjectProperty<LoopType> loopType =new SimpleObjectProperty<>(LoopType.LIST);
 
-    boolean loading=false;
+    volatile boolean loading=false;
 
     public SimpleObjectProperty<LoopType> loopTypeProperty() {
         return loopType;
@@ -136,10 +136,10 @@ public class PlayTable extends MusicTable{
     public void add(Music music){
         System.out.println("Add:"+music);
         if(music.getType()== Music.Type.MUSIC){
-            for(int i=musicList.size()-1;i>=0;i--){
-                if(musicList.get(i).getMid().equals(music.getMid()))return;
+            for (Music value : musicList) {
+                if (value.getMid().equals(music.getMid())) return;
             }
-            musicList.add(0,music);
+            musicList.add(music);
         }
         else{
             if(loading)return;

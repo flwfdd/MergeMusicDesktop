@@ -102,7 +102,7 @@ public class Player {
         if(player!=null)player.play();
     }
 
-    boolean loading=false;
+    volatile boolean loading=false;
     public void play(Music music){
         if(player!=null){
             if(player.getMedia().getSource().equals(music.getSrc())){

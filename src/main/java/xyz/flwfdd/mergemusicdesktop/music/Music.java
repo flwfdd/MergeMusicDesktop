@@ -1,12 +1,6 @@
 package xyz.flwfdd.mergemusicdesktop.music;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author flwfdd
@@ -38,17 +32,6 @@ public abstract class Music {
                 case USER -> "用户";
                 case LYRIC -> "歌词";
             };
-        }
-    }
-
-    static OkHttpClient client = new OkHttpClient();
-
-    static String httpGet(String url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        try (Response response = client.newCall(request).execute()) {
-            return Objects.requireNonNull(response.body()).string();
         }
     }
 
@@ -114,6 +97,11 @@ public abstract class Music {
 
     public Type getType(){
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s(%s):%s", mid, type, name);
     }
 
 }

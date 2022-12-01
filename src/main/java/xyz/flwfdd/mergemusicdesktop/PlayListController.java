@@ -22,7 +22,7 @@ public class PlayListController {
         playTableModel=PlayTable.getInstance();
         playTableModel.bind(playTable);
 
-        // 选择在播放的
+        // 在列表中标注正在播放的
         var playingMusic=Player.getInstance().playingMusicProperty();
         playingMusic.addListener(observable -> playTable.getCells().forEach((ind, row)->{
             if(row.getData().getMid().equals(playingMusic.get().getMid())){

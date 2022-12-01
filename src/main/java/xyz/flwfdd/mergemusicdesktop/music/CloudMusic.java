@@ -6,6 +6,10 @@ import com.alibaba.fastjson2.JSONObject;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,14 +21,6 @@ import java.util.stream.Collectors;
  */
 
 class CloudMusic extends Music {
-    static String getApiUrl(){
-        return Config.getInstance().get("cloud_music_api_url");
-    }
-
-    static String getCookie(){
-        return Config.getInstance().get("cloud_music_cookie");
-    }
-
     CloudMusic(Type type, String mid) {
         this.type = type;
         this.mid = mid;
@@ -38,13 +34,25 @@ class CloudMusic extends Music {
         this.albumName = albumName;
     }
 
+    static String httpGet(String url1) throws IOException {
+        String apiUrl=Config.getInstance().get("cloud_music_api_url");
+        String cookie=Config.getInstance().get("cloud_music_cookie");
+        String url2= apiUrl+url1+"&realIP=114.246.205.187&cookie="+URLEncoder.encode(cookie,StandardCharsets.UTF_8);
+        URL url=new URL(url2);
+        HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+        connection.setConnectTimeout(11000);
+        connection.setReadTimeout(11000);
+        connection.setRequestMethod("GET");
+        return new Scanner(connection.getInputStream()).useDelimiter("\\A").next();
+    }
+
     static Map<Type, String> type_map = new HashMap<>(Map.of(Type.MUSIC, "1", Type.LYRIC, "1006", Type.LIST, "1000", Type.USER, "1002"));
 
     static List<Music> search(String keyword, Type type, int limit, int page) {
         if(keyword.isEmpty())return new ArrayList<>();
-        String url = getApiUrl() + "/cloudsearch?keywords=%s&type=%s&limit=%d&offset=%d";
+        String url = "/cloudsearch?keywords=%s&type=%s&limit=%d&offset=%d";
         if (!type_map.containsKey(type)) type = Type.MUSIC;
-        url = String.format(url, keyword, type_map.get(type), limit, limit * page);
+        url = String.format(url, URLEncoder.encode(keyword,StandardCharsets.UTF_8), type_map.get(type), limit, limit * page);
         try {
             String s = httpGet(url);
             JSONObject data = JSON.parseObject(s).getJSONObject("result");
@@ -87,10 +95,6 @@ class CloudMusic extends Music {
         return null;
     }
 
-    static String httpGet(String url) throws IOException {
-        return Music.httpGet(url + "&realIP=114.246.205.187&cookie=" + getCookie());
-    }
-
     static List<Music> parseSongs(JSONArray songs) {
         List<Music> music_list = new ArrayList<>();
         songs.forEach(x -> {
@@ -108,7 +112,7 @@ class CloudMusic extends Music {
 
     void loadMusic() {
         try {
-            String s = httpGet(getApiUrl() + "/song/detail/?ids=" + id);
+            String s = httpGet("/song/detail/?ids=" + id);
             JSONObject data = JSON.parseObject(s).getJSONArray("songs").getJSONObject(0);
             name = data.getString("name");
             artists = data.getJSONArray("ar").stream()
@@ -116,12 +120,12 @@ class CloudMusic extends Music {
             img = data.getJSONObject("al").getString("picUrl");
             albumName = data.getJSONObject("al").getString("name");
 
-            s = Music.httpGet(getApiUrl() + "/lyric/?id=" + id);
+            s = httpGet("/lyric/?id=" + id);
             data = JSON.parseObject(s);
             lrc = data.getJSONObject("lrc").getString("lyric");
             if (data.containsKey("tlyric")) translateLrc = data.getJSONObject("tlyric").getString("lyric");
 
-            s = httpGet(getApiUrl() + "/song/url/?br=320000&id=" + id);
+            s = httpGet("/song/url/?br=320000&id=" + id);
             data = JSON.parseObject(s);
             src = data.getJSONArray("data").getJSONObject(0).getString("url");
             if (src == null) throw new RuntimeException("Can't get src!");
@@ -133,7 +137,7 @@ class CloudMusic extends Music {
 
     List<Music> loadUserList() throws IOException {
         // user->list 加载用户
-        String s = httpGet(getApiUrl() + "/user/playlist?uid=" + id);
+        String s = httpGet("/user/playlist?uid=" + id);
         List<Music> lists = new ArrayList<>();
         JSON.parseObject(s).getJSONArray("playlist").forEach(obj -> {
             JSONObject l = (JSONObject) obj;
@@ -148,10 +152,10 @@ class CloudMusic extends Music {
 
     List<Music> loadPlayList() throws IOException {
         // list->music 加载歌单
-        String s = httpGet(getApiUrl() + "/playlist/detail?id=" + id);
+        String s = httpGet("/playlist/detail?id=" + id);
         String ids = JSON.parseObject(s).getJSONObject("playlist").getJSONArray("trackIds").stream()
                 .map(obj -> ((JSONObject) obj).getString("id")).collect(Collectors.joining(","));
-        s = httpGet(getApiUrl() + "/song/detail/?ids=" + ids);
+        s = httpGet("/song/detail/?ids=" + ids);
         return parseSongs(JSON.parseObject(s).getJSONArray("songs"));
     }
 
@@ -170,11 +174,4 @@ class CloudMusic extends Music {
             return null;
         }
     }
-
-    @Override
-    public String toString() {
-        return String.format("%s(%s):%s", mid, type, name);
-    }
-
-
 }

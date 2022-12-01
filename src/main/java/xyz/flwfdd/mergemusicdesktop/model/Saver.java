@@ -11,14 +11,14 @@ import java.net.URLConnection;
  * @implNote 文件保存模块
  */
 public class Saver {
-    final static int bufferSize=102400;
+    final static int buffSize=102400;
 
     public static boolean download(String src,String path){
         try{
             URL url=new URL(src);
             URLConnection con=url.openConnection();
             InputStream is=con.getInputStream();
-            byte[]bs=new byte[bufferSize];
+            byte[]bs=new byte[buffSize];
             File file=new File(path);
             FileOutputStream os=new FileOutputStream(file,true);
             int len;

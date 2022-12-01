@@ -5,7 +5,6 @@ module xyz.flwfdd.mergemusicdesktop {
     requires MaterialFX;
     requires VirtualizedFX;
     requires org.kordamp.ikonli.javafx;
-    requires okhttp3;
     requires com.alibaba.fastjson2;
 
 

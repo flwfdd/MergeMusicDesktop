@@ -1,9 +1,6 @@
 package xyz.flwfdd.mergemusicdesktop;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
-import io.github.palexdev.materialfx.controls.MFXSlider;
-import io.github.palexdev.materialfx.controls.MFXTooltip;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.enums.SliderEnums;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
@@ -295,14 +292,22 @@ public class MainController {
     }
 
     public void setScene(Scene scene){
-        scene.addEventHandler(KeyEvent.KEY_RELEASED,keyEvent -> {
-            var player=Player.getInstance();
+        scene.addEventFilter(KeyEvent.KEY_RELEASED,keyEvent -> {
+            // 如果是输入框就不捕获
+            if(keyEvent.getTarget().getClass()==BoundTextField.class&&((BoundTextField)keyEvent.getTarget()).isEditable())return;
+            Player player=Player.getInstance();
+            boolean consume=true;
             switch (keyEvent.getCode()){
                 case SPACE -> playButton.getOnAction().handle(new ActionEvent());
                 case UP -> player.showVolumeProperty().set(Math.min(100,player.showVolumeProperty().get()+10));
                 case DOWN -> player.showVolumeProperty().set(Math.max(0,player.showVolumeProperty().get()-10));
                 case LEFT -> player.seek(player.nowTimeProperty().get()-10);
                 case RIGHT -> player.seek(player.nowTimeProperty().get()+10);
+                default -> consume=false;
+            }
+            if(consume){
+                keyEvent.consume();
+                backgroundPane.requestFocus(); //让无关紧要的组件捕获焦点以解决玄学问题
             }
         });
     }
