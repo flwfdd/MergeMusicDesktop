@@ -1,6 +1,8 @@
 package xyz.flwfdd.mergemusicdesktop.music;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author flwfdd
@@ -19,6 +21,12 @@ public abstract class Music {
                 case CLOUD -> "网易云";
             };
         }
+
+        public String getExtension(){
+            return switch (this){
+                case CLOUD -> ".mp3";
+            };
+        }
     }
 
     public enum Type{
@@ -35,32 +43,70 @@ public abstract class Music {
         }
     }
 
+    static DB db=DB.getInstance();
+
     public static List<Music> search(String keyword, Platform platform, Type type, int limit, int page) {
         // page从0开始
         List<Music> music_list = null;
-        if (platform.equals(Platform.CLOUD)) music_list = CloudMusic.search(keyword, type, limit, page);
+        if (platform==Platform.CLOUD) music_list = CloudMusic.search(keyword, type, limit, page);
         return music_list;
     }
 
-    public static Music getMusic(String mid) {
-        try {
-            Music music;
-            if (mid.startsWith("C")) music=new CloudMusic(Type.MUSIC, mid);
-            else return null;
-            music.load();
-            return music;
-        } catch (Exception e) {
-            System.out.println("get music error: " + e);
-            return null;
+    public static Music getMusic(String mid,String name,String lrc,String translateLrc,String albumName,List<String> artists) {
+        Music music=switch (mid.charAt(0)){
+            case 'C'->new CloudMusic(Type.MUSIC, mid);
+            default -> null;
+        };
+        if(music==null)return null;
+        music.mid=mid;
+        music.name=name;
+        music.lrc=lrc;
+        music.translateLrc=translateLrc;
+        music.albumName=albumName;
+        music.artists=artists;
+        return music;
+    }
+
+    public static Music getMusic(String mid,String name,String lrc,String translateLrc,String albumName,List<String> artists,String src,String img) {
+        Music music=getMusic(mid,name,lrc,translateLrc,albumName,artists);
+        if(music==null)return null;
+        music.src=src;
+        music.img=img;
+        return music;
+    }
+
+    abstract void custom_load(); //加载音乐播放链接、图片链接、歌词、专辑
+
+    public void load(){
+        Music music=db.getCacheMusic(mid);
+        if(music==null||music.src.isBlank()||music.img.isBlank()){
+            System.out.println("Load:"+music);
+            custom_load();
+            if(src==null)src="";
+            if(img==null)img="";
+            if(lrc==null)lrc="";
+            if(translateLrc==null)translateLrc="";
+            if(albumName==null)albumName="";
+            db.updateMusic(this);
+            db.cacheMusic(this);
+        }
+        else {
+            src=music.src;
+            img=music.img;
         }
     }
 
-    public abstract void load(); //加载音乐详细信息、封面图、播放链接等
+    abstract List<Music> custom_unfold(); //展开音乐列表
 
-    public abstract List<Music> unfold(); //展开音乐列表
+    public List<Music> unfold(){
+        List<Music> l=custom_unfold();
+        l.forEach(music -> db.updateMusic(music));
+        return l;
+    }
 
-    String mid, id, name="", src="", img="", lrc="", translateLrc="", albumName="";
+    String mid, name="", src="", img="", lrc="", translateLrc="", albumName="";
     Type type;
+    Platform platform;
     List<String> artists;
 
     public String getMid() { //获取mid mid第一个字母为平台
@@ -97,6 +143,14 @@ public abstract class Music {
 
     public Type getType(){
         return type;
+    }
+
+    public Platform getPlatform(){
+        return platform;
+    }
+
+    public Map<String,String> getHeaders(){
+        return new HashMap<>();
     }
 
     @Override

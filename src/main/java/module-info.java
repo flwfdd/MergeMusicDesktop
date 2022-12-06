@@ -6,6 +6,7 @@ module xyz.flwfdd.mergemusicdesktop {
     requires VirtualizedFX;
     requires org.kordamp.ikonli.javafx;
     requires com.alibaba.fastjson2;
+    requires java.sql;
 
 
     opens xyz.flwfdd.mergemusicdesktop to javafx.fxml;

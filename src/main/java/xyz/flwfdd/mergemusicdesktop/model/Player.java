@@ -124,9 +124,6 @@ public class Player {
             protected void succeeded() {
                 try{
                     playingMusic.set(music);
-//                    var t= System.currentTimeMillis();
-//                    Saver.download(music.getSrc(),"D:/test.mp3");
-//                    System.out.println(System.currentTimeMillis()-t);
                     media=new Media(music.getSrc());
                     player=new MediaPlayer(media);
 

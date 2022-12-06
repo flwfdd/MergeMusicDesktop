@@ -21,7 +21,9 @@ import java.util.stream.Collectors;
  */
 
 class CloudMusic extends Music {
+    String id;
     CloudMusic(Type type, String mid) {
+        this.platform=Platform.CLOUD;
         this.type = type;
         this.mid = mid;
         id = mid.substring(1);
@@ -159,15 +161,15 @@ class CloudMusic extends Music {
         return parseSongs(JSON.parseObject(s).getJSONArray("songs"));
     }
 
-    public void load() {
-        if (type.equals(Type.MUSIC)) loadMusic();
+    public void custom_load() {
+        if (type==Type.MUSIC) loadMusic();
         else throw new RuntimeException("Can only load music.");
     }
 
-    public List<Music> unfold() {
+    public List<Music> custom_unfold() {
         try {
-            if (type.equals(Type.LIST)) return loadPlayList();
-            else if (type.equals(Type.USER)) return loadUserList();
+            if (type==Type.LIST) return loadPlayList();
+            else if (type==Type.USER) return loadUserList();
             return null;
         } catch (Exception e) {
             System.out.println("cloud music load list error: " + e);

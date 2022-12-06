@@ -54,11 +54,13 @@ public class PlayTable extends MusicTable{
         switch (loopType.get()){
             case LIST -> {
                 if(musicList.isEmpty())return;
-                var playingMid=Player.getInstance().playingMusicProperty().get().getMid();
-                for(int i=0;i<musicList.size();i++){
-                    if(musicList.get(i).getMid().equals(playingMid)){
-                        play(musicList.get((i+musicList.size()-1)%musicList.size()));
-                        return;
+                Music playingMusic=Player.getInstance().playingMusicProperty().get();
+                if(playingMusic!=null) {
+                    for (int i = 0; i < musicList.size(); i++) {
+                        if (musicList.get(i).getMid().equals(playingMusic.getMid())) {
+                            play(musicList.get((i + musicList.size() - 1) % musicList.size()));
+                            return;
+                        }
                     }
                 }
                 play(musicList.get(0));
@@ -84,13 +86,16 @@ public class PlayTable extends MusicTable{
         switch (loopType.get()){
             case LIST -> {
                 if(musicList.isEmpty())return;
-                var playingMid=Player.getInstance().playingMusicProperty().get().getMid();
-                for(int i=0;i<musicList.size();i++){
-                    if(musicList.get(i).getMid().equals(playingMid)){
-                        play(musicList.get((i+1)%musicList.size()));
-                        return;
+                Music playingMusic=Player.getInstance().playingMusicProperty().get();
+                if(playingMusic!=null){
+                    for(int i=0;i<musicList.size();i++){
+                        if(musicList.get(i).getMid().equals(playingMusic.getMid())){
+                            play(musicList.get((i+1)%musicList.size()));
+                            return;
+                        }
                     }
                 }
+
                 play(musicList.get(0));
             }
             case SINGLE -> Player.getInstance().play();
@@ -134,7 +139,6 @@ public class PlayTable extends MusicTable{
     }
 
     public void add(Music music){
-        System.out.println("Add:"+music);
         if(music.getType()== Music.Type.MUSIC){
             for (Music value : musicList) {
                 if (value.getMid().equals(music.getMid())) return;

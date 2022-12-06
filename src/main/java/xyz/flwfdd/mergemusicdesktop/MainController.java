@@ -24,8 +24,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextBoundsType;
 import org.kordamp.ikonli.javafx.FontIcon;
+import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
 import xyz.flwfdd.mergemusicdesktop.model.table.PlayTable;
+import xyz.flwfdd.mergemusicdesktop.music.DB;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.net.URL;
@@ -318,5 +320,8 @@ public class MainController {
         initPlayController();
         initVolumeController();
         initPlayInfoPane();
+
+        Config.getInstance();
+        DB.getInstance();
     }
 }

@@ -18,6 +18,11 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 
 最后可谓是「众里寻他千百度，蓦然回首」，发现 Java FX 还有一个叫做 `javafx-media`的模块，几乎和浏览器中的`Web Audio API`别无二致（甚至我怀疑他们共享了同样的底层实现），查阅[文档](https://docs.oracle.com/javafx/2/api/javafx/scene/media/package-summary.html)发现可以满足需求（除了无法播放`.flac`，不过无损音乐的功能本来就不是特别常用，也可以通过再加一个包来解决），而且还可以直接使用链接播放，甚至还自带了频谱（都不用自己想办法做傅里叶分解了）！
 
+## 数据库
+使用`sqlite-jdbc`操作`SQLite`数据库。
+
+开始设计时，考虑到列表和歌曲是一个多对多的关系，所以就想到先对歌曲和列表分别建立一张表，然后再通过一张中间表记录对应的`list_id`和`music_id`来将两张表关联起来。但是后来发现每次对于列表的操作都是整读整取，不存在读部分列表的情况，所以就没有必要建立三张表了，直接把一个列表里的歌曲列成一个字符串，然后存到一个字段里就行。
+
 ## 打包与分发
 开始时尝试了 IntelliJ 的 artifacts 导出 JavaFX Application 的方案以及其他的一些 maven 插件，但是都遇到了各种各样的报错，最终发现`JDK`中的`jpackage`一行命令就能搞定....
 
@@ -96,3 +101,20 @@ java.io.IOException: Server returned HTTP response code: 400 for URL
 ```
 原因就是`URLConnection`并不会对链接进行自动转义，如果链接中包含了中文或空格等字符就会出错，需要手动使用`URLEncoder.encode`进行转义。但后来又发现如果把整个`url`都进行转义，那么包括`http://`中的符号等也会一并转义，还是不行，所以就只能对其中可能包含非法字符的部分进行转义。
 
+
+### 数据库冲突
+当多个线程同时调用数据库时，会出现错误：
+```
+org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
+```
+解决方法是把获取数据库连接的代码单独为一个函数，并且用`synchronized`关键字修饰，这样当有冲突时后面的就会等待前面的连接释放。
+```java
+synchronized Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(dbURL);
+    }
+```
+
+### 数据库`REPLACE INTO`语句问题
+本来使用这个语句来进行更新条目，如果不存在就新建。后来发现这条语句的更新并非是真正更新，而是替换。举例来说，我有一个`src`字段设置了默认值，当执行`REPLACE INTO`命令时，虽然没有更新`src`字段，但是这个字段并没有保持原来的值而是变成了默认值。
+
+解决方法是改成了`INSERT INTO .... ON CONFLICT DO UPDATE SET`的形式。

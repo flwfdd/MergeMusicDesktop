@@ -20,14 +20,14 @@
    <Pane fx:id="backgroundPane" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    <VBox style="-fx-background-color: #fff4;" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox prefHeight="453.0" VBox.vgrow="ALWAYS">
-         <VBox fx:id="navBar" prefWidth="124.0" style="-fx-background-color: #fafafaaa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: #80A0A8; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
+         <VBox fx:id="navBar" prefWidth="124.0" style="-fx-background-color: #fffa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: transparent; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
             <padding>
                <Insets bottom="11.0" right="11.0" top="11.0" />
             </padding>
          </VBox>
          <StackPane fx:id="mainPane" style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS" />
       </HBox>
-      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="84.0" style="-fx-background-color: #fffd; -fx-border-color: #80A0A8; -fx-border-width: 0.5 0.5 0 0; -fx-border-radius: 0 11 0 0; -fx-background-radius: 0 11 0 0;">
+      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="84.0" style="-fx-background-color: #fffd; -fx-border-color: transparent; -fx-border-width: 0.5 0.5 0 0; -fx-border-radius: 0 11 0 0; -fx-background-radius: 0 11 0 0;">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" percentWidth="34.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" percentWidth="42.0" />
