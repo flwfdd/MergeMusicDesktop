@@ -1,6 +1,47 @@
+<style>
+#c1{
+  animation:c1 4.2s infinite;
+}
+#c2{
+  animation:c1 2.24s infinite;
+}
+#c3{
+  animation:c1 3.24s infinite;
+}
+#c4{
+  animation:c1 2.42s infinite;
+}
+#title{
+  animation:title 11s infinite;
+}
+
+@keyframes c1{
+  0%{transform:scale(1,1)}
+  50%{transform:scale(0.84,0.84)}
+  100%{transform:scale(1,1)}
+}
+
+@keyframes title{
+  0%{transform:scale(1,1)}
+  50%{transform:scale(0.95,0.95)}
+  100%{transform:scale(1,1)}
+}
+</style>
+
+<div style="width:100%;height:400px;background-color:#aef;border-radius:24px;">
+  <div style="height:400px;width:100%;">
+  </div>
+  <div style="width:400px;height:400px;border-radius:50%;background-color:#fff;margin:auto;margin-top:-400px;" id="c1"></div>
+  <div style="width:300px;height:300px;border-radius:50%;background-color:#00d0ff42;margin:auto;margin-top:-350px;" id="c2"></div>
+  <div style="width:200px;height:200px;border-radius:50%;background-color:#00d0ff42;margin:auto;margin-top:-250px;" id="c3"></div>
+  <div style="width:100px;height:100px;border-radius:50%;background-color:#00d0ff42;margin:auto;margin-top:-150px" id="c4"></div>
+</div>
+<div style="text-align:center;padding-top:150px;font-size:2.4em;margin-top:-400px;color:#004354;" id="title">聚合音乐 桌面端<br/>MergeMusicDesktop</div>
+<div style="margin-bottom:200px"></div>
+
 # MergeMusicDesktop
 
-> 聚合音乐 桌面版
+> 聚合音乐 桌面端
 
 ## UI库的选取
 JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于是就想着寻找一些其他的UI库轮子，正好在浏览[JavaFX 官方网站](https://openjfx.io/)时发现上面列出了一些社区轮子，由于我个人对 Google 的 Material Design 比较情有独钟，就看中了一个叫做 [MaterialFX](https://github.com/palexdev/MaterialFX) 的UI库。
@@ -24,13 +65,22 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 开始设计时，考虑到列表和歌曲是一个多对多的关系，所以就想到先对歌曲和列表分别建立一张表，然后再通过一张中间表记录对应的`list_id`和`music_id`来将两张表关联起来。但是后来发现每次对于列表的操作都是整读整取，不存在读部分列表的情况，所以就没有必要建立三张表了，直接把一个列表里的歌曲列成一个字符串，然后存到一个字段里就行。
 
 ## 打包与分发
-开始时尝试了 IntelliJ 的 artifacts 导出 JavaFX Application 的方案以及其他的一些 maven 插件，但是都遇到了各种各样的报错，最终发现`JDK`中的`jpackage`一行命令就能搞定....
+开始时尝试了 IntelliJ 的 Artifacts 导出 JavaFX Application 的方案以及其他的一些 maven 插件，但是都遇到了各种各样的报错，最终发现`JDK`中的`jpackage`一行命令就能搞定....
 
-```
-jpackage --name MergeMusic --input .\MergeMusicDesktop_jar\ --vendor raven --main-jar .\MergeMusicDesktop.jar --type app-image
+可以参考文档 [Packaging Tool User's Guide](https://docs.oracle.com/en/java/javase/19/jpackage/index.html) 和 [The jpackage Command](https://docs.oracle.com/en/java/javase/19/docs/specs/man/jpackage.html) 。
+
+果然还是应该先把官方的东西吃透。感觉 Java 生态和之前比较了解的前端生态的一大不同之处就是 Java 的生态还是官方主导的，大部分会用到的东西官方都已经做好了，反而是社区的东西很多情况下不如官方的好使。这点前端生态就跟更加去中心化一些。
+
+整个流程为：
+1. 克隆项目
+2. 加载`pom.xml`中指定的 maven 依赖
+3. 执行`mvn clean package`
+4. 删除`target`目录中除了打包完整的`.jar`之外的所有文件（否则会被打包进去）
+5. 在项目根目录下运行如下命令（可根据需求修改）
+```shell
+jpackage --name MergeMusicDesktop --input .\target\ --main-jar .\MergeMusicDesktop-1.0-SNAPSHOT.jar --type app-image --icon .\other\launcher.ico --resource-dir .\other\ --app-version 0.0.0.0 --copyright "Copyright flwfdd All Rights Reserved" --description MergeMusicDesktop-聚合音乐桌面端
 ```
 
-果然还是应该先把官方的东西吃透。感觉 Java 生态和之前比较了解的前端生态的一大不同之处就是 Java 的生态还是官方主导的，大部分会用到的东西官方都已经做好了，反而是社区的东西很多情况下不如官方的好使。这点前端生态就跟更加去中心化一些，
 
 ## 问题
 
@@ -96,7 +146,7 @@ realVolume=showVolume.multiply(new When(mute).then(0).otherwise(1));
 
 ### URL 编码
 开始使用了现成的`OkHttp`库，后来发现并没有太大必要，想换回`URLConnection`时，发生了错误。
-```
+```shell
 java.io.IOException: Server returned HTTP response code: 400 for URL
 ```
 原因就是`URLConnection`并不会对链接进行自动转义，如果链接中包含了中文或空格等字符就会出错，需要手动使用`URLEncoder.encode`进行转义。但后来又发现如果把整个`url`都进行转义，那么包括`http://`中的符号等也会一并转义，还是不行，所以就只能对其中可能包含非法字符的部分进行转义。
@@ -104,7 +154,7 @@ java.io.IOException: Server returned HTTP response code: 400 for URL
 
 ### 数据库冲突
 当多个线程同时调用数据库时，会出现错误：
-```
+```shell
 org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
 ```
 解决方法是把获取数据库连接的代码单独为一个函数，并且用`synchronized`关键字修饰，这样当有冲突时后面的就会等待前面的连接释放。
@@ -118,3 +168,24 @@ synchronized Connection getConnection() throws SQLException {
 本来使用这个语句来进行更新条目，如果不存在就新建。后来发现这条语句的更新并非是真正更新，而是替换。举例来说，我有一个`src`字段设置了默认值，当执行`REPLACE INTO`命令时，虽然没有更新`src`字段，但是这个字段并没有保持原来的值而是变成了默认值。
 
 解决方法是改成了`INSERT INTO .... ON CONFLICT DO UPDATE SET`的形式。
+
+### 打包jar运行报错问题
+打包为单个`.jar`文件运行时出现了错误：
+```shell
+Caused by: java.lang.UnsupportedOperationException: Cannot resolve 'mdrmz-skip_previous'
+        at org.kordamp.ikonli.AbstractIkonResolver.resolve(AbstractIkonResolver.java:61)
+        at org.kordamp.ikonli.javafx.IkonResolver.resolve(IkonResolver.java:73)
+        at org.kordamp.ikonli.javafx.FontIcon.setIconLiteral(FontIcon.java:251)
+        at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+        ... 23 more
+```
+看样子是 ikonli 图标库的问题，于是到项目的 issue 下搜索，发现项目官网就提供了[解决方法](https://kordamp.org/ikonli/#_creating_a_fat_jar)，只需要在 maven 里添加一个插件即可。具体的原理还没有研究，反正是能用了。
+
+在此之后也就不能使用 IntelliJ 的 Artifacts 来进行打包了，而要使用 maven 命令`mvn clean package`。
+
+打包完运行又出现错误提示“没有主清单属性”，还需要在插件配置里加上以下内容来指定主类。
+```xml
+<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+    <mainClass>xyz.flwfdd.mergemusicdesktop.Main</mainClass>
+</transformer>
+```
