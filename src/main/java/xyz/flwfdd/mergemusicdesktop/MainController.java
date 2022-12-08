@@ -22,7 +22,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import javafx.scene.text.TextFlow;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
@@ -31,9 +33,7 @@ import xyz.flwfdd.mergemusicdesktop.music.DB;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author flwfdd
@@ -50,7 +50,7 @@ public class MainController {
 
     @FXML
     MFXSlider playSlider; //播放进度条
-    boolean settingPlaySlider=false;
+    boolean settingPlaySlider = false;
 
     @FXML
     MFXSlider volumeSlider; //音量条
@@ -89,12 +89,18 @@ public class MainController {
     MFXButton loopButton;
 
     @FXML
-    void onPlayPref(){
+    Text msgText;
+
+    @FXML
+    TextFlow msgPane;
+
+    @FXML
+    void onPlayPref() {
         PlayTable.getInstance().playPref();
     }
 
     @FXML
-    void onPlayNext(){
+    void onPlayNext() {
         PlayTable.getInstance().playNext();
     }
 
@@ -102,36 +108,43 @@ public class MainController {
     Player playerInstance;
 
 
-    URL loadURL(String path){
+    URL loadURL(String path) {
         return MainApplication.class.getResource(path);
     }
 
-    Map<String,Runnable>toggleFunc=new HashMap<>();
-    void toggle(String name){
+    Map<String, Runnable> toggleFunc = new HashMap<>();
+
+    void toggle(String name) { //切换面板
         toggleFunc.get(name).run();
     }
 
-    ToggleButton createToggle(String icon,String text){
-        MFXRectangleToggleNode toggleNode=new MFXRectangleToggleNode(text,new FontIcon(icon+":24"));
+    ToggleButton createToggle(String icon, String text) {
+        MFXRectangleToggleNode toggleNode = new MFXRectangleToggleNode(text, new FontIcon(icon + ":24"));
         toggleNode.setToggleGroup(toggleGroup);
         return toggleNode;
     }
 
-    void initNavBar(){
+    void initNavBar() { //初始化侧边导航栏
         navBar.setSpacing(4);
-        toggleGroup=new ToggleGroup();
+        toggleGroup = new ToggleGroup();
         ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
-        MFXLoader loader=new MFXLoader();
-        loader.addView(MFXLoaderBean.of("Search",loadURL("search-view.fxml")).setBeanToNodeMapper(()->createToggle("mdomz-search","搜索")).setDefaultRoot(true).get());
-        loader.addView(MFXLoaderBean.of("PlayList",loadURL("playlist-view.fxml")).setBeanToNodeMapper(()->createToggle("mdrmz-queue_music","列表")).setDefaultRoot(false).get());
-        loader.addView(MFXLoaderBean.of("Playing",loadURL("playing-view.fxml")).setBeanToNodeMapper(()->createToggle("mdral-graphic_eq","播放")).setDefaultRoot(false).get());
-        loader.addView(MFXLoaderBean.of("Config",loadURL("config-view.fxml")).setBeanToNodeMapper(()->createToggle("mdrmz-settings","设置")).setDefaultRoot(false).get());
+        MFXLoader loader = new MFXLoader();
+
+        loader.addView(MFXLoaderBean.of("Search", loadURL("search-view.fxml")).setBeanToNodeMapper(
+                () -> createToggle("mdomz-search", "搜索")).setDefaultRoot(true).get());
+        loader.addView(MFXLoaderBean.of("PlayList", loadURL("playlist-view.fxml")).setBeanToNodeMapper(
+                () -> createToggle("mdrmz-queue_music", "列表")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("Playing", loadURL("playing-view.fxml")).setBeanToNodeMapper(
+                () -> createToggle("mdral-graphic_eq", "播放")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("Config", loadURL("config-view.fxml")).setBeanToNodeMapper(
+                () -> createToggle("mdrmz-settings", "设置")).setDefaultRoot(false).get());
+
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream()
                     .map(bean -> {
                         ToggleButton toggle = (ToggleButton) bean.getBeanToNodeMapper().get();
                         toggle.setOnAction(event -> mainPane.getChildren().setAll(bean.getRoot()));
-                        toggleFunc.put(bean.getViewName(),()->{
+                        toggleFunc.put(bean.getViewName(), () -> {
                             mainPane.getChildren().setAll(bean.getRoot());
                             toggle.setSelected(true);
                         });
@@ -146,12 +159,13 @@ public class MainController {
         loader.start();
     }
 
-    String formatTime(Double t){
-        return String.format("%d:%02d",Math.round(t/60-0.5),Math.round(t)%60);
+    //将秒数转为显示时间
+    String formatTime(Double t) {
+        return String.format("%d:%02d", Math.round(t / 60 - 0.5), Math.round(t) % 60);
     }
 
-    void initPlaySliderPopup(){
-        //配置弹出时间提示
+    void initPlaySliderPopup() {
+        //配置进度条的时间提示气泡
         playSlider.setPopupSupplier(() -> {
             Label text = new Label();
             text.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -186,10 +200,11 @@ public class MainController {
     }
 
     double settingStartTime;
-    void initPlayController(){
+
+    void initPlayController() {
         // 初始化进度条
-        var nowT=playerInstance.nowTimeProperty();
-        var totalT=playerInstance.totalTimeProperty();
+        var nowT = playerInstance.nowTimeProperty();
+        var totalT = playerInstance.totalTimeProperty();
         nowTimeLabel.textProperty().bind(Bindings.createStringBinding(() -> formatTime(nowT.get()), nowT));
         totalTimeLabel.textProperty().bind(Bindings.createStringBinding(() -> formatTime(totalT.get()), totalT));
 
@@ -197,90 +212,101 @@ public class MainController {
         playSlider.setEnableKeyboard(false);
         initPlaySliderPopup();
         nowT.addListener(observable -> {
-            if(!settingPlaySlider)playSlider.setValue(nowT.get());
+            if (!settingPlaySlider) playSlider.setValue(nowT.get());
         });
         playSlider.setOnMousePressed(mouseEvent -> {
-            settingStartTime=Math.round(nowT.get());
-            settingPlaySlider=true;
+            settingStartTime = Math.round(nowT.get());
+            settingPlaySlider = true;
         });
         playSlider.setOnMouseReleased(mouseEvent -> {
-            if(settingStartTime!=playSlider.getValue())playerInstance.seek(playSlider.getValue());
-            settingPlaySlider=false;
+            if (settingStartTime != playSlider.getValue()) playerInstance.seek(playSlider.getValue());
+            settingPlaySlider = false;
         });
 
         // 初始化播放按钮
-        playButton.setOnAction(e->{
-            if(playerInstance.playingProperty().get()){
+        playButton.setOnAction(e -> {
+            if (playerInstance.playingProperty().get()) {
                 playerInstance.pause();
-            }else {
+            } else {
                 playerInstance.play();
             }
         });
 
         playerInstance.playingProperty().addListener(observable -> {
-            FontIcon icon= (FontIcon) playButton.getGraphic();
-            if(playerInstance.playingProperty().get())icon.setIconLiteral("mdrmz-pause");
+            FontIcon icon = (FontIcon) playButton.getGraphic();
+            if (playerInstance.playingProperty().get()) icon.setIconLiteral("mdrmz-pause");
             else icon.setIconLiteral("mdrmz-play_arrow");
         });
 
         // 初始化播放顺序
-        var loopType=PlayTable.getInstance().loopTypeProperty();
+        var loopType = PlayTable.getInstance().loopTypeProperty();
         loopType.addListener(observable -> {
-            FontIcon icon=(FontIcon) loopButton.getGraphic();
+            FontIcon icon = (FontIcon) loopButton.getGraphic();
             icon.setIconLiteral(loopType.get().getIcon());
         });
 
-        loopButton.setOnAction(e-> loopType.set(loopType.get().getNext()));
+        loopButton.setOnAction(e -> loopType.set(loopType.get().getNext()));
     }
 
-    void initVolumeController(){ //初始化音量控制部分
+    void initVolumeController() { //初始化音量控制部分
         volumeSlider.setPopupSupplier(Region::new);
         volumeSlider.valueProperty().bindBidirectional(playerInstance.showVolumeProperty());
-        muteButton.setOnAction(e-> playerInstance.setMute(!playerInstance.isMute()));
+        muteButton.setOnAction(e -> playerInstance.setMute(!playerInstance.isMute()));
 
         playerInstance.realVolumeProperty().addListener(observable -> {
-            FontIcon icon= (FontIcon) muteButton.getGraphic();
-            double v=((ObservableDoubleValue)observable).get();
-            if(v==0){
+            FontIcon icon = (FontIcon) muteButton.getGraphic();
+            double v = ((ObservableDoubleValue) observable).get();
+            if (v == 0) {
                 icon.setIconLiteral("mdrmz-volume_off");
-            } else if (v<=33) {
+            } else if (v <= 33) {
                 icon.setIconLiteral("mdrmz-volume_mute");
-            } else if (v<=66) {
+            } else if (v <= 66) {
                 icon.setIconLiteral("mdrmz-volume_down");
             } else icon.setIconLiteral("mdrmz-volume_up");
         });
     }
 
-    void initPlayInfoPane(){ //播放中信息
-        var tooltip=new MFXTooltip(infoPane);
+    void initPlayInfoPane() { //设置播放中歌曲的信息
+        var tooltip = new MFXTooltip(infoPane);
         tooltip.setText("MergeMusic!");
         tooltip.install();
-        playImage.setOnMouseClicked(e->toggle("Playing"));
+        playImage.setOnMouseClicked(e -> toggle("Playing"));
 
         playerInstance.playingMusicProperty().addListener(observable -> {
-            Music music=playerInstance.playingMusicProperty().get();
+            Music music = playerInstance.playingMusicProperty().get();
 
             playName.setText(music.getName());
             playAlbum.setText(music.getAlbumName());
-            playArtists.setText(String.join(",",music.getArtists()));
-            tooltip.setText(playName.getText()+System.lineSeparator()+
-                    "作者："+playArtists.getText()+System.lineSeparator()+
-                    "专辑："+playAlbum.getText());
+            playArtists.setText(String.join(",", music.getArtists()));
+            tooltip.setText(playName.getText() + System.lineSeparator() +
+                    "作者：" + playArtists.getText() + System.lineSeparator() +
+                    "专辑：" + playAlbum.getText());
 
+            //设置图片
             new Thread(new Task<Void>() {
                 @Override
-                protected Void call(){
-                    Image image=new Image(music.getImg());
+                protected Void call() {
+                    if (playImage.getImage() != null && playImage.getImage().getProgress() < 1)
+                        playImage.getImage().cancel();
+                    Image image = new Image(music.getImg());
                     playImage.setImage(image);
-                    if(image.getHeight()>image.getWidth()){
-                        playImage.setX(playImage.getFitWidth()*(1-image.getWidth()/image.getHeight())/2);
+                    //调整歌曲信息面板的图片位置以居中
+                    if (image.getHeight() > image.getWidth()) {
+                        playImage.setX(playImage.getFitWidth() * (1 - image.getWidth() / image.getHeight()) / 2);
                         playImage.setY(0);
                     } else {
                         playImage.setX(0);
-                        playImage.setY(playImage.getFitHeight()*(1-image.getHeight()/image.getWidth())/2);
+                        playImage.setY(playImage.getFitHeight() * (1 - image.getHeight() / image.getWidth()) / 2);
                     }
-                    var ratio=Math.max(backgroundPane.getWidth()/image.getWidth(),backgroundPane.getHeight()/image.getHeight());
-                    backgroundPane.setBackground(new Background(new BackgroundImage(new Image(music.getImg()),BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT,BackgroundPosition.CENTER,new BackgroundSize(image.getWidth()*ratio,image.getHeight()*ratio,false,false,false,false))));
+                    //调整背景图片大小以适配窗口
+                    var ratio = Math.max(backgroundPane.getWidth() / image.getWidth(), backgroundPane.getHeight() / image.getHeight());
+                    backgroundPane.setBackground(new Background(new BackgroundImage(
+                            image,
+                            BackgroundRepeat.REPEAT,
+                            BackgroundRepeat.REPEAT,
+                            BackgroundPosition.CENTER,
+                            new BackgroundSize(image.getWidth() * ratio, image.getHeight() * ratio,
+                                    false, false, false, false))));
                     backgroundPane.setEffect(new GaussianBlur(11));
                     return null;
                 }
@@ -289,39 +315,61 @@ public class MainController {
 
     }
 
-    void initPlayer(){
-        playerInstance=Player.getInstance();
-    }
-
-    public void setScene(Scene scene){
-        scene.addEventFilter(KeyEvent.KEY_RELEASED,keyEvent -> {
+    public void setScene(Scene scene) {
+        // 设置全局键盘捕获
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, keyEvent -> {
             // 如果是输入框就不捕获
-            if(keyEvent.getTarget().getClass()==BoundTextField.class&&((BoundTextField)keyEvent.getTarget()).isEditable())return;
-            Player player=Player.getInstance();
-            boolean consume=true;
-            switch (keyEvent.getCode()){
+            if (keyEvent.getTarget().getClass() == BoundTextField.class && ((BoundTextField) keyEvent.getTarget()).isEditable())
+                return;
+            Player player = Player.getInstance();
+            boolean consume = true;
+            switch (keyEvent.getCode()) {
                 case SPACE -> playButton.getOnAction().handle(new ActionEvent());
-                case UP -> player.showVolumeProperty().set(Math.min(100,player.showVolumeProperty().get()+10));
-                case DOWN -> player.showVolumeProperty().set(Math.max(0,player.showVolumeProperty().get()-10));
-                case LEFT -> player.seek(player.nowTimeProperty().get()-10);
-                case RIGHT -> player.seek(player.nowTimeProperty().get()+10);
-                default -> consume=false;
+                case UP -> player.showVolumeProperty().set(Math.min(100, player.showVolumeProperty().get() + 10));
+                case DOWN -> player.showVolumeProperty().set(Math.max(0, player.showVolumeProperty().get() - 10));
+                case LEFT -> player.seek(player.nowTimeProperty().get() - 10);
+                case RIGHT -> player.seek(player.nowTimeProperty().get() + 10);
+                default -> consume = false;
             }
-            if(consume){
+            if (consume) {
                 keyEvent.consume();
                 backgroundPane.requestFocus(); //让无关紧要的组件捕获焦点以解决玄学问题
             }
         });
     }
 
+    long lastMsgTime = 0;
+    Timer timer = new Timer();
+
+    public void initMsg() { // 设置提示消息
+        Config.getInstance().getMsgProperty().addListener(observable -> {
+            var msg = Config.getInstance().getMsgProperty();
+            msgPane.setVisible(!msg.get().isBlank());
+            msgText.setText(msg.get());
+            lastMsgTime = System.currentTimeMillis();
+
+            // 自动消失
+            if (!msg.get().isBlank()) timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (System.currentTimeMillis() - lastMsgTime > 4000) {
+                        msg.set("");
+                        msgPane.setVisible(false);
+                    }
+                }
+            }, 4200);
+        });
+    }
+
     public void initialize() {
-        initPlayer();
+        Config.getInstance();
+        DB.getInstance();
+        playerInstance = Player.getInstance();
+
         initNavBar();
         initPlayController();
         initVolumeController();
         initPlayInfoPane();
-
-        Config.getInstance();
-        DB.getInstance();
+        initMsg();
     }
 }

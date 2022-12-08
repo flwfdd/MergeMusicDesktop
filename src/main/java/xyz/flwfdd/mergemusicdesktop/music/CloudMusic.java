@@ -22,26 +22,27 @@ import java.util.stream.Collectors;
 
 class CloudMusic extends Music {
     String id;
+
     CloudMusic(Type type, String mid) {
-        this.platform=Platform.CLOUD;
+        this.platform = Platform.CLOUD;
         this.type = type;
         this.mid = mid;
         id = mid.substring(1);
     }
 
     CloudMusic(Type type, String mid, String name, List<String> artists, String albumName) {
-        this(type,mid);
+        this(type, mid);
         this.name = name;
         this.artists = artists;
         this.albumName = albumName;
     }
 
     static String httpGet(String url1) throws IOException {
-        String apiUrl=Config.getInstance().get("cloud_music_api_url");
-        String cookie=Config.getInstance().get("cloud_music_cookie");
-        String url2= apiUrl+url1+"&realIP=114.246.205.187&cookie="+URLEncoder.encode(cookie,StandardCharsets.UTF_8);
-        URL url=new URL(url2);
-        HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+        String apiUrl = Config.getInstance().get("cloud_music_api_url");
+        String cookie = Config.getInstance().get("cloud_music_cookie");
+        String url2 = apiUrl + url1 + "&realIP=114.246.205.187&cookie=" + URLEncoder.encode(cookie, StandardCharsets.UTF_8);
+        URL url = new URL(url2);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(11000);
         connection.setReadTimeout(11000);
         connection.setRequestMethod("GET");
@@ -51,15 +52,15 @@ class CloudMusic extends Music {
     static Map<Type, String> type_map = new HashMap<>(Map.of(Type.MUSIC, "1", Type.LYRIC, "1006", Type.LIST, "1000", Type.USER, "1002"));
 
     static List<Music> search(String keyword, Type type, int limit, int page) {
-        if(keyword.isEmpty())return new ArrayList<>();
+        if (keyword.isEmpty()) return new ArrayList<>();
         String url = "/cloudsearch?keywords=%s&type=%s&limit=%d&offset=%d";
         if (!type_map.containsKey(type)) type = Type.MUSIC;
-        url = String.format(url, URLEncoder.encode(keyword,StandardCharsets.UTF_8), type_map.get(type), limit, limit * page);
+        url = String.format(url, URLEncoder.encode(keyword, StandardCharsets.UTF_8), type_map.get(type), limit, limit * page);
         try {
             String s = httpGet(url);
             JSONObject data = JSON.parseObject(s).getJSONObject("result");
             switch (type) {
-                case MUSIC ,LYRIC -> {
+                case MUSIC, LYRIC -> {
                     if (data.getIntValue("songCount") == 0) return new ArrayList<>();
                     return parseSongs(data.getJSONArray("songs"));
                 }
@@ -162,14 +163,14 @@ class CloudMusic extends Music {
     }
 
     public void custom_load() {
-        if (type==Type.MUSIC) loadMusic();
+        if (type == Type.MUSIC) loadMusic();
         else throw new RuntimeException("Can only load music.");
     }
 
     public List<Music> custom_unfold() {
         try {
-            if (type==Type.LIST) return loadPlayList();
-            else if (type==Type.USER) return loadUserList();
+            if (type == Type.LIST) return loadPlayList();
+            else if (type == Type.USER) return loadUserList();
             return null;
         } catch (Exception e) {
             System.out.println("cloud music load list error: " + e);

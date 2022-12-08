@@ -12,29 +12,29 @@ import java.util.Map;
  */
 
 public abstract class Music {
-    public enum Platform{
+    public enum Platform {
         CLOUD;
 
         @Override
         public String toString() {
-            return switch (this){
+            return switch (this) {
                 case CLOUD -> "网易云";
             };
         }
 
-        public String getExtension(){
-            return switch (this){
+        public String getExtension() {
+            return switch (this) {
                 case CLOUD -> ".mp3";
             };
         }
     }
 
-    public enum Type{
-        MUSIC,LIST,USER,LYRIC;
+    public enum Type {
+        MUSIC, LIST, USER, LYRIC;
 
         @Override
         public String toString() {
-            return switch (this){
+            return switch (this) {
                 case MUSIC -> "歌曲";
                 case LIST -> "列表";
                 case USER -> "用户";
@@ -43,68 +43,67 @@ public abstract class Music {
         }
     }
 
-    static DB db=DB.getInstance();
+    static DB db = DB.getInstance();
 
     public static List<Music> search(String keyword, Platform platform, Type type, int limit, int page) {
         // page从0开始
         List<Music> music_list = null;
-        if (platform==Platform.CLOUD) music_list = CloudMusic.search(keyword, type, limit, page);
+        if (platform == Platform.CLOUD) music_list = CloudMusic.search(keyword, type, limit, page);
         return music_list;
     }
 
-    public static Music getMusic(String mid,String name,String lrc,String translateLrc,String albumName,List<String> artists) {
-        Music music=switch (mid.charAt(0)){
-            case 'C'->new CloudMusic(Type.MUSIC, mid);
+    public static Music getMusic(String mid, String name, String lrc, String translateLrc, String albumName, List<String> artists) {
+        Music music = switch (mid.charAt(0)) {
+            case 'C' -> new CloudMusic(Type.MUSIC, mid);
             default -> null;
         };
-        if(music==null)return null;
-        music.mid=mid;
-        music.name=name;
-        music.lrc=lrc;
-        music.translateLrc=translateLrc;
-        music.albumName=albumName;
-        music.artists=artists;
+        if (music == null) return null;
+        music.mid = mid;
+        music.name = name;
+        music.lrc = lrc;
+        music.translateLrc = translateLrc;
+        music.albumName = albumName;
+        music.artists = artists;
         return music;
     }
 
-    public static Music getMusic(String mid,String name,String lrc,String translateLrc,String albumName,List<String> artists,String src,String img) {
-        Music music=getMusic(mid,name,lrc,translateLrc,albumName,artists);
-        if(music==null)return null;
-        music.src=src;
-        music.img=img;
+    public static Music getMusic(String mid, String name, String lrc, String translateLrc, String albumName, List<String> artists, String src, String img) {
+        Music music = getMusic(mid, name, lrc, translateLrc, albumName, artists);
+        if (music == null) return null;
+        music.src = src;
+        music.img = img;
         return music;
     }
 
     abstract void custom_load(); //加载音乐播放链接、图片链接、歌词、专辑
 
-    public void load(){
-        Music music=db.getCacheMusic(mid);
-        if(music==null||music.src.isBlank()||music.img.isBlank()){
-            System.out.println("Load:"+music);
+    public void load() {
+        Music music = db.getCacheMusic(mid);
+        if (music == null || music.src.isBlank() || music.img.isBlank()) {
+            System.out.println("Load:" + this);
             custom_load();
-            if(src==null)src="";
-            if(img==null)img="";
-            if(lrc==null)lrc="";
-            if(translateLrc==null)translateLrc="";
-            if(albumName==null)albumName="";
+            if (src == null) src = "";
+            if (img == null) img = "";
+            if (lrc == null) lrc = "";
+            if (translateLrc == null) translateLrc = "";
+            if (albumName == null) albumName = "";
             db.updateMusic(this);
             db.cacheMusic(this);
-        }
-        else {
-            src=music.src;
-            img=music.img;
+        } else {
+            src = music.src;
+            img = music.img;
         }
     }
 
     abstract List<Music> custom_unfold(); //展开音乐列表
 
-    public List<Music> unfold(){
-        List<Music> l=custom_unfold();
+    public List<Music> unfold() {
+        List<Music> l = custom_unfold();
         l.forEach(music -> db.updateMusic(music));
         return l;
     }
 
-    String mid, name="", src="", img="", lrc="", translateLrc="", albumName="";
+    String mid, name = "", src = "", img = "", lrc = "", translateLrc = "", albumName = "";
     Type type;
     Platform platform;
     List<String> artists;
@@ -141,15 +140,15 @@ public abstract class Music {
         return artists;
     }
 
-    public Type getType(){
+    public Type getType() {
         return type;
     }
 
-    public Platform getPlatform(){
+    public Platform getPlatform() {
         return platform;
     }
 
-    public Map<String,String> getHeaders(){
+    public Map<String, String> getHeaders() {
         return new HashMap<>();
     }
 

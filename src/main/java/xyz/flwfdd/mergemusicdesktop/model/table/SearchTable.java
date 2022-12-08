@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.util.*;
@@ -109,6 +110,7 @@ public class SearchTable extends MusicTable{
                     nowSearchCase.get().page++;
                     tableView.getSelectionModel().clearSelection();
                 }
+                else Config.getInstance().setMsg("搜索失败Orz");
                 loading.set(false);
             }
         }).start();

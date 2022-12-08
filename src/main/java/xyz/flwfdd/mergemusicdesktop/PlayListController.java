@@ -19,20 +19,19 @@ public class PlayListController {
     PlayTable playTableModel;
 
     public void initialize() {
-        playTableModel=PlayTable.getInstance();
+        playTableModel = PlayTable.getInstance();
         playTableModel.bind(playTable);
 
         // 在列表中标注正在播放的
-        var playingMusic=Player.getInstance().playingMusicProperty();
-        playingMusic.addListener(observable -> playTable.getCells().forEach((ind, row)->{
-            if(row.getData().getMid().equals(playingMusic.get().getMid())){
+        var playingMusic = Player.getInstance().playingMusicProperty();
+        playingMusic.addListener(observable -> playTable.getCells().forEach((ind, row) -> {
+            if (row.getData().getMid().equals(playingMusic.get().getMid())) {
                 row.getCells().get(0).setText("◉");
-            }
-            else row.getCells().get(0).setText(ind+1+"");
+            } else row.getCells().get(0).setText(ind + 1 + "");
         }));
-        var colIndex=playTable.getTableColumns().get(0);
-        colIndex.setRowCellFactory(music-> new MFXTableRowCell<>((music1 -> {
-            if (playingMusic.get()!=null&&music1.getMid().equals(playingMusic.get().getMid())) return "◉";
+        var colIndex = playTable.getTableColumns().get(0);
+        colIndex.setRowCellFactory(music -> new MFXTableRowCell<>((music1 -> {
+            if (playingMusic.get() != null && music1.getMid().equals(playingMusic.get().getMid())) return "◉";
             return playTable.getItems().indexOf(music1) + 1 + "";
         })));
     }

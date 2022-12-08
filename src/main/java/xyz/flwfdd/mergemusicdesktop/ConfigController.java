@@ -25,10 +25,10 @@ public class ConfigController {
 
     Config configModel;
 
-    void initConfigBox(){
-        configModel.configItems.forEach(item->{
-            if(item.type== Config.Type.TEXT){
-                var textFiled=new MFXTextField();
+    void initConfigBox() {
+        configModel.configItems.forEach(item -> {
+            if (item.type == Config.Type.TEXT) {
+                var textFiled = new MFXTextField();
                 textFiled.setFloatingText(item.description);
                 textFiled.setFloatingTextGap(0);
                 textFiled.getStyleClass().add("custom-text-field");
@@ -38,24 +38,24 @@ public class ConfigController {
                 configBox.getChildren().add(textFiled);
             }
         });
-        var buttonBox=new HBox();
+        var buttonBox = new HBox();
         buttonBox.setSpacing(11);
 
-        var resetButton=new MFXButton("重置", new FontIcon("mdrmz-settings_backup_restore:24"));
+        var resetButton = new MFXButton("重置", new FontIcon("mdrmz-settings_backup_restore:24"));
         resetButton.getStyleClass().add("custom-button");
-        resetButton.setOnAction(e-> configModel.resetConfigItems());
+        resetButton.setOnAction(e -> configModel.resetConfigItems());
         buttonBox.getChildren().add(resetButton);
 
-        var saveButton=new MFXButton("保存", new FontIcon("mdrmz-save:24"));
+        var saveButton = new MFXButton("保存", new FontIcon("mdrmz-save:24"));
         saveButton.getStyleClass().add("custom-button");
-        saveButton.setOnAction(e->configModel.saveConfigItems());
+        saveButton.setOnAction(e -> configModel.saveConfigItems());
         buttonBox.getChildren().add(saveButton);
 
         configBox.getChildren().add(buttonBox);
     }
 
     public void initialize() {
-        configModel=Config.getInstance();
+        configModel = Config.getInstance();
         ScrollUtils.addSmoothScrolling(scrollPane);
         initConfigBox();
     }

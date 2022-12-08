@@ -14,16 +14,31 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <AnchorPane prefHeight="556.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.MainController">
    <Pane fx:id="backgroundPane" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    <VBox style="-fx-background-color: #fff4;" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox prefHeight="453.0" VBox.vgrow="ALWAYS">
-         <VBox fx:id="navBar" prefWidth="124.0" style="-fx-background-color: #fffa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: transparent; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
-            <padding>
-               <Insets bottom="11.0" right="11.0" top="11.0" />
-            </padding>
+         <VBox prefWidth="124.0"
+               style="-fx-background-color: #fffa; -fx-border-width: 0.5 0.5 0 0; -fx-border-color: transparent; -fx-background-radius: 0 11 0 0; -fx-border-radius: 0 11 0 0;">
+            <VBox fx:id="navBar" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+               <padding>
+                  <Insets bottom="11.0" right="11.0" top="11.0"/>
+               </padding>
+            </VBox>
+            <TextFlow fx:id="msgPane" prefWidth="124.0"
+                      style="-fx-background-color: #aef8; -fx-background-radius: 0 6 6 0;" visible="false">
+               <VBox.margin>
+                  <Insets bottom="11.0" right="6.0" top="11.0"/>
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="4.0" left="4.0" top="4.0"/>
+               </padding>
+               <Text fx:id="msgText" opacity="0.84" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font"/>
+            </TextFlow>
          </VBox>
          <StackPane fx:id="mainPane" style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS" />
       </HBox>

@@ -32,7 +32,7 @@ public class Player {
     SimpleDoubleProperty totalTime;
     SimpleDoubleProperty nowTime;
     SimpleBooleanProperty playing;
-    SimpleObjectProperty<Music>playingMusic;
+    SimpleObjectProperty<Music> playingMusic;
     SimpleListProperty<Double> spectrum;
 
     public SimpleListProperty<Double> spectrumProperty() {
@@ -73,46 +73,47 @@ public class Player {
         this.mute.set(mute);
     }
 
-    public void seek(double t){
-        if(player!=null)player.seek(Duration.seconds(t));
+    public void seek(double t) {
+        if (player != null) player.seek(Duration.seconds(t));
     }
 
-    Player(){
-        mute=new SimpleBooleanProperty(false);
-        showVolume=new SimpleDoubleProperty(24);
-        realVolume=showVolume.multiply(new When(mute).then(0).otherwise(1));
+    Player() {
+        mute = new SimpleBooleanProperty(false);
+        showVolume = new SimpleDoubleProperty(24);
+        realVolume = showVolume.multiply(new When(mute).then(0).otherwise(1));
 
-        totalTime=new SimpleDoubleProperty(320);
-        nowTime=new SimpleDoubleProperty(0);
-        playing=new SimpleBooleanProperty(false);
-        playingMusic=new SimpleObjectProperty<>();
-        spectrum=new SimpleListProperty<>();
+        totalTime = new SimpleDoubleProperty(320);
+        nowTime = new SimpleDoubleProperty(0);
+        playing = new SimpleBooleanProperty(false);
+        playingMusic = new SimpleObjectProperty<>();
+        spectrum = new SimpleListProperty<>();
     }
 
-    public static Player getInstance(){
-        if(instance==null)instance=new Player();
+    public static Player getInstance() {
+        if (instance == null) instance = new Player();
         return instance;
     }
 
-    public void pause(){
-        if(player!=null)player.pause();
+    public void pause() {
+        if (player != null) player.pause();
     }
 
-    public void play(){
-        if(player!=null)player.play();
+    public void play() {
+        if (player != null) player.play();
     }
 
-    volatile boolean loading=false;
-    public void play(Music music){
-        if(player!=null){
-            if(player.getMedia().getSource().equals(music.getSrc())){
+    volatile boolean loading = false;
+
+    public void play(Music music) {
+        if (player != null) {
+            if (player.getMedia().getSource().equals(music.getSrc())) {
                 play();
                 return;
             }
             player.stop();
         }
-        if(loading)return;
-        loading=true;
+        if (loading) return;
+        loading = true;
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {
@@ -122,10 +123,11 @@ public class Player {
 
             @Override
             protected void succeeded() {
-                try{
+                try {
+                    if (player != null) player.dispose(); // 释放之前播放的资源
                     playingMusic.set(music);
-                    media=new Media(music.getSrc());
-                    player=new MediaPlayer(media);
+                    media = new Media(music.getSrc());
+                    player = new MediaPlayer(media);
 
                     player.muteProperty().bind(mute);
                     player.volumeProperty().bind(realVolume.divide(100));
@@ -135,33 +137,36 @@ public class Player {
                     player.setAudioSpectrumInterval(Config.getInstance().getDouble("spectrum_interval"));
                     player.setAudioSpectrumThreshold(-Config.getInstance().getInt("spectrum_threshold"));
                     player.setAudioSpectrumListener((timestamp, duration, magnitudes, phases) -> {
-                        List<Double>l=new ArrayList<>();
+                        List<Double> l = new ArrayList<>();
                         for (float magnitude : magnitudes) l.add((double) magnitude);
                         spectrum.set(FXCollections.observableList(l));
                     });
 
                     player.play();
-                    player.setOnReady(()->{
+                    player.setOnReady(() -> {
                         totalTime.set(player.getStopTime().toSeconds());
                         player.currentTimeProperty().addListener((observableValue, t0, t1) -> nowTime.set(t1.toSeconds()));
                     });
                     playing.bind(player.statusProperty().isEqualTo(MediaPlayer.Status.PLAYING));
-                    player.setOnEndOfMedia(()-> {
+                    player.setOnEndOfMedia(() -> {
                         player.stop();
                         PlayTable.getInstance().playNext();
                     });
 
-                    player.setOnError(()-> System.out.println(player.getError().toString()));
+                    player.setOnError(() -> {
+                        Config.getInstance().setMsg("播放失败：" + music.getName());
+                        System.out.println(player.getError().toString());
+                    });
+                } catch (Exception e) {
+                    Config.getInstance().setMsg("播放错误：" + music.getName());
+                    System.out.println("Media Error" + e);
                 }
-                catch (Exception e){
-                    System.out.println("Media Error"+e);
-                }
-                loading=false;
+                loading = false;
             }
 
             @Override
-            protected void failed(){
-                loading=false;
+            protected void failed() {
+                loading = false;
             }
         }).start();
     }

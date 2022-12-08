@@ -22,11 +22,11 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        mainStage=stage;
+        mainStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 888, 666);
-        ((MainController)fxmlLoader.getController()).setScene(scene);
+        ((MainController) fxmlLoader.getController()).setScene(scene);
         stage.setTitle("MergeMusic");
         // 只加载一个大图片的话最终图标会不清晰
         stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("16.png"))));

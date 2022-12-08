@@ -29,7 +29,7 @@ public class SearchController {
 
     @FXML
     MFXTableView<Music> searchTable;
-    SearchTable searchTableModel=new SearchTable();
+    SearchTable searchTableModel = new SearchTable();
 
     @FXML
     MFXProgressBar loadingBar;
@@ -40,17 +40,17 @@ public class SearchController {
     }
 
     @FXML
-    void onBack(){ //返回按钮
+    void onBack() { //返回按钮
         searchTableModel.back();
     }
 
-    void initSearchTable(){ //初始化歌曲表
+    void initSearchTable() { //初始化歌曲表
         searchTableModel.bind(searchTable);
     }
 
-    void initSearchInput(){ //初始化搜索栏和多选框
-        searchKey.setOnKeyPressed(e->{ //回车搜索
-            if(e.getCode()==KeyCode.ENTER)onSearch();
+    void initSearchInput() { //初始化搜索栏和多选框
+        searchKey.setOnKeyPressed(e -> { //回车搜索
+            if (e.getCode() == KeyCode.ENTER) onSearch();
         });
         searchPlatform.setItems(FXCollections.observableList(Arrays.stream(Music.Platform.values()).toList()));
         searchType.setItems(FXCollections.observableList(Arrays.stream(Music.Type.values()).toList()));
@@ -61,7 +61,7 @@ public class SearchController {
         searchTableModel.searchTypeProperty().bindBidirectional(searchType.valueProperty());
     }
 
-    void initLoadingBar(){ //初始化加载条
+    void initLoadingBar() { //初始化加载条
         loadingBar.visibleProperty().bind(searchTableModel.loadingProperty());
     }
 
