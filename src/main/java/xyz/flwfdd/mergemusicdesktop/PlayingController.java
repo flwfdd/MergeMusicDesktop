@@ -48,23 +48,24 @@ public class PlayingController {
     Player player;
 
     void updateCircle(double a, double b, double c, double d) { //更新音频可视化
+        offset = (int) Math.round(Config.getInstance().getDouble("spectrum_delay") / Config.getInstance().getDouble("spectrum_interval"));
         history_a.add(a);
         history_b.add(b);
         history_c.add(c);
         history_d.add(d);
-        if (history_a.size() >= offset) {
+        while (history_a.size() >= offset) {
             a = history_a.get(0);
             history_a.remove(0);
         }
-        if (history_b.size() >= offset) {
+        while (history_b.size() >= offset) {
             b = history_b.get(0);
             history_b.remove(0);
         }
-        if (history_c.size() >= offset) {
+        while (history_c.size() >= offset) {
             c = history_c.get(0);
             history_c.remove(0);
         }
-        if (history_d.size() >= offset) {
+        while (history_d.size() >= offset) {
             d = history_d.get(0);
             history_d.remove(0);
         }

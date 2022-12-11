@@ -286,9 +286,8 @@ public class MainController {
             new Thread(new Task<Void>() {
                 @Override
                 protected Void call() {
-                    if (playImage.getImage() != null && playImage.getImage().getProgress() < 1)
-                        playImage.getImage().cancel();
-                    Image image = new Image(music.getImg());
+                    var image=new Image(music.getImg());
+                    if(!music.getImg().equals(playerInstance.playingMusicProperty().get().getImg()))return null;
                     playImage.setImage(image);
                     //调整歌曲信息面板的图片位置以居中
                     if (image.getHeight() > image.getWidth()) {
@@ -339,7 +338,6 @@ public class MainController {
     }
 
     long lastMsgTime = 0;
-    Timer timer = new Timer();
 
     public void initMsg() { // 设置提示消息
         Config.getInstance().getMsgProperty().addListener(observable -> {
@@ -349,7 +347,7 @@ public class MainController {
             lastMsgTime = System.currentTimeMillis();
 
             // 自动消失
-            if (!msg.get().isBlank()) timer.schedule(new TimerTask() {
+            if (!msg.get().isBlank()) new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (System.currentTimeMillis() - lastMsgTime > 4000) {

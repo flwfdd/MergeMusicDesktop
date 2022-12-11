@@ -75,18 +75,19 @@ public abstract class Music {
         return music;
     }
 
-    abstract void custom_load(); //加载音乐播放链接、图片链接、歌词、专辑
+    public abstract void full_load(); //加载音乐播放链接、图片链接、歌词、专辑
 
     public void load() {
         Music music = db.getCacheMusic(mid);
         if (music == null || music.src.isBlank() || music.img.isBlank()) {
             System.out.println("Load:" + this);
-            custom_load();
+            full_load();
             if (src == null) src = "";
             if (img == null) img = "";
             if (lrc == null) lrc = "";
             if (translateLrc == null) translateLrc = "";
             if (albumName == null) albumName = "";
+            img=getLowImg();
             db.updateMusic(this);
             db.cacheMusic(this);
         } else {
@@ -123,6 +124,8 @@ public abstract class Music {
     public String getImg() { //获取图片链接
         return img;
     }
+
+    abstract String getLowImg(); //获取压缩图片链接
 
     public String getLrc() { //获取lrc格式歌词
         return lrc;

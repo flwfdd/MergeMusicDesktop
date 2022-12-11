@@ -1,44 +1,3 @@
-<style>
-#c1{
-  animation:c1 4.2s infinite;
-}
-#c2{
-  animation:c1 2.24s infinite;
-}
-#c3{
-  animation:c1 3.24s infinite;
-}
-#c4{
-  animation:c1 2.42s infinite;
-}
-#title{
-  animation:title 11s infinite;
-}
-
-@keyframes c1{
-  0%{transform:scale(1,1)}
-  50%{transform:scale(0.84,0.84)}
-  100%{transform:scale(1,1)}
-}
-
-@keyframes title{
-  0%{transform:scale(1,1)}
-  50%{transform:scale(0.95,0.95)}
-  100%{transform:scale(1,1)}
-}
-</style>
-
-<div style="width:100%;height:400px;background-color:#aef;border-radius:24px;">
-  <div style="height:400px;width:100%;">
-  </div>
-  <div style="width:400px;height:400px;border-radius:50%;background-color:#fff;margin:auto;margin-top:-400px;" id="c1"></div>
-  <div style="width:300px;height:300px;border-radius:50%;background-color:#00d0ff42;margin:auto;margin-top:-350px;" id="c2"></div>
-  <div style="width:200px;height:200px;border-radius:50%;background-color:#00d0ff42;margin:auto;margin-top:-250px;" id="c3"></div>
-  <div style="width:100px;height:100px;border-radius:50%;background-color:#00d0ff42;margin:auto;margin-top:-150px" id="c4"></div>
-</div>
-<div style="text-align:center;padding-top:150px;font-size:2.4em;margin-top:-400px;color:#004354;" id="title">聚合音乐 桌面端<br/>MergeMusicDesktop</div>
-<div style="margin-bottom:200px"></div>
-
 # MergeMusicDesktop
 
 > 聚合音乐 桌面端
@@ -141,7 +100,9 @@ realVolume=showVolume.multiply(new When(mute).then(0).otherwise(1));
 
 
 ### 内存占用分析
-偶然打开任务管理器发现竟然占了1G+的内存，于是尝试使用 Java 监视与管理控制台（JConsole）进行了监控，发现内存占用一直在锯齿状大波动。查资料又发现了一个叫做 JProfiler 的工具，可以进行比较详细的 Java 运行监控。发现是在加载歌曲时会有一个很大的内存暴涨，导致 JVM 申请了很大的内存，之后又一直都在反复占用，但是手动进行垃圾回收后内存占用会降低到100+M，并且可以稳定正常运行。后来尝试加上了运行参数`-Xmx256m`，仍然可以正常运行，应该不是代码的问题，只是单纯 JVM 内存分配机制的原因。
+偶然打开任务管理器发现竟然占了1G+的内存，于是尝试使用 Java 监视与管理控制台（JConsole）进行了监控，发现内存占用一直在锯齿状大波动。查资料又发现了一个叫做 JProfiler 的工具，可以进行比较详细的 Java 运行监控。发现是在加载歌曲时会有一个很大的内存暴涨，导致 JVM 申请了很大的内存，之后又一直都在反复占用，但是手动进行垃圾回收后内存占用会降低到`100+MB`，并且可以稳定正常运行。后来尝试加上了运行参数`-Xmx256m`，仍然可以正常运行， JProfiler 里也能看到内存占用一直没有超出过`256MB`，但是任务管理器中内存占用仍然会到`800+MB`，我感到非常不解。
+
+经过测试发现当播放音乐时内存就会暴涨，进一步调试发现真正造成这个现象的不是播放音乐，而是加载歌曲图片。加载一个`10MB`左右的图片就会使得内存暴涨几百兆，这应该是 JavaFX 中`Image`类实现的问题，其内部没有用压缩方式存储图片，且内存释放逻辑也有问题。我没能想到怎么从正面角度解决这个问题，只能减小图片尺寸，避免使用`Image`加载大尺寸图片。
 
 
 ### URL 编码
@@ -152,7 +113,7 @@ java.io.IOException: Server returned HTTP response code: 400 for URL
 原因就是`URLConnection`并不会对链接进行自动转义，如果链接中包含了中文或空格等字符就会出错，需要手动使用`URLEncoder.encode`进行转义。但后来又发现如果把整个`url`都进行转义，那么包括`http://`中的符号等也会一并转义，还是不行，所以就只能对其中可能包含非法字符的部分进行转义。
 
 
-### 数据库冲突
+### 数据库多线程冲突
 当多个线程同时调用数据库时，会出现错误：
 ```shell
 org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
@@ -189,3 +150,16 @@ Caused by: java.lang.UnsupportedOperationException: Cannot resolve 'mdrmz-skip_p
     <mainClass>xyz.flwfdd.mergemusicdesktop.Main</mainClass>
 </transformer>
 ```
+
+### 点击关闭后没有完全退出
+点击关闭按钮关闭程序后，IntelliJ 中仍然显示程序没有停止，开始还以为是 IntelliJ 卡了，后来使用 JProfiler 监控发现是有一个线程一直没有退出。窗口关闭按钮只会强制退出主线程，如果要完全退出程序，需要加入如下代码：
+```java
+stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+    @Override
+    public void handle(WindowEvent windowEvent) {
+        System.exit(0);
+    }
+});
+```
+这样确实关闭的时候就完全退出了。但是这是治标不治本的办法，之前是没有这个问题的，肯定是加了某些代码后造成了这个问题，所以决定排查出来。然而调试工具并不能指出那个没有退出的线程是由哪里的代码产生的，我把所有`new Thread()`的地方排查了一遍也没有找到问题所在。最终通过不停回退`git`版本，发现是在加入了提示消息的时候引入了这个问题，进一步排查发现是为了实现提示消息一定时间自动隐藏的功能，定义了一个对象的全局变量`Timer timer = new Timer();`，如果把这个`Timer`改为即用即抛的局部变量就不会出现问题，推测是`Timer`会保持一个线程，而因为定义在对象的属性里，不会被自动回收，就一直不退出了。
+

@@ -31,6 +31,7 @@ public class DB {
     static DB instance;
     String dbURL;
     String cachePath;
+    long cacheSizeSum=0;
 
     synchronized Connection getConnection() throws SQLException {
         return DriverManager.getConnection(dbURL);
@@ -106,13 +107,17 @@ public class DB {
         }).start());
     }
 
-    DB() {
+    void init(){
         initDB();
         initList();
+        initCacheSize();
     }
 
     public static DB getInstance() {
-        if (instance == null) instance = new DB();
+        if (instance == null){
+            instance = new DB();
+            instance.init();
+        }
         return instance;
     }
 
@@ -214,7 +219,7 @@ public class DB {
             is.close();
         } catch (Exception e) {
             System.out.println("Download error:" + e);
-            file.deleteOnExit();
+            if(!file.delete())System.out.println("Delete fail: "+file.getPath());
             return false;
         }
         return true;
@@ -222,6 +227,7 @@ public class DB {
 
     void cacheMusic(Music music) {
         // 缓存音乐
+        updateCacheSize();
         if (music.getSrc() != null && !music.getSrc().isBlank() && !music.getSrc().startsWith("file")) {
             new Thread(() -> {
                 if (download(music.getSrc(), Paths.get(cachePath, getMusicFileName(music)).toString(), music.getHeaders())) {
@@ -231,6 +237,7 @@ public class DB {
                         statement.setString(1, getMusicFileName(music));
                         statement.setString(2, music.getMid());
                         statement.execute();
+                        cacheSizeSum+=Paths.get(cachePath, getMusicFileName(music)).toFile().length();
                     } catch (SQLException e) {
                         Config.getInstance().setMsg("缓存音乐失败："+music.getName());
                         System.out.println("Cache src error:" + music);
@@ -248,6 +255,7 @@ public class DB {
                         statement.setString(1, getImgFileName(music));
                         statement.setString(2, music.getMid());
                         statement.execute();
+                        cacheSizeSum+=Paths.get(cachePath, getImgFileName(music)).toFile().length();
                     } catch (SQLException e) {
                         Config.getInstance().setMsg("缓存图片失败："+music.getName());
                         System.out.println("Cache image error:" + music);
@@ -287,6 +295,58 @@ public class DB {
         }
         if (music != null) updateMusic(music);
         return music;
+    }
+
+    void initCacheSize(){
+        // 初始化扫描缓存大小
+        List<String> noFileMusics=new ArrayList<>(); //需要取消音乐文件缓存记录的音乐mid列表
+        List<String> noImgMusics=new ArrayList<>(); //需要取消图片文件缓存记录的音乐mid列表
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery("SELECT * FROM music WHERE file_name!='' OR img_file_name!=''");
+            while (rs.next()) {
+                Path filePath = Paths.get(cachePath, rs.getString("file_name"));
+                if (filePath.toFile().isFile() && filePath.toFile().exists()){
+                    cacheSizeSum+=filePath.toFile().length();
+                } else noFileMusics.add(rs.getString("mid"));
+                filePath = Paths.get(cachePath, rs.getString("img_file_name"));
+                if (filePath.toFile().isFile() && filePath.toFile().exists()){
+                    cacheSizeSum+=filePath.toFile().length();
+                } else noImgMusics.add(rs.getString("mid"));
+            }
+            statement.execute("UPDATE music SET file_name='' WHERE mid in ('" +String.join("','",noFileMusics) + "');");
+            statement.execute("UPDATE music SET img_file_name='' WHERE mid in ('" +String.join("','",noImgMusics) + "');");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        updateCacheSize();
+    }
+
+    void updateCacheSize(){
+        // 更新缓存
+        List<String> noFileMusics=new ArrayList<>(); //需要取消缓存记录的音乐mid列表
+        if (cacheSizeSum/1024/1024>Config.getInstance().getInt("cache_size")){
+            try (Connection connection = getConnection();
+                 Statement statement = connection.createStatement()) {
+                ResultSet rs = statement.executeQuery("SELECT * FROM music WHERE file_name!='' OR img_file_name!='' ORDER BY refresh_time;");
+                while (cacheSizeSum/1024/1024>Config.getInstance().getInt("cache_size")&&rs.next()){
+                    Path filePath = Paths.get(cachePath, rs.getString("file_name"));
+                    if (filePath.toFile().isFile() && filePath.toFile().exists()){
+                        cacheSizeSum-=filePath.toFile().length();
+                        if(!filePath.toFile().delete())System.out.println("Delete fail: "+filePath);
+                    }
+                    filePath = Paths.get(cachePath, rs.getString("img_file_name"));
+                    if (filePath.toFile().isFile() && filePath.toFile().exists()){
+                        cacheSizeSum-=filePath.toFile().length();
+                        if(!filePath.toFile().delete())System.out.println("Delete fail: "+filePath);
+                    }
+                    noFileMusics.add(rs.getString("mid"));
+                }
+                statement.execute("UPDATE music SET file_name='',img_file_name='' WHERE mid in ('" +String.join("','",noFileMusics) + "');");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

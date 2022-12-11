@@ -27,7 +27,7 @@ public class ConfigController {
 
     void initConfigBox() {
         configModel.configItems.forEach(item -> {
-            if (item.type == Config.Type.TEXT) {
+            if (item.editable) {
                 var textFiled = new MFXTextField();
                 textFiled.setFloatingText(item.description);
                 textFiled.setFloatingTextGap(0);

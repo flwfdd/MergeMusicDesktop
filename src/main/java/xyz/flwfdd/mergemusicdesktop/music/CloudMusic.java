@@ -162,7 +162,7 @@ class CloudMusic extends Music {
         return parseSongs(JSON.parseObject(s).getJSONArray("songs"));
     }
 
-    public void custom_load() {
+    public void full_load() {
         if (type == Type.MUSIC) loadMusic();
         else throw new RuntimeException("Can only load music.");
     }
@@ -176,5 +176,9 @@ class CloudMusic extends Music {
             System.out.println("cloud music load list error: " + e);
             return null;
         }
+    }
+
+    public String getLowImg(){
+        return img+"?param=424y424";
     }
 }

@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Function;
 
 /**
  * @author flwfdd
@@ -31,35 +32,44 @@ public class Config {
         public Type type;
         public String key, description;
         public boolean editable;
+        public Function<String, Boolean> checker;
         public SimpleStringProperty valueProperty;
 
-        ConfigItem(String key, String value, String description, boolean editable, Type type) {
+        ConfigItem(String key, String value, String description, boolean editable, Type type, Function<String, Boolean> checker) {
             this.key = key;
             this.description = description;
             this.editable = editable;
             this.type = type;
+            this.checker = checker;
             valueProperty = new SimpleStringProperty(value);
         }
     }
 
     public List<ConfigItem> configItems;
 
-    void initConfigItem(String key, String value, String description, boolean editable, Type type) {
+    void initConfigItem(String key, String value, String description, boolean editable, Type type, Function<String, Boolean> checker) {
         if (!has(key)) set(key, value);
         else value = get(key);
-        configItems.add(new ConfigItem(key, value, description, editable, type));
+        configItems.add(new ConfigItem(key, value, description, editable, type, checker));
     }
 
     public void initConfigItems() { //初始化项目
         if (new File(configPath).exists()) load();
         configItems = new ArrayList<>();
-        initConfigItem("cloud_music_api_url", "https://service-r6uorko5-1255944436.bj.apigw.tencentcs.com/release", "网易云音乐API", true, Type.TEXT);
-        initConfigItem("cloud_music_cookie", "", "网易云音乐Cookie", true, Type.TEXT);
-        initConfigItem("spectrum_num_bands", "16", "音频可视化通道数", false, Type.INT);
-        initConfigItem("spectrum_threshold", "100", "音频可视化阈值(>0,dB)", false, Type.INT);
-        initConfigItem("spectrum_interval", "0.04", "音频可视化时间窗口(s)", false, Type.DOUBLE);
-        initConfigItem("spectrum_delay", "0.42", "音频可视化延迟时间(s)", false, Type.DOUBLE);
-        initConfigItem("spectrum_smooth_ratio", "0.24", "平滑比例(0~1)", false, Type.DOUBLE);
+        initConfigItem("cloud_music_api_url", "https://service-r6uorko5-1255944436.bj.apigw.tencentcs.com/release", "网易云音乐API", true, Type.TEXT, s -> true);
+        initConfigItem("cloud_music_cookie", "", "网易云音乐Cookie", true, Type.TEXT, s -> true);
+        initConfigItem("cache_size", "2048", "最大缓存空间(MB)", true, Type.INT, s -> {
+            int x = Integer.parseInt(s);
+            return !(x < 0);
+        });
+        initConfigItem("spectrum_num_bands", "16", "音频可视化通道数", false, Type.INT, s -> true);
+        initConfigItem("spectrum_threshold", "100", "音频可视化阈值(>0,dB)", false, Type.INT, s -> true);
+        initConfigItem("spectrum_interval", "0.04", "音频可视化时间窗口(s)", false, Type.DOUBLE, s -> true);
+        initConfigItem("spectrum_delay", "0.42", "音频可视化延迟时间(s)", true, Type.DOUBLE, s -> {
+            double x = Double.parseDouble(s);
+            return !(x < 0);
+        });
+        initConfigItem("spectrum_smooth_ratio", "0.24", "平滑比例(0~1)", false, Type.DOUBLE, s -> true);
     }
 
     public void resetConfigItems() {
@@ -67,7 +77,19 @@ public class Config {
     }
 
     public void saveConfigItems() {
+        for (ConfigItem configItem : configItems) {
+            try {
+                if (!configItem.checker.apply(configItem.valueProperty.get())) {
+                    setMsg(configItem.description + " 参数无效 请修改awa");
+                    return;
+                }
+            } catch (Exception e) {
+                setMsg(configItem.description + " 参数无效 请修改awa");
+                return;
+            }
+        }
         configItems.forEach(item -> set(item.key, item.valueProperty.get()));
+        setMsg("保存成功OvO");
     }
 
     Config() { //初始化配置文件
