@@ -22,6 +22,8 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 
 ### QQ音乐
 
+参考项目：[QQMusicApi](https://github.com/jsososo/QQMusicApi)
+
 #### 搜索
 `POST https://u.y.qq.com/cgi-bin/musicu.fcg`
 
@@ -35,7 +37,7 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
             "num_per_page": 24, //每页条目数
             "page_num": 1, //页码 从1开始
             "query": "夜航星", //关键词 无需编码
-            "search_type": 0 //0为歌曲 3为歌单 7为歌词 8为用户
+            "search_type": 0 //0为歌曲 2为专辑 3为歌单 7为歌词 8为用户
         }
     }
 }
@@ -103,6 +105,22 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 `POST https://c.y.qq.com/rsc/fcgi-bin/fcg_user_created_diss`
 
 `body`格式为`size=2333&inCharset=utf8&outCharset=utf8&hostuin=1234567890`
+
+#### 获取专辑歌曲
+`POST https://u.y.qq.com/cgi-bin/musicu.fcg`
+
+`body`为一个`JSON`格式的字符串，格式如下：
+```json
+{
+  "albumSonglist":{
+    "method":"GetAlbumSongList",
+    "param":{
+      "albumMid":"003lkdBY4bs97f" //填入专辑mid
+    },
+    "module":"music.musichallAlbum.AlbumSongList"
+  }
+}
+```
 
 
 ## 数据库

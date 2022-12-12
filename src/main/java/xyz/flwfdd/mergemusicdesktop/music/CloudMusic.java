@@ -49,7 +49,7 @@ class CloudMusic extends Music {
         return new Scanner(connection.getInputStream()).useDelimiter("\\A").next();
     }
 
-    static Map<Type, String> type_map = new HashMap<>(Map.of(Type.MUSIC, "1", Type.LYRIC, "1006", Type.LIST, "1000", Type.USER, "1002"));
+    static Map<Type, String> type_map = new HashMap<>(Map.of(Type.MUSIC, "1", Type.LYRIC, "1006", Type.LIST, "1000", Type.USER, "1002",Type.ALBUM,"10"));
 
     static List<Music> search(String keyword, Type type, int limit, int page) {
         if (keyword.isEmpty()) return new ArrayList<>();
@@ -90,6 +90,20 @@ class CloudMusic extends Music {
                                 ""));
                     });
                     return users;
+                }
+                case ALBUM -> {
+                    if(data.getIntValue("albumCount")==0)return new ArrayList<>();
+                    List<Music> albums=new ArrayList<>();
+                    data.getJSONArray("albums").forEach(obj->{
+                        var album=(JSONObject)obj;
+                        albums.add(new CloudMusic(Type.ALBUM,
+                                "C"+album.getString("id"),
+                                album.getString("name"),
+                                List.of(album.getJSONObject("artist").getString("name")),
+                                ""
+                                ));
+                    });
+                    return albums;
                 }
             }
         } catch (Exception e) {
@@ -162,6 +176,12 @@ class CloudMusic extends Music {
         return parseSongs(JSON.parseObject(s).getJSONArray("songs"));
     }
 
+    List<Music> loadAlbumList() throws IOException {
+        // list->music 加载专辑
+        String s = httpGet("/album?id=" + id);
+        return parseSongs(JSON.parseObject(s).getJSONArray("songs"));
+    }
+
     public void full_load() {
         if (type == Type.MUSIC) loadMusic();
         else throw new RuntimeException("Can only load music.");
@@ -169,9 +189,12 @@ class CloudMusic extends Music {
 
     public List<Music> custom_unfold() {
         try {
-            if (type == Type.LIST) return loadPlayList();
-            else if (type == Type.USER) return loadUserList();
-            return null;
+            return switch (type){
+                case LIST -> loadPlayList();
+                case USER -> loadUserList();
+                case ALBUM -> loadAlbumList();
+                default -> null;
+            };
         } catch (Exception e) {
             System.out.println("cloud music load list error: " + e);
             return null;

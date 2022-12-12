@@ -49,7 +49,7 @@ public class QQMusic extends Music {
         connection.setReadTimeout(11000);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Referer", "y.qq.com");
-        connection.setRequestProperty("Cookie",Config.getInstance().get("qq_music_cookie"));
+        connection.setRequestProperty("Cookie", Config.getInstance().get("qq_music_cookie"));
         connection.setDoOutput(true);
         OutputStream outputStream = connection.getOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
@@ -59,10 +59,11 @@ public class QQMusic extends Music {
     }
 
     static List<Music> search(String keyword, Type type, int limit, int page) {
-        int typeCode=switch (type){
+        int typeCode = switch (type) {
             case LIST -> 3;
             case LYRIC -> 7;
             case USER -> 8;
+            case ALBUM -> 2;
             default -> 0;
         };
         String url = "https://u.y.qq.com/cgi-bin/musicu.fcg";
@@ -83,30 +84,43 @@ public class QQMusic extends Music {
         body = String.format(body, limit, page + 1, keyword, typeCode);
         try {
             String s = httpPost(url, body);
-            JSONObject jsonBody=JSONObject.parseObject(s).getJSONObject("music.search.SearchCgiService")
+            JSONObject jsonBody = JSONObject.parseObject(s).getJSONObject("music.search.SearchCgiService")
                     .getJSONObject("data").getJSONObject("body");
             List<Music> musicList = new ArrayList<>();
-            switch (type){
+            switch (type) {
                 case LIST -> {
                     JSONArray list = jsonBody.getJSONObject("songlist").getJSONArray("list");
-                    list.forEach(x->{
-                        var songList=(JSONObject)x;
+                    list.forEach(x -> {
+                        var songList = (JSONObject) x;
                         musicList.add(new QQMusic(Type.LIST,
-                                "Q"+songList.getString("dissid"),
+                                "Q" + songList.getString("dissid"),
                                 songList.getString("dissname"),
                                 List.of(songList.getJSONObject("creator").getString("name")),
                                 ""
-                                ));
+                        ));
                     });
                 }
                 case USER -> {
                     JSONArray list = jsonBody.getJSONObject("user").getJSONArray("list");
-                    list.forEach(x->{
-                        var songList=(JSONObject)x;
+                    list.forEach(x -> {
+                        var songList = (JSONObject) x;
                         musicList.add(new QQMusic(Type.USER,
-                                "Q"+songList.getString("uin"),
+                                "Q" + songList.getString("uin"),
                                 songList.getString("title"),
                                 List.of(),
+                                ""
+                        ));
+                    });
+                }
+                case ALBUM -> {
+                    JSONArray list = jsonBody.getJSONObject("album").getJSONArray("list");
+                    list.forEach(x -> {
+                        var album = (JSONObject) x;
+                        musicList.add(new QQMusic(Type.ALBUM,
+                                "Q" + album.getString("albumMID"),
+                                album.getString("albumName"),
+                                album.getJSONArray("singer_list").stream()
+                                        .map(obj -> ((JSONObject) obj).getString("name")).collect(Collectors.toList()),
                                 ""
                         ));
                     });
@@ -195,12 +209,12 @@ public class QQMusic extends Music {
                     }
                 }
                 """;
-        body=String.format(body,media_mid,id);
+        body = String.format(body, media_mid, id);
         String s = httpPost(url, body);
-        JSONObject data=JSONObject.parseObject(s).getJSONObject("req_0").getJSONObject("data");
-        String purl=data.getJSONArray("midurlinfo").getJSONObject(0).getString("purl");
-        if(purl.isBlank())src="";
-        else src=data.getJSONArray("sip").getString(0)+purl;
+        JSONObject data = JSONObject.parseObject(s).getJSONObject("req_0").getJSONObject("data");
+        String purl = data.getJSONArray("midurlinfo").getJSONObject(0).getString("purl");
+        if (purl.isBlank()) src = "";
+        else src = data.getJSONArray("sip").getString(0) + purl;
     }
 
     void loadMusic() {
@@ -226,11 +240,11 @@ public class QQMusic extends Music {
     }
 
     List<Music> unfoldList() throws IOException {
-        List<Music> musicList=new ArrayList<>();
-        String url="http://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg";
-        String body="type=1&utf8=1&format=json&disstid="+id;
-        String s=httpPost(url,body);
-        JSONArray list=JSONObject.parseObject(s).getJSONArray("cdlist").getJSONObject(0).getJSONArray("songlist");
+        List<Music> musicList = new ArrayList<>();
+        String url = "http://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg";
+        String body = "type=1&utf8=1&format=json&disstid=" + id;
+        String s = httpPost(url, body);
+        JSONArray list = JSONObject.parseObject(s).getJSONArray("cdlist").getJSONObject(0).getJSONArray("songlist");
         list.forEach(x -> {
             var song = (JSONObject) x;
             musicList.add(new QQMusic(Type.MUSIC,
@@ -245,14 +259,14 @@ public class QQMusic extends Music {
     }
 
     List<Music> unfoldUser() throws IOException {
-        List<Music> musicList=new ArrayList<>();
-        String url="https://c.y.qq.com/rsc/fcgi-bin/fcg_user_created_diss";
-        String body="size=2333&inCharset=utf8&outCharset=utf8&hostuin="+id;
-        String s=httpPost(url,body);
-        JSONArray list=JSONObject.parseObject(s).getJSONObject("data").getJSONArray("disslist");
+        List<Music> musicList = new ArrayList<>();
+        String url = "https://c.y.qq.com/rsc/fcgi-bin/fcg_user_created_diss";
+        String body = "size=2333&inCharset=utf8&outCharset=utf8&hostuin=" + id;
+        String s = httpPost(url, body);
+        JSONArray list = JSONObject.parseObject(s).getJSONObject("data").getJSONArray("disslist");
         list.forEach(x -> {
             var diss = (JSONObject) x;
-            if(!diss.getString("tid").equals("0"))musicList.add(new QQMusic(Type.LIST,
+            if (!diss.getString("tid").equals("0")) musicList.add(new QQMusic(Type.LIST,
                     "Q" + diss.getString("tid"),
                     diss.getString("diss_name"),
                     List.of(name),
@@ -262,17 +276,48 @@ public class QQMusic extends Music {
         return musicList;
     }
 
+    List<Music> unfoldAlbum() throws IOException {
+        String url = "https://u.y.qq.com/cgi-bin/musicu.fcg";
+        String body = """
+                {
+                  "albumSonglist":{
+                    "method":"GetAlbumSongList",
+                    "param":{
+                      "albumMid":"%s"
+                    },
+                    "module":"music.musichallAlbum.AlbumSongList"
+                  }
+                }
+                """;
+        body = String.format(body, id);
+        String s = httpPost(url, body);
+        JSONArray list = JSONObject.parseObject(s).getJSONObject("albumSonglist").getJSONObject("data").getJSONArray("songList");
+        List<Music> musicList = new ArrayList<>();
+        list.forEach(x -> {
+            var song = ((JSONObject) x).getJSONObject("songInfo");
+            musicList.add(new QQMusic(Type.MUSIC,
+                    "Q" + song.getString("mid"),
+                    song.getString("name"),
+                    song.getJSONArray("singer").stream()
+                            .map(obj -> ((JSONObject) obj).getString("name")).collect(Collectors.toList()),
+                    song.getJSONObject("album").getString("name")
+            ));
+        });
+        return musicList;
+    }
+
 
     @Override
     List<Music> custom_unfold() {
-        try{
-            return switch (type){
+        try {
+            return switch (type) {
                 case LIST -> unfoldList();
                 case USER -> unfoldUser();
+                case ALBUM -> unfoldAlbum();
                 default -> null;
             };
-        } catch (Exception e){
-            System.out.println("QQ music unfold error:"+e);
+        } catch (Exception e) {
+            System.out.println("QQ music unfold error:" + e);
         }
         return null;
     }

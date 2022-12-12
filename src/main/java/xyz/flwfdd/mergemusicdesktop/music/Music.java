@@ -13,7 +13,7 @@ import java.util.Map;
 
 public abstract class Music {
     public enum Platform {
-        CLOUD,QQ;
+        CLOUD, QQ;
 
         @Override
         public String toString() {
@@ -29,8 +29,8 @@ public abstract class Music {
             };
         }
 
-        public String getColor(){
-            return switch (this){
+        public String getColor() {
+            return switch (this) {
                 case CLOUD -> "#A8001C";
                 case QQ -> "#00A85F";
             };
@@ -38,7 +38,7 @@ public abstract class Music {
     }
 
     public enum Type {
-        MUSIC, LIST, USER, LYRIC;
+        MUSIC, LIST, USER, ALBUM, LYRIC;
 
         @Override
         public String toString() {
@@ -46,6 +46,7 @@ public abstract class Music {
                 case MUSIC -> "歌曲";
                 case LIST -> "歌单";
                 case USER -> "用户";
+                case ALBUM -> "专辑";
                 case LYRIC -> "歌词";
             };
         }
@@ -57,14 +58,14 @@ public abstract class Music {
         // page从0开始
         List<Music> music_list = null;
         if (platform == Platform.CLOUD) music_list = CloudMusic.search(keyword, type, limit, page);
-        else if(platform==Platform.QQ) music_list=QQMusic.search(keyword,type,limit,page);
+        else if (platform == Platform.QQ) music_list = QQMusic.search(keyword, type, limit, page);
         return music_list;
     }
 
     public static Music getMusic(String mid, String name, String lrc, String translateLrc, String albumName, List<String> artists) {
         Music music = switch (mid.charAt(0)) {
             case 'C' -> new CloudMusic(Type.MUSIC, mid);
-            case 'Q' -> new QQMusic(Type.MUSIC,mid);
+            case 'Q' -> new QQMusic(Type.MUSIC, mid);
             default -> null;
         };
         if (music == null) return null;
@@ -97,7 +98,7 @@ public abstract class Music {
             if (lrc == null) lrc = "";
             if (translateLrc == null) translateLrc = "";
             if (albumName == null) albumName = "";
-            img=getLowImg();
+            img = getLowImg();
             db.updateMusic(this);
             db.cacheMusic(this);
         } else {
@@ -110,7 +111,7 @@ public abstract class Music {
 
     public List<Music> unfold() {
         List<Music> l = custom_unfold();
-        if(l==null)return null;
+        if (l == null) return null;
         l.forEach(music -> db.updateMusic(music));
         return l;
     }

@@ -54,4 +54,16 @@ class CloudMusicTest {
         l = Music.search("赤羽", Music.Platform.CLOUD, Music.Type.MUSIC, 2, 1);
         System.out.println(l);
     }
+
+    @Test
+    public void testCloudSearchAlbum() {
+        List<Music> l = Music.search("天气之子", Music.Platform.CLOUD, Music.Type.ALBUM, 4, 0);
+        System.out.println(l);
+    }
+
+    @Test
+    public void testCloudAlbumUnfold() {
+        Music m=new CloudMusic(Music.Type.ALBUM,"C82894738");
+        System.out.println(m.unfold());
+    }
 }

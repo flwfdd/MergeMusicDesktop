@@ -8,7 +8,7 @@ class QQMusicTest {
 
     @Test
     public void testQQMusic() {
-        Music m = new QQMusic(Music.Type.MUSIC,"Q0003wCkl4OrELF");
+        Music m = new QQMusic(Music.Type.MUSIC, "Q0003wCkl4OrELF");
         m.full_load();
         System.out.println(m.getMid());
         System.out.println(m.getName());
@@ -22,19 +22,25 @@ class QQMusicTest {
 
     @Test
     public void testQQListUnfold() {
-        Music m = new QQMusic(Music.Type.LIST,"Q7479057129");
+        Music m = new QQMusic(Music.Type.LIST, "Q7479057129");
         System.out.println(m.unfold());
     }
 
     @Test
     public void testQQUserUnfold() {
-        Music m = new QQMusic(Music.Type.USER,"QoK4A7Kcl7wSioz**");
+        Music m = new QQMusic(Music.Type.USER, "QoK4A7Kcl7wSioz**");
         System.out.println(m.unfold());
         System.out.println(m.unfold().get(0).unfold());
     }
 
     @Test
-    public void testQQSearchMusic(){
+    public void testQQAlbumUnfold() {
+        Music m = new QQMusic(Music.Type.ALBUM, "Q003lkdBY4bs97f");
+        System.out.println(m.unfold());
+    }
+
+    @Test
+    public void testQQSearchMusic() {
         List<Music> l = Music.search("阶", Music.Platform.QQ, Music.Type.MUSIC, 4, 0);
         System.out.println(l);
         System.out.println(l.get(0).getMid());
@@ -52,21 +58,27 @@ class QQMusicTest {
     }
 
     @Test
-    public void testQQSearchList(){
+    public void testQQSearchList() {
         List<Music> l = Music.search("我的三体", Music.Platform.QQ, Music.Type.LIST, 4, 0);
         System.out.println(l);
     }
 
     @Test
-    public void testQQSearchUser(){
+    public void testQQSearchUser() {
         List<Music> l = Music.search("海の声音", Music.Platform.QQ, Music.Type.USER, 4, 0);
         System.out.println(l);
         System.out.println(l.get(1).unfold());
     }
 
     @Test
-    public void testQQSearchLyrics(){
+    public void testQQSearchLyrics() {
         List<Music> l = Music.search("明明拥着黑夜的双肩", Music.Platform.QQ, Music.Type.LYRIC, 4, 0);
+        System.out.println(l);
+    }
+
+    @Test
+    public void testQQSearchAlbum() {
+        List<Music> l = Music.search("云南师大附中", Music.Platform.QQ, Music.Type.ALBUM, 4, 0);
         System.out.println(l);
     }
 
