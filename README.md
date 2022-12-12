@@ -18,6 +18,93 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 
 最后可谓是「众里寻他千百度，蓦然回首」，发现 Java FX 还有一个叫做 `javafx-media`的模块，几乎和浏览器中的`Web Audio API`别无二致（甚至我怀疑他们共享了同样的底层实现），查阅[文档](https://docs.oracle.com/javafx/2/api/javafx/scene/media/package-summary.html)发现可以满足需求（除了无法播放`.flac`，不过无损音乐的功能本来就不是特别常用，也可以通过再加一个包来解决），而且还可以直接使用链接播放，甚至还自带了频谱（都不用自己想办法做傅里叶分解了）！
 
+## 音乐API部分
+
+### QQ音乐
+
+#### 搜索
+`POST https://u.y.qq.com/cgi-bin/musicu.fcg`
+
+`body`为一个`JSON`格式的字符串，格式如下：
+```json
+{
+    "music.search.SearchCgiService": {
+        "method": "DoSearchForQQMusicDesktop",
+        "module": "music.search.SearchCgiService",
+        "param": {
+            "num_per_page": 24, //每页条目数
+            "page_num": 1, //页码 从1开始
+            "query": "夜航星", //关键词 无需编码
+            "search_type": 0 //0为歌曲 3为歌单 7为歌词 8为用户
+        }
+    }
+}
+```
+
+#### 获取歌曲详情
+`POST https://u.y.qq.com/cgi-bin/musicu.fcg`
+
+`body`为一个`JSON`格式的字符串，格式如下：
+```json
+{
+  "songinfo": {
+    "method": "get_song_detail_yqq",
+    "module": "music.pf_song_detail_svr",
+    "param": {
+      "song_mid": "004QtMmf2AeGHZ" //填入歌曲mid
+    }
+  }
+}
+```
+
+#### 获取歌词
+`POST https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg`
+
+`body`格式为`format=json&nobase64=1&g_tk=5381&songmid=004QtMmf2AeGHZ`，注意该接口要求添加`Headers`：`Referer:y.qq.com`。
+
+
+#### 获取歌曲播放链接
+`POST https://u.y.qq.com/cgi-bin/musicu.fcg`
+
+`body`为一个`JSON`格式的字符串，格式如下：
+```json
+{
+  "req_0": {
+    "module": "vkey.GetVkeyServer",
+    "method": "CgiGetVkey",
+    "param": {
+      "filename":["M500002I2lcO3lqZFW.mp3"], //不传则默认为m4a格式
+      "guid": "2333",
+      "songmid": [
+        "004QtMmf2AeGHZ" //填入mid
+      ],
+      "songtype": [
+        0
+      ],
+      "loginflag": 1,
+      "platform": "20"
+    }
+  },
+  "comm": {
+    "format": "json",
+    "ct": 24,
+    "cv": 0
+  }
+}
+```
+其中`filename`的计算需要用到`media_mid`，在歌曲详细信息接口中可以获取到。
+
+#### 获取歌单详情
+`POST http://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg`
+
+`body`格式为`type=1&utf8=1&format=json&disstid=7479057129`，需要`Referer`。
+
+#### 获取用户歌单
+`POST https://c.y.qq.com/rsc/fcgi-bin/fcg_user_created_diss`
+
+`body`格式为`size=2333&inCharset=utf8&outCharset=utf8&hostuin=1234567890`
+
+
 ## 数据库
 使用`sqlite-jdbc`操作`SQLite`数据库。
 

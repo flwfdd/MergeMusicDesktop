@@ -3,6 +3,8 @@ package xyz.flwfdd.mergemusicdesktop;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.fxml.FXML;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
 import xyz.flwfdd.mergemusicdesktop.model.table.PlayTable;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
@@ -26,13 +28,20 @@ public class PlayListController {
         var playingMusic = Player.getInstance().playingMusicProperty();
         playingMusic.addListener(observable -> playTable.getCells().forEach((ind, row) -> {
             if (row.getData().getMid().equals(playingMusic.get().getMid())) {
-                row.getCells().get(0).setText("◉");
-            } else row.getCells().get(0).setText(ind + 1 + "");
+                ((Text)row.getCells().get(0).getGraphic()).setText("◉");
+            } else ((Text)row.getCells().get(0).getGraphic()).setText(ind + 1 + "");
         }));
         var colIndex = playTable.getTableColumns().get(0);
-        colIndex.setRowCellFactory(music -> new MFXTableRowCell<>((music1 -> {
-            if (playingMusic.get() != null && music1.getMid().equals(playingMusic.get().getMid())) return "◉";
-            return playTable.getItems().indexOf(music1) + 1 + "";
-        })));
+        colIndex.setRowCellFactory(music -> {
+            Text text=new Text();
+            var rowCell=new MFXTableRowCell<Music,String>((music1 -> {
+                if (playingMusic.get() != null && music1.getMid().equals(playingMusic.get().getMid()))text.setText("◉");
+                else text.setText(playTable.getItems().indexOf(music1) + 1 + "");
+                text.setFill(Paint.valueOf(music1.getPlatform().getColor()));
+                return "";
+            }));
+            rowCell.setGraphic(text);
+            return rowCell;
+        });
     }
 }

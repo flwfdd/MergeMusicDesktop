@@ -13,18 +13,26 @@ import java.util.Map;
 
 public abstract class Music {
     public enum Platform {
-        CLOUD;
+        CLOUD,QQ;
 
         @Override
         public String toString() {
             return switch (this) {
                 case CLOUD -> "网易云";
+                case QQ -> "QQ";
             };
         }
 
         public String getExtension() {
             return switch (this) {
-                case CLOUD -> ".mp3";
+                case CLOUD, QQ -> ".mp3";
+            };
+        }
+
+        public String getColor(){
+            return switch (this){
+                case CLOUD -> "#A8001C";
+                case QQ -> "#00A85F";
             };
         }
     }
@@ -36,7 +44,7 @@ public abstract class Music {
         public String toString() {
             return switch (this) {
                 case MUSIC -> "歌曲";
-                case LIST -> "列表";
+                case LIST -> "歌单";
                 case USER -> "用户";
                 case LYRIC -> "歌词";
             };
@@ -49,12 +57,14 @@ public abstract class Music {
         // page从0开始
         List<Music> music_list = null;
         if (platform == Platform.CLOUD) music_list = CloudMusic.search(keyword, type, limit, page);
+        else if(platform==Platform.QQ) music_list=QQMusic.search(keyword,type,limit,page);
         return music_list;
     }
 
     public static Music getMusic(String mid, String name, String lrc, String translateLrc, String albumName, List<String> artists) {
         Music music = switch (mid.charAt(0)) {
             case 'C' -> new CloudMusic(Type.MUSIC, mid);
+            case 'Q' -> new QQMusic(Type.MUSIC,mid);
             default -> null;
         };
         if (music == null) return null;
@@ -100,6 +110,7 @@ public abstract class Music {
 
     public List<Music> unfold() {
         List<Music> l = custom_unfold();
+        if(l==null)return null;
         l.forEach(music -> db.updateMusic(music));
         return l;
     }

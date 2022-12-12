@@ -158,7 +158,7 @@ public class Player {
                         System.out.println(player.getError().toString());
                     });
                 } catch (Exception e) {
-                    Config.getInstance().setMsg("播放错误：" + music.getName());
+                    Config.getInstance().setMsg("播放失败：" + music.getName());
                     System.out.println("Media Error" + e);
                 }
                 loading = false;

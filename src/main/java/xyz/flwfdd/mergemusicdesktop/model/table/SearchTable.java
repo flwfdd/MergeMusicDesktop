@@ -105,6 +105,7 @@ public class SearchTable extends MusicTable{
             @Override
             protected void succeeded() {
                 if(l!=null){
+                    if(l.size()==0)Config.getInstance().setMsg("没有更多了哦");
                     nowSearchCase.get().list.addAll(l);
                     nowSearchCase.get().haveNext=(l.size()!=0);
                     nowSearchCase.get().page++;
@@ -133,7 +134,8 @@ public class SearchTable extends MusicTable{
                     pushHistory();
                     nowSearchCase.set(new SearchCase(l));
                     tableView.getSelectionModel().clearSelection();
-                }
+                    if(l.size()==0)Config.getInstance().setMsg("空空如也呢");
+                } else Config.getInstance().setMsg("展开失败Orz");
                 loading.set(false);
             }
         }).start();

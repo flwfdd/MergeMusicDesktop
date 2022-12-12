@@ -9,6 +9,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
@@ -71,7 +73,16 @@ public class MusicTable {
     void initView(MFXTableView<Music> tableView) { //初始化视图
         // 设置列
         MFXTableColumn<Music> colIndex = new MFXTableColumn<>("   序号");
-        colIndex.setRowCellFactory(music -> new MFXTableRowCell<>(music1 -> (tableView.getItems().indexOf(music1) + 1 + "")));
+        colIndex.setRowCellFactory(music -> {
+            Text text = new Text();
+            var rowCell = new MFXTableRowCell<Music, String>(music1 -> {
+                text.setText(tableView.getItems().indexOf(music1) + 1 + "");
+                text.setFill(Paint.valueOf(music1.getPlatform().getColor()));
+                return "";
+            });
+            rowCell.setGraphic(text);
+            return rowCell;
+        });
         colIndex.setMinWidth(42);
         tableView.getTableColumns().add(colIndex);
 

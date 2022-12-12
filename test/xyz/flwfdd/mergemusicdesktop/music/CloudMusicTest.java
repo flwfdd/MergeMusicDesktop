@@ -2,6 +2,8 @@ package xyz.flwfdd.mergemusicdesktop.music;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 
 /**
  * @author flwfdd
@@ -9,19 +11,19 @@ import org.junit.jupiter.api.Test;
  * @date 2022/11/17 20:03
  * 音乐模块测试
  */
-class MusicTest {
+class CloudMusicTest {
     @Test
     public void testCloudUser() {
-        var users = Music.search("范滇东", Music.Platform.CLOUD, Music.Type.USER, 24, 0);
+        List<Music> users = Music.search("范滇东", Music.Platform.CLOUD, Music.Type.USER, 24, 0);
         System.out.println(users.size());
         System.out.println(users);
-        var lists = users.get(0).unfold();
+        List<Music> lists = users.get(0).unfold();
         System.out.println(lists.size());
         System.out.println(lists);
-        var musics = lists.get(0).unfold();
+        List<Music> musics = lists.get(0).unfold();
         System.out.println(musics.size());
         System.out.println(musics);
-        var m = musics.get(5);
+        Music m = musics.get(5);
         m.load();
         System.out.println("Src "+m.getSrc());
         System.out.println("Img "+m.getImg());
@@ -29,8 +31,8 @@ class MusicTest {
 
     @Test
     public void testCloudMusic() {
-        Music m = Music.getMusic("C554245242");
-        assert m != null;
+        Music m = new CloudMusic(Music.Type.MUSIC,"C554245242");
+        m.full_load();
         System.out.println(m.getMid());
         System.out.println(m.getName());
         System.out.println(m.getAlbumName());
@@ -43,7 +45,7 @@ class MusicTest {
 
     @Test
     public void testCloudSearchMusic() {
-        var l = Music.search("wocaikendingsoubudao", Music.Platform.CLOUD, Music.Type.MUSIC, 4, 0);
+        List<Music> l = Music.search("wocaikendingsoubudao", Music.Platform.CLOUD, Music.Type.MUSIC, 4, 0);
         System.out.println(l);
         l = Music.search("", Music.Platform.CLOUD, Music.Type.MUSIC, 4, 0);
         System.out.println(l);
