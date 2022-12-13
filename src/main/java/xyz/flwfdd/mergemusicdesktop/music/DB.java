@@ -183,7 +183,7 @@ public class DB {
         }
     }
 
-    Pattern illegalFileNamePattern = Pattern.compile("[\\\\/:*?\"<>|]"); //操作系统非法字符
+    Pattern illegalFileNamePattern = Pattern.compile("[\\\\/:*?\"<>|\r\n]"); //操作系统非法字符
 
     String getFileName(Music music) {
         //生成音乐文件名
@@ -225,26 +225,30 @@ public class DB {
         return true;
     }
 
+    String cacheMusicSrc(Music music){
+        if (download(music.getSrc(), Paths.get(cachePath, getMusicFileName(music)).toString(), music.getHeaders())) {
+            updateCacheSize();
+            String sql = "UPDATE music SET file_name=? WHERE mid=?;";
+            try (Connection connection = getConnection();
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, getMusicFileName(music));
+                statement.setString(2, music.getMid());
+                statement.execute();
+                cacheSizeSum+=Paths.get(cachePath, getMusicFileName(music)).toFile().length();
+                return Paths.get(cachePath, getMusicFileName(music)).toUri().toString();
+            } catch (SQLException e) {
+                Config.getInstance().setMsg("缓存音乐失败："+music.getName());
+                System.out.println("Cache src error:" + music);
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
+
     void cacheMusic(Music music) {
         // 缓存音乐
-        updateCacheSize();
         if (music.getSrc() != null && !music.getSrc().isBlank() && !music.getSrc().startsWith("file")) {
-            new Thread(() -> {
-                if (download(music.getSrc(), Paths.get(cachePath, getMusicFileName(music)).toString(), music.getHeaders())) {
-                    String sql = "UPDATE music SET file_name=? WHERE mid=?;";
-                    try (Connection connection = getConnection();
-                         PreparedStatement statement = connection.prepareStatement(sql)) {
-                        statement.setString(1, getMusicFileName(music));
-                        statement.setString(2, music.getMid());
-                        statement.execute();
-                        cacheSizeSum+=Paths.get(cachePath, getMusicFileName(music)).toFile().length();
-                    } catch (SQLException e) {
-                        Config.getInstance().setMsg("缓存音乐失败："+music.getName());
-                        System.out.println("Cache src error:" + music);
-                        throw new RuntimeException(e);
-                    }
-                }
-            }).start();
+            new Thread(() -> cacheMusicSrc(music)).start();
         }
         if (music.getImg() != null && !music.getImg().isBlank() && !music.getImg().startsWith("file")) {
             new Thread(() -> {

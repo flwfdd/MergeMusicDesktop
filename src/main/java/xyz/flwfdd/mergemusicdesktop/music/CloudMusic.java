@@ -202,6 +202,6 @@ class CloudMusic extends Music {
     }
 
     public String getLowImg(){
-        return img+"?param=424y424";
-    }
+        return img+"?param=424x424";
+    } //x是保持原比例 y是强制裁切
 }

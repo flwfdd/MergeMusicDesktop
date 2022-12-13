@@ -13,19 +13,21 @@ import java.util.Map;
 
 public abstract class Music {
     public enum Platform {
-        CLOUD, QQ;
+        CLOUD, QQ, BILI;
 
         @Override
         public String toString() {
             return switch (this) {
                 case CLOUD -> "网易云";
                 case QQ -> "QQ";
+                case BILI -> "B站";
             };
         }
 
         public String getExtension() {
             return switch (this) {
                 case CLOUD, QQ -> ".mp3";
+                case BILI -> ".m4a";
             };
         }
 
@@ -33,6 +35,7 @@ public abstract class Music {
             return switch (this) {
                 case CLOUD -> "#A8001C";
                 case QQ -> "#00A85F";
+                case BILI -> "#FB7299";
             };
         }
     }
@@ -56,16 +59,18 @@ public abstract class Music {
 
     public static List<Music> search(String keyword, Platform platform, Type type, int limit, int page) {
         // page从0开始
-        List<Music> music_list = null;
-        if (platform == Platform.CLOUD) music_list = CloudMusic.search(keyword, type, limit, page);
-        else if (platform == Platform.QQ) music_list = QQMusic.search(keyword, type, limit, page);
-        return music_list;
+        return switch (platform){
+            case CLOUD -> CloudMusic.search(keyword, type, limit, page);
+            case QQ -> QQMusic.search(keyword, type, limit, page);
+            case BILI -> BiliMusic.search(keyword, type, limit, page);
+        };
     }
 
     public static Music getMusic(String mid, String name, String lrc, String translateLrc, String albumName, List<String> artists) {
         Music music = switch (mid.charAt(0)) {
             case 'C' -> new CloudMusic(Type.MUSIC, mid);
             case 'Q' -> new QQMusic(Type.MUSIC, mid);
+            case 'B' -> new BiliMusic(Type.MUSIC, mid);
             default -> null;
         };
         if (music == null) return null;
@@ -166,6 +171,12 @@ public abstract class Music {
     public Map<String, String> getHeaders() {
         return new HashMap<>();
     }
+
+    public boolean supportPartUnfold(){
+        return false;
+    }
+
+    public void resetUnfoldPage(){}
 
     @Override
     public String toString() {

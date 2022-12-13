@@ -36,6 +36,8 @@ public class MainApplication extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("256.png"))));
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest(windowEvent -> System.exit(0));
     }
 
     public static void main(String[] args) {

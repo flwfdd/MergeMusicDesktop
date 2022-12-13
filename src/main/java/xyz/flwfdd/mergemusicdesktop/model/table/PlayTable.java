@@ -2,6 +2,7 @@ package xyz.flwfdd.mergemusicdesktop.model.table;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
+import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
@@ -112,7 +113,7 @@ public class PlayTable extends MusicTable {
         if (history.size() > history_max) history.removeFirst();
 
         if (music.getType() == Music.Type.MUSIC) {
-            add(music);
+            add(music,false);
             Player.getInstance().play(music);
         } else {
             if (loading) return;
@@ -138,11 +139,15 @@ public class PlayTable extends MusicTable {
         }
     }
 
-    public void add(Music music) {
+    public void add(Music music,boolean msg) {
         if (music.getType() == Music.Type.MUSIC) {
             for (Music value : musicList) {
-                if (value.getMid().equals(music.getMid())) return;
+                if (value.getMid().equals(music.getMid())){
+                    if(msg)Config.getInstance().setMsg("已在列表中啦");
+                    return;
+                }
             }
+            if(msg)Config.getInstance().setMsg("添加成功OvO");
             musicList.add(music);
         } else {
             if (loading) return;
@@ -158,7 +163,10 @@ public class PlayTable extends MusicTable {
 
                 @Override
                 protected void succeeded() {
-                    if (l != null) musicList.addAll(l);
+                    if (l != null){
+                        musicList.addAll(l);
+                        if(msg)Config.getInstance().setMsg("添加成功OvO");
+                    } else if(msg)Config.getInstance().setMsg("添加失败Orz");
                     loading = false;
                 }
             }).start();

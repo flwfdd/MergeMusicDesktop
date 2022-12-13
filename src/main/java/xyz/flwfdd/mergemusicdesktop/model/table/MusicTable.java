@@ -180,7 +180,7 @@ public class MusicTable {
     List<Operation> getOperations(Music music) { //操作栏
         List<Operation> operations = new ArrayList<>();
         operations.add(new MusicTable.Operation("mdrmz-play_arrow", "播放", () -> PlayTable.getInstance().play(music)));
-        operations.add(new MusicTable.Operation("mdral-add", "添加到播放列表", () -> PlayTable.getInstance().add(music)));
+        operations.add(new MusicTable.Operation("mdral-add", "添加到播放列表", () -> PlayTable.getInstance().add(music,true)));
         return operations;
     }
 

@@ -59,6 +59,7 @@ public class Config {
         initConfigItem("cloud_music_api_url", "https://service-r6uorko5-1255944436.bj.apigw.tencentcs.com/release", "网易云音乐API", true, Type.TEXT, s -> true);
         initConfigItem("cloud_music_cookie", "", "网易云音乐Cookie", true, Type.TEXT, s -> true);
         initConfigItem("qq_music_cookie", "", "QQ音乐Cookie", true, Type.TEXT, s -> true);
+        initConfigItem("bili_cookie", "", "B站Cookie", true, Type.TEXT, s -> true);
         initConfigItem("cache_size", "2048", "最大缓存空间(MB)", true, Type.INT, s -> {
             int x = Integer.parseInt(s);
             return !(x < 0);

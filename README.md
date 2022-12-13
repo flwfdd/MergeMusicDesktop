@@ -122,6 +122,40 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 }
 ```
 
+### bilibili
+
+#### 搜索
+`GET https://api.bilibili.com/x/web-interface/search/type`
+
+参数说明：
+* `search_type`: `video` | `bili_user`
+* `page`: 页码从1开始
+* `page_size`: 每页数量
+* `keyword`: 关键词，需要`URLEncode`
+
+需要`Cookie`，经实验`buvid3=xxx`都可以。
+
+另外注意搜索结果标题关键字会被`<em class="keyword"></em>`包裹，需要特殊处理。
+
+
+#### 获取视频详情
+`GET https://api.bilibili.com/x/web-interface/view`
+
+参数说明：
+* `aid`: av号
+
+#### 获取播放源
+`GET https://api.bilibili.com/x/player/playurl?fnval=80&avid=73751088&cid=126162431`
+
+#### 获取UP作品列表
+`GET https://api.bilibili.com/x/space/arc/search?ps=50&mid=uid&pn=1`
+
+#### 获取用户收藏列表
+`GET https://api.bilibili.com/x/v3/fav/folder/created/list?pn=1&ps=100&up_mid=`
+
+#### 获取收藏夹内容
+`GET https://api.bilibili.com/x/v3/fav/resource/list?ps=20&pn=1&media_id=`
+
 
 ## 数据库
 使用`sqlite-jdbc`操作`SQLite`数据库。

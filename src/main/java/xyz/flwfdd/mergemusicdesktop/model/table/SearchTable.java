@@ -29,9 +29,10 @@ public class SearchTable extends MusicTable {
         public Music.Type type;
         public ObservableList<Music> list;
         public InvalidationListener musicTableListener;
+        public Music unfoldMusic;
 
         SearchCase(List<Music> l) {
-            haveNext = false;
+            haveNext=false;
             list = FXCollections.observableArrayList();
             list.addAll(l);
         }
@@ -99,7 +100,8 @@ public class SearchTable extends MusicTable {
 
             @Override
             protected Void call() {
-                l = Music.search(nowSearchCase.get().key, nowSearchCase.get().platform, nowSearchCase.get().type, limit, nowSearchCase.get().page);
+                if(nowSearchCase.get().unfoldMusic!=null)l=nowSearchCase.get().unfoldMusic.unfold();
+                else l = Music.search(nowSearchCase.get().key, nowSearchCase.get().platform, nowSearchCase.get().type, limit, nowSearchCase.get().page);
                 return null;
             }
 
@@ -125,6 +127,7 @@ public class SearchTable extends MusicTable {
 
             @Override
             protected Void call() {
+                music.resetUnfoldPage();
                 l = music.unfold();
                 return null;
             }
@@ -133,7 +136,12 @@ public class SearchTable extends MusicTable {
             protected void succeeded() {
                 if (l != null) {
                     pushHistory();
-                    nowSearchCase.set(new SearchCase(l));
+                    SearchCase searchCase=new SearchCase(l);
+                    if(music.supportPartUnfold()){
+                        searchCase.unfoldMusic=music;
+                        searchCase.haveNext=true;
+                    }
+                    nowSearchCase.set(searchCase);
                     tableView.getSelectionModel().clearSelection();
                     if (l.size() == 0) Config.getInstance().setMsg("空空如也呢");
                 } else Config.getInstance().setMsg("展开失败Orz");
