@@ -2,7 +2,6 @@ package xyz.flwfdd.mergemusicdesktop.model.table;
 
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -86,7 +85,6 @@ public class MusicTable {
             rowCell.setGraphic(text);
             return rowCell;
         });
-        colIndex.setMinWidth(42);
         tableView.getTableColumns().add(colIndex);
 
         MFXTableColumn<Music> colOpt = new MFXTableColumn<>("操作");
@@ -111,7 +109,6 @@ public class MusicTable {
             rowCell.setPadding(new Insets(0));
             return rowCell;
         });
-        colOpt.setMinWidth(84);
         tableView.getTableColumns().add(colOpt);
 
         MFXTableColumn<Music> colName = new MFXTableColumn<>("名字");
@@ -139,7 +136,11 @@ public class MusicTable {
         tableView.getTableColumns().add(colAlbum);
 
         // 平均分布各列
-        Platform.runLater(() -> {
+        tableView.widthProperty().addListener(observable -> {
+            colIndex.setPrefWidth(42);
+            colIndex.setMinWidth(42);
+            colOpt.setPrefWidth(84);
+            colOpt.setMinWidth(84);
             var w = (tableView.getWidth() - colIndex.getWidth() - colOpt.getWidth()) / 3 - 2;
             colName.setMinWidth(w);
             colArtists.setMinWidth(w);

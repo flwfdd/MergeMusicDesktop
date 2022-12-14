@@ -1,9 +1,11 @@
 package xyz.flwfdd.mergemusicdesktop.model.table;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
+import xyz.flwfdd.mergemusicdesktop.music.DB;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
 import java.util.ArrayList;
@@ -49,8 +51,20 @@ public class PlayTable extends MusicTable {
         return loopType;
     }
 
-    final int history_max = 24;
+    final int historyMax = 24;
     Deque<Music> history = new LinkedList<>();
+    Deque<List<Music>> musicListHistory=new LinkedList<>();
+    final int musicListHistoryMax=24;
+
+    PlayTable(){
+        super();
+
+        // 初始化数据库
+        List<Music>l=DB.getInstance().getList(1);
+        if(l==null)DB.getInstance().createList("play_list");
+        else musicList.setAll(l);
+        musicList.addListener((InvalidationListener) observable -> new Thread(()-> DB.getInstance().setList(1,musicList)).start());
+    }
 
     public void playPref() {
         switch (loopType.get()) {
@@ -110,7 +124,7 @@ public class PlayTable extends MusicTable {
     public void play(Music music) {
         System.out.println("Play:" + music);
         history.addLast(music);
-        if (history.size() > history_max) history.removeFirst();
+        if (history.size() > historyMax) history.removeFirst();
 
         if (music.getType() == Music.Type.MUSIC) {
             add(music,false);
@@ -130,7 +144,8 @@ public class PlayTable extends MusicTable {
                 @Override
                 protected void succeeded() {
                     if (l != null) {
-                        musicList.setAll(l);
+                        clear();
+                        musicList.addAll(l);
                         if (!musicList.isEmpty()) Player.getInstance().play(musicList.get(0));
                     }
                     loading = false;
@@ -147,8 +162,8 @@ public class PlayTable extends MusicTable {
                     return;
                 }
             }
-            if(msg)Config.getInstance().setMsg("添加成功OvO");
             musicList.add(music);
+            if(msg)Config.getInstance().setMsg("添加成功OvO");
         } else {
             if (loading) return;
             loading = true;
@@ -180,6 +195,19 @@ public class PlayTable extends MusicTable {
                 return;
             }
         }
+    }
+
+    public void clear(){
+        if(musicList.isEmpty())return;
+        musicListHistory.addLast(musicList.stream().toList());
+        while(musicListHistory.size()>musicListHistoryMax)musicListHistory.removeFirst();
+        musicList.clear();
+    }
+
+    public void back(){
+        if(musicListHistory.isEmpty())return;
+        musicList.setAll(musicListHistory.getLast());
+        musicListHistory.removeLast();
     }
 
     @Override

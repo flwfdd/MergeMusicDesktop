@@ -1,6 +1,8 @@
 package xyz.flwfdd.mergemusicdesktop;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.fxml.FXML;
 import javafx.scene.paint.Paint;
@@ -18,11 +20,30 @@ import xyz.flwfdd.mergemusicdesktop.music.Music;
 public class PlayListController {
     @FXML
     MFXTableView<Music> playTable;
+
+    @FXML
+    MFXButton backButton;
+
+    @FXML
+    MFXButton clearButton;
+
     PlayTable playTableModel;
 
     public void initialize() {
         playTableModel = PlayTable.getInstance();
         playTableModel.bind(playTable);
+
+        backButton.setOnAction(e-> playTableModel.back());
+
+        clearButton.setOnAction(e-> playTableModel.clear());
+
+        var tooltip = new MFXTooltip(backButton);
+        tooltip.setText("恢复播放列表");
+        tooltip.install();
+
+        tooltip = new MFXTooltip(clearButton);
+        tooltip.setText("清空播放列表");
+        tooltip.install();
 
         // 在列表中标注正在播放的
         var playingMusic = Player.getInstance().playingMusicProperty();

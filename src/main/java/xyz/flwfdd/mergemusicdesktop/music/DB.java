@@ -1,10 +1,8 @@
 package xyz.flwfdd.mergemusicdesktop.music;
 
 import com.alibaba.fastjson2.JSON;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleDoubleProperty;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
-import xyz.flwfdd.mergemusicdesktop.model.table.PlayTable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +15,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -84,35 +85,8 @@ public class DB {
         }
     }
 
-    void initList() {
-        // 初始化播放列表
-        var playTable = PlayTable.getInstance();
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("SELECT * FROM list WHERE id=1;");
-            if (rs.next()) {
-                List<String> l = string2List(rs.getString("musics"));
-                playTable.getMusicList().setAll(selectMusics(l));
-            } else statement.execute("INSERT INTO list (name,musics) VALUES ('play_list','[]')");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        playTable.getMusicList().addListener((InvalidationListener) observable -> new Thread(() -> {
-            String sql = "UPDATE list SET musics=? WHERE id=1;";
-            try (Connection connection = getConnection();
-                 PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, list2String(playTable.getMusicList().stream().map(Music::getMid).toList()));
-                statement.execute();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }).start());
-    }
-
     void init(){
         initDB();
-        initList();
         initCacheSize();
     }
 
@@ -186,6 +160,60 @@ public class DB {
         }
     }
 
+    public List<Music> getList(int id){
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery("SELECT * FROM list WHERE id="+id);
+            if (rs.next()) {
+                List<String> l = string2List(rs.getString("musics"));
+                return selectMusics(l);
+            } else return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int createList(String name){
+        String sql = "INSERT INTO list (name,musics) VALUES (?,'[]')";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1,name);
+            statement.execute();
+            var rs=statement.getGeneratedKeys();
+            if(rs.next())return rs.getInt(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
+    }
+
+    public void setList(int id,List<Music> musicList){
+        String sql = "UPDATE list SET musics=? WHERE id=?;";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, list2String(musicList.stream().map(Music::getMid).toList()));
+            statement.setInt(2, id);
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteList(int id){
+        if(id==1){
+            System.out.println("can not delete playlist");
+            return;
+        }
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.execute("DELETE FROM list WHERE id="+id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // 以下为缓存部分
+
     Pattern illegalFileNamePattern = Pattern.compile("[\\\\/:*?\"<>|\r\n]"); //操作系统非法字符
 
     String getFileName(Music music) {
@@ -242,6 +270,7 @@ public class DB {
     }
 
     String cacheMusicSrc(Music music){
+        // 同步缓存音乐 返回缓存链接
         if (download(music.getSrc(), Paths.get(cachePath, getMusicFileName(music)).toString(), music.getHeaders())) {
             updateCacheSize();
             String sql = "UPDATE music SET file_name=? WHERE mid=?;";
@@ -262,7 +291,7 @@ public class DB {
     }
 
     void cacheMusic(Music music) {
-        // 缓存音乐
+        // 异步缓存音乐
         if (music.getSrc() != null && !music.getSrc().isBlank() && !music.getSrc().startsWith("file")) {
             new Thread(() -> cacheMusicSrc(music)).start();
         }
@@ -343,7 +372,7 @@ public class DB {
     }
 
     void updateCacheSize(){
-        // 更新缓存
+        // 更新和清理缓存
         List<String> noFileMusics=new ArrayList<>(); //需要取消缓存记录的音乐mid列表
         if (cacheSizeSum/1024/1024>Config.getInstance().getInt("cache_size")){
             try (Connection connection = getConnection();
@@ -368,5 +397,4 @@ public class DB {
             }
         }
     }
-
 }

@@ -35,6 +35,8 @@ public class MainApplication extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("128.png"))));
         stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("256.png"))));
         stage.setScene(scene);
+        stage.setMinWidth(700);
+        stage.setMinHeight(500);
         stage.show();
 
         stage.setOnCloseRequest(windowEvent -> System.exit(0));

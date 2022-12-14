@@ -18,4 +18,7 @@
          </padding>
       </VBox>
    </MFXScrollPane>
+   <padding>
+      <Insets left="11.0" right="11.0" />
+   </padding>
 </VBox>

@@ -80,7 +80,6 @@ public class SearchTable extends MusicTable {
 
     void pushHistory() {
         if (nowSearchCase.get() == null || nowSearchCase.get().list.isEmpty()) return;
-//        historySearchCase.addLast(FXCollections.observableList(musicList.stream().toList()));
         historySearchCase.addLast(nowSearchCase.get());
         if (historySearchCase.size() > 24) historySearchCase.removeFirst();
     }
@@ -190,8 +189,6 @@ public class SearchTable extends MusicTable {
             search();
         })));
         if (music.getType() == Music.Type.MUSIC) menus.addAll(super.getMenus(music));
-        else
-            menus.add(new MusicTable.Operation("mdral-info", "详细信息", () -> System.out.println("List Detail:" + music)));
         return menus;
     }
 
