@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXListView?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" spacing="11.0" style="-fx-background-radius: 24px; -fx-background-color: #F0FCFFDD;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController">
+   <padding>
+      <Insets bottom="24.0" left="11.0" right="11.0" />
+   </padding>
+   <HBox fx:id="headBar" alignment="CENTER">
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+      <padding>
+         <Insets top="11.0" />
+      </padding>
+      <Label maxWidth="1.7976931348623157E308" styleClass="custom-font" text="请选择收藏夹" HBox.hgrow="ALWAYS">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <MFXButton id="closeButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onClose" prefHeight="32.0" prefWidth="32.0">
+         <graphic>
+            <FontIcon iconLiteral="mdral-close" iconSize="24" />
+         </graphic>
+      </MFXButton>
+   </HBox>
+   <HBox alignment="CENTER_RIGHT" spacing="4.0">
+      <VBox.margin>
+         <Insets/>
+      </VBox.margin>
+      <MFXTextField fx:id="newNameField" floatMode="DISABLED" maxHeight="1.7976931348623157E308"
+                    maxWidth="1.7976931348623157E308" prefColumnCount="4" promptText="新收藏夹名"
+                    styleClass="custom-text-field" HBox.hgrow="ALWAYS">
+         <padding>
+            <Insets left="11.0" right="11.0"/>
+         </padding>
+      </MFXTextField>
+      <MFXButton onAction="#onNew" styleClass="custom-button" text="新建">
+         <graphic>
+            <FontIcon iconLiteral="mdral-add" iconSize="24"/>
+         </graphic>
+      </MFXButton>
+   </HBox>
+   <MFXListView id="favList" fx:id="favList" depthLevel="LEVEL0" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-border-radius: 11px;" stylesheets="@../style.css">
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+   </MFXListView>
+   <HBox alignment="CENTER_RIGHT" spacing="11.0">
+      <Label fx:id="msgLabel" maxWidth="1.7976931348623157E308" styleClass="custom-font" text="请选择"
+             HBox.hgrow="ALWAYS">
+         <font>
+            <Font size="16.0"/>
+         </font>
+      </Label>
+      <MFXButton onAction="#onOK" styleClass="custom-button" text="确认">
+         <graphic>
+            <FontIcon iconLiteral="mdral-done" iconSize="24"/>
+         </graphic>
+      </MFXButton>
+   </HBox>
+</VBox>

@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
-import xyz.flwfdd.mergemusicdesktop.DetailController;
+import xyz.flwfdd.mergemusicdesktop.dialog.DetailController;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 

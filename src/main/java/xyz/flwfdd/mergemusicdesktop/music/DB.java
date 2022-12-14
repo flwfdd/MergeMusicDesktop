@@ -160,6 +160,20 @@ public class DB {
         }
     }
 
+    public Map<Integer,String> getLists(){
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery("SELECT id,name FROM list WHERE id!=1");
+            Map<Integer,String> map=new HashMap<>();
+            while (rs.next()) {
+                map.put(rs.getInt("id"),rs.getString("name"));
+            }
+            return map;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Music> getList(int id){
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {

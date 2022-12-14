@@ -322,3 +322,33 @@ Detail 详情模态框
     -fx-background-insets: 0;
     -fx-border-insets: 0;
 }
+
+/********************
+FavList 收藏夹选择列表
+********************/
+
+#favList .virtual-flow {
+    -fx-background-radius: 11;
+    -fx-background-color: transparent;
+}
+
+#favList .virtual-flow .mfx-list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 11;
+    -fx-border-radius: 11;
+    -fx-padding: 11;
+}
+
+#favList .virtual-flow .mfx-list-cell .data-label{
+    -fx-font-family: "Source Han Serif CN Medium";
+    -fx-font-size: 14px;
+}
+
+#favList .virtual-flow .mfx-list-cell:hover{
+    -fx-background-color: #57DDFF44;
+}
+
+#favList .virtual-flow .mfx-list-cell:selected {
+    -fx-background-color: #57DDFF88;
+}

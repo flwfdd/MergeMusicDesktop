@@ -1,4 +1,4 @@
-package xyz.flwfdd.mergemusicdesktop;
+package xyz.flwfdd.mergemusicdesktop.dialog;
 
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.SimpleStringProperty;
@@ -66,7 +66,7 @@ public class DetailController {
     }
 
     void setMusic(Music music){
-        music.load();
+        music.full_load();
         mid.set(music.getMid());
         name.set(music.getName());
         artists.set(String.join(",",music.getArtists()));
@@ -94,6 +94,7 @@ public class DetailController {
     double yOffset=0;
     SimpleStringProperty mid,name,artists,album,src,img,lrc,translateLrc;
     public void initialize() {
+        System.out.println(2333);
         mid=new SimpleStringProperty();
         name=new SimpleStringProperty();
         artists=new SimpleStringProperty();
@@ -136,7 +137,7 @@ public class DetailController {
             System.out.println("open detail error:"+e);
         }
 
-        controller.setMusic(music);
         stage.show();
+        controller.setMusic(music);
     }
 }
