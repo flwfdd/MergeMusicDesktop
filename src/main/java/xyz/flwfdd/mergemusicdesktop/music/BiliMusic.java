@@ -135,7 +135,6 @@ public class BiliMusic extends Music {
                                 src=audio.getString("base_url");
                             }
                         });
-                src=Music.db.cacheMusicSrc(this);
             } catch (Exception e) {
                 System.out.println("bili full load error:" + e);
             }

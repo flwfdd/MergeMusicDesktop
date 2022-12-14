@@ -2,6 +2,7 @@ package xyz.flwfdd.mergemusicdesktop.music;
 
 import com.alibaba.fastjson2.JSON;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.SimpleDoubleProperty;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.model.table.PlayTable;
 
@@ -9,8 +10,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -203,23 +206,36 @@ public class DB {
     final static int buffSize = 102400; //下载片大小
 
     boolean download(String src, String path, Map<String, String> headers) {
+        return download(src,path,headers,new SimpleDoubleProperty());
+    }
+
+    boolean download(String src, String path, Map<String, String> headers, SimpleDoubleProperty progress) {
         File file = Paths.get(path).toFile();
         try {
-            URL url = new URL(src);
-            URLConnection con = url.openConnection();
-            headers.forEach(con::setRequestProperty);
-            InputStream is = con.getInputStream();
-            byte[] bs = new byte[buffSize];
-            FileOutputStream os = new FileOutputStream(file);
-            int len;
-            while ((len = is.read(bs)) != -1) {
-                os.write(bs, 0, len);
+            if(src.startsWith("file")){
+                Files.copy(Paths.get(URI.create(src)),file.toPath());
+                progress.set(1);
+            } else {
+                URL url = new URL(src);
+                URLConnection con = url.openConnection();
+                headers.forEach(con::setRequestProperty);
+                InputStream is = con.getInputStream();
+                int totalLen=con.getContentLength();
+                int sumLen=0;
+                byte[] bs = new byte[buffSize];
+                FileOutputStream os = new FileOutputStream(file);
+                int len;
+                while ((len = is.read(bs)) != -1) {
+                    os.write(bs, 0, len);
+                    sumLen+=len;
+                    progress.set(((double)sumLen)/totalLen);
+                }
+                os.close();
+                is.close();
             }
-            os.close();
-            is.close();
         } catch (Exception e) {
             System.out.println("Download error:" + e);
-            if(!file.delete())System.out.println("Delete fail: "+file.getPath());
+            if(!file.delete())System.out.println("download delete fail: "+file.getPath());
             return false;
         }
         return true;

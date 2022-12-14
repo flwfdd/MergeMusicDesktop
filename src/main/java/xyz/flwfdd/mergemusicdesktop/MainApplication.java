@@ -26,7 +26,7 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 888, 666);
-        ((MainController) fxmlLoader.getController()).setScene(scene);
+        ((MainController) fxmlLoader.getController()).setApp(stage,scene);
         stage.setTitle("MergeMusic");
         // 只加载一个大图片的话最终图标会不清晰
         stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("16.png"))));

@@ -1,5 +1,11 @@
 package xyz.flwfdd.mergemusicdesktop.music;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import xyz.flwfdd.mergemusicdesktop.DownloadController;
+import xyz.flwfdd.mergemusicdesktop.model.Config;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +65,7 @@ public abstract class Music {
 
     public static List<Music> search(String keyword, Platform platform, Type type, int limit, int page) {
         // page从0开始
-        return switch (platform){
+        return switch (platform) {
             case CLOUD -> CloudMusic.search(keyword, type, limit, page);
             case QQ -> QQMusic.search(keyword, type, limit, page);
             case BILI -> BiliMusic.search(keyword, type, limit, page);
@@ -103,6 +109,7 @@ public abstract class Music {
             if (lrc == null) lrc = "";
             if (translateLrc == null) translateLrc = "";
             if (albumName == null) albumName = "";
+            if (platform == Platform.BILI) src = Music.db.cacheMusicSrc(this);
             img = getLowImg();
             db.updateMusic(this);
             db.cacheMusic(this);
@@ -119,6 +126,41 @@ public abstract class Music {
         if (l == null) return null;
         l.forEach(music -> db.updateMusic(music));
         return l;
+    }
+
+    public void downloadImg(Path path) {
+        if (type != Type.MUSIC) {
+            System.out.println("can only download music!");
+            return;
+        }
+        Path path1 = Paths.get(path.toString(), db.getImgFileName(this));
+        if (path1.toFile().exists()) Config.getInstance().setMsg("已经存在图片 " + name);
+        else new Thread(() -> {
+            SimpleDoubleProperty progress = DownloadController.createDownloadItem(name, path.toFile(), path1.toString());
+            Config.getInstance().setMsg("开始下载图片 " + name);
+            full_load();
+            if (db.download(img, path1.toString(), getHeaders(), progress))
+                Config.getInstance().setMsg("下载成功图片 " + name);
+            else Config.getInstance().setMsg("下载失败图片 " + name);
+        }).start();
+    }
+
+    public void downloadMusic(Path path) {
+        if (type != Type.MUSIC) {
+            System.out.println("can only download music!");
+            return;
+        }
+        Path path1 = Paths.get(path.toString(), db.getMusicFileName(this));
+        if (path1.toFile().exists()) Config.getInstance().setMsg("已经存在音乐 " + name);
+        else new Thread(() -> {
+            SimpleDoubleProperty progress = DownloadController.createDownloadItem(name, path.toFile(), path1.toString());
+            Config.getInstance().setMsg("开始下载音乐 " + name);
+            Music music = db.getCacheMusic(mid);
+            if (music == null || music.src.isBlank()) full_load();
+            if (db.download(src, path1.toString(), getHeaders(), progress))
+                Config.getInstance().setMsg("下载成功音乐 " + name);
+            else Config.getInstance().setMsg("下载失败音乐 " + name);
+        }).start();
     }
 
     String mid, name = "", src = "", img = "", lrc = "", translateLrc = "", albumName = "";
@@ -172,11 +214,12 @@ public abstract class Music {
         return new HashMap<>();
     }
 
-    public boolean supportPartUnfold(){
+    public boolean supportPartUnfold() {
         return false;
     }
 
-    public void resetUnfoldPage(){}
+    public void resetUnfoldPage() {
+    }
 
     @Override
     public String toString() {

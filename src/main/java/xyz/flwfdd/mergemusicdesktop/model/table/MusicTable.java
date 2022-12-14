@@ -12,8 +12,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
+import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,12 +182,21 @@ public class MusicTable {
     List<Operation> getOperations(Music music) { //操作栏
         List<Operation> operations = new ArrayList<>();
         operations.add(new MusicTable.Operation("mdrmz-play_arrow", "播放", () -> PlayTable.getInstance().play(music)));
-        operations.add(new MusicTable.Operation("mdral-add", "添加到播放列表", () -> PlayTable.getInstance().add(music,true)));
+        operations.add(new MusicTable.Operation("mdral-add", "添加到播放列表", () -> PlayTable.getInstance().add(music, true)));
         return operations;
     }
 
     List<Operation> getMenus(Music music) { //右键菜单
+        // 针对MUSIC类型的通用设置
         List<Operation> menus = new ArrayList<>();
+        menus.add(new MusicTable.Operation("mdral-get_app", "下载音乐", () -> {
+            File file = Config.getInstance().chooseDir();
+            if (file != null) music.downloadMusic(file.toPath());
+        }));
+        menus.add(new MusicTable.Operation("mdral-image", "下载图片", () -> {
+            File file = Config.getInstance().chooseDir();
+            if (file != null) music.downloadImg(file.toPath());
+        }));
         menus.add(new MusicTable.Operation("mdral-info", "详细信息", () -> System.out.println("Detail:" + music)));
         return menus;
     }

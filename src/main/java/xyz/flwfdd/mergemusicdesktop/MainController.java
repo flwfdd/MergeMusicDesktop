@@ -25,6 +25,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
@@ -136,6 +137,8 @@ public class MainController {
                 () -> createToggle("mdrmz-queue_music", "列表")).setDefaultRoot(false).get());
         loader.addView(MFXLoaderBean.of("Playing", loadURL("playing-view.fxml")).setBeanToNodeMapper(
                 () -> createToggle("mdral-graphic_eq", "播放")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("Download", loadURL("download-view.fxml")).setBeanToNodeMapper(
+                () -> createToggle("mdral-get_app", "下载")).setDefaultRoot(false).get());
         loader.addView(MFXLoaderBean.of("Config", loadURL("config-view.fxml")).setBeanToNodeMapper(
                 () -> createToggle("mdrmz-settings", "设置")).setDefaultRoot(false).get());
 
@@ -314,7 +317,8 @@ public class MainController {
 
     }
 
-    public void setScene(Scene scene) {
+    public void setApp(Stage stage,Scene scene) {
+        Config.getInstance().setMainStage(stage);
         // 设置全局键盘捕获
         scene.addEventFilter(KeyEvent.KEY_RELEASED, keyEvent -> {
             // 如果是输入框就不捕获

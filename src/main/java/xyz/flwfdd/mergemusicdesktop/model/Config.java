@@ -1,6 +1,8 @@
 package xyz.flwfdd.mergemusicdesktop.model;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -23,6 +25,7 @@ public class Config {
     String configPath;
     Properties properties;
     SimpleStringProperty msgProperty;
+    Stage mainStage;
 
     public enum Type {
         TEXT, INT, DOUBLE
@@ -149,6 +152,19 @@ public class Config {
 
     public void setMsg(String msg) {
         msgProperty.set(msg);
+    }
+
+    public void setMainStage(Stage stage){
+        mainStage=stage;
+    }
+
+    File lastDir=null;
+    public File chooseDir(){
+        DirectoryChooser directoryChooser=new DirectoryChooser();
+        if(lastDir!=null)directoryChooser.setInitialDirectory(lastDir);
+        File file=directoryChooser.showDialog(mainStage);
+        if(file!=null)lastDir=file;
+        return file;
     }
 
     public String getRootPath() {
