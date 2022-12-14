@@ -4,22 +4,17 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox alignment="TOP_CENTER" prefHeight="441.0" prefWidth="685.0" style="-fx-background-color: #fff0;"
-      xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="xyz.flwfdd.mergemusicdesktop.ConfigController">
-   <MFXScrollPane fx:id="scrollPane" maxWidth="-Infinity" prefWidth="618.0"
-                  style="-fx-background-color: #fff8; -fx-background-radius: 11 11 0 0; -fx-border-radius: 11 11 0 0; -fx-border-width: 0.84; -fx-border-color: #C9D4D6;"
-                  VBox.vgrow="ALWAYS">
+<VBox alignment="TOP_CENTER" prefHeight="441.0" prefWidth="685.0" style="-fx-background-color: #fff0;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.ConfigController">
+   <MFXScrollPane fx:id="scrollPane" maxWidth="-Infinity" prefWidth="618.0" style="-fx-background-color: #fff8; -fx-background-radius: 11 11 0 0; -fx-border-radius: 11 11 0 0; -fx-border-width: 0.84; -fx-border-color: #C9D4D6;" VBox.vgrow="ALWAYS">
       <VBox.margin>
-         <Insets top="24.0"/>
+         <Insets top="24.0" />
       </VBox.margin>
       <padding>
-         <Insets left="24.0" right="24.0"/>
+         <Insets left="24.0" right="24.0" />
       </padding>
       <VBox fx:id="configBox" spacing="11.0">
          <padding>
-            <Insets bottom="4.0" left="4.0" right="4.0" top="24.0"/>
+            <Insets bottom="4.0" left="4.0" right="4.0" top="24.0" />
          </padding>
       </VBox>
    </MFXScrollPane>

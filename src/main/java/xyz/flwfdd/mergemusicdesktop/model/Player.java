@@ -102,6 +102,14 @@ public class Player {
         if (player != null) player.play();
     }
 
+    public int getThreshold(){
+        return player.getAudioSpectrumThreshold();
+    }
+
+    public double getInterval(){
+        return player.getAudioSpectrumInterval();
+    }
+
     volatile boolean loading = false;
 
     public void play(Music music) {

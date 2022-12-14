@@ -47,34 +47,39 @@ public class PlayingController {
 
     Player player;
 
+    Config config;
+
     void updateCircle(double a, double b, double c, double d) { //更新音频可视化
-        offset = (int) Math.round(Config.getInstance().getDouble("spectrum_delay") / Config.getInstance().getDouble("spectrum_interval"));
-        history_a.add(a);
-        history_b.add(b);
-        history_c.add(c);
-        history_d.add(d);
-        while (history_a.size() >= offset) {
+        offset = (int) Math.round(config.getDouble("spectrum_delay") / player.getInterval());
+        ratio = config.getDouble("spectrum_smooth_ratio");
+        threshold = -player.getThreshold();
+
+        history_a.add((a + threshold) / threshold);
+        history_b.add((b + threshold) / threshold);
+        history_c.add((c + threshold) / threshold);
+        history_d.add((d + threshold) / threshold);
+        while (history_a.size() > offset) {
             a = history_a.get(0);
             history_a.remove(0);
         }
-        while (history_b.size() >= offset) {
+        while (history_b.size() > offset) {
             b = history_b.get(0);
             history_b.remove(0);
         }
-        while (history_c.size() >= offset) {
+        while (history_c.size() > offset) {
             c = history_c.get(0);
             history_c.remove(0);
         }
-        while (history_d.size() >= offset) {
+        while (history_d.size() > offset) {
             d = history_d.get(0);
             history_d.remove(0);
         }
         var e = (a + b + c + d) / 4;
-        e = (e + threshold) * 100 / threshold + 200;
-        a = (a + threshold) * 100 / threshold + 100;
-        b = (b + threshold) * 100 / threshold + 75;
-        c = (c + threshold) * 100 / threshold + 50;
-        d = (d + threshold) * 100 / threshold + 25;
+        e = e * 100 + 200;
+        a = a * 100 + 100;
+        b = b * 100 + 75;
+        c = c * 100 + 50;
+        d = d * 100 + 25;
         e = c0.getRadius() * 0.84 + e * (1 - 0.84);
         a = c1.getRadius() * ratio + a * (1 - ratio);
         b = c2.getRadius() * ratio + b * (1 - ratio);
@@ -106,11 +111,9 @@ public class PlayingController {
     }
 
     public void initialize() {
+        config = Config.getInstance();
         player = Player.getInstance();
         // 初始化音频可视化
-        threshold = Config.getInstance().getInt("spectrum_threshold");
-        offset = (int) Math.round(Config.getInstance().getDouble("spectrum_delay") / Config.getInstance().getDouble("spectrum_interval"));
-        ratio = Config.getInstance().getDouble("spectrum_smooth_ratio");
 
         player.spectrumProperty().addListener((InvalidationListener) observable -> {
             var l = Player.getInstance().spectrumProperty();
@@ -127,18 +130,23 @@ public class PlayingController {
         });
 
         player.nowTimeProperty().addListener(observable -> {
-            var t = player.nowTimeProperty().get();
-            for (Double i : lrcMap.keySet()) {
-                if (t >= i) {
-                    lrcText.setText(lrcMap.get(i));
-                    break;
+            if (config.getInt("show_lrc") == 1) {
+                var t = player.nowTimeProperty().get();
+                for (Double i : lrcMap.keySet()) {
+                    if (t >= i) {
+                        lrcText.setText(lrcMap.get(i));
+                        break;
+                    }
                 }
-            }
-            for (var i : translateLrcMap.keySet()) {
-                if (t >= i) {
-                    translateLrcText.setText(translateLrcMap.get(i));
-                    break;
+                for (var i : translateLrcMap.keySet()) {
+                    if (t >= i) {
+                        translateLrcText.setText(translateLrcMap.get(i));
+                        break;
+                    }
                 }
+            } else {
+                lrcText.setText("");
+                translateLrcText.setText("");
             }
         });
     }

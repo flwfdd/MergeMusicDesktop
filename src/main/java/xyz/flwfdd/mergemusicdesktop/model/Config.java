@@ -63,18 +63,34 @@ public class Config {
         initConfigItem("cloud_music_cookie", "", "网易云音乐Cookie", true, Type.TEXT, s -> true);
         initConfigItem("qq_music_cookie", "", "QQ音乐Cookie", true, Type.TEXT, s -> true);
         initConfigItem("bili_cookie", "", "B站Cookie", true, Type.TEXT, s -> true);
+        initConfigItem("show_lrc", "1", "是否显示歌词(0/1)", true, Type.INT, s -> {
+            int x = Integer.parseInt(s);
+            return x==0||x==1;
+        });
         initConfigItem("cache_size", "2048", "最大缓存空间(MB)", true, Type.INT, s -> {
             int x = Integer.parseInt(s);
             return !(x < 0);
         });
-        initConfigItem("spectrum_num_bands", "16", "音频可视化通道数", false, Type.INT, s -> true);
-        initConfigItem("spectrum_threshold", "100", "音频可视化阈值(>0,dB)", false, Type.INT, s -> true);
-        initConfigItem("spectrum_interval", "0.04", "音频可视化时间窗口(s)", false, Type.DOUBLE, s -> true);
         initConfigItem("spectrum_delay", "0.42", "音频可视化延迟时间(s)", true, Type.DOUBLE, s -> {
             double x = Double.parseDouble(s);
-            return !(x < 0);
+            return x>=0&&x<=11;
         });
-        initConfigItem("spectrum_smooth_ratio", "0.24", "平滑比例(0~1)", false, Type.DOUBLE, s -> true);
+        initConfigItem("spectrum_smooth_ratio", "0.24", "音频可视化平滑系数(0~1)", true, Type.DOUBLE, s -> {
+            double x=Double.parseDouble(s);
+            return x>=0&&x<=1;
+        });
+        initConfigItem("spectrum_threshold", "100", "音频可视化采样灵敏度(>0,dB)", true, Type.INT, s -> {
+            int x=Integer.parseInt(s);
+            return x>0;
+        });
+        initConfigItem("spectrum_num_bands", "16", "音频可视化采样通道数(1-512)", true, Type.INT, s -> {
+            int x=Integer.parseInt(s);
+            return x>0&&x<=512;
+        });
+        initConfigItem("spectrum_interval", "0.04", "音频可视化采样时间(s)", true, Type.DOUBLE, s -> {
+            double x=Double.parseDouble(s);
+            return x>=0.01;
+        });
     }
 
     public void resetConfigItems() {

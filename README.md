@@ -20,6 +20,10 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 
 ## 音乐API部分
 
+### 网易云音乐
+
+由于网易云音乐所有接口都有`AES`加密处理，时间有限，暂时懒得研究了。而且现在已经有了非常成熟易用的项目 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi) ，可以一键部署在普通服务器以及 Vercel 、 Serverless 函数计算等托管平台上，所以就不重复造轮子了。具体接口文档见项目主页。
+
 ### QQ音乐
 
 参考项目：[QQMusicApi](https://github.com/jsososo/QQMusicApi)
@@ -137,18 +141,16 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 
 另外注意搜索结果标题关键字会被`<em class="keyword"></em>`包裹，需要特殊处理。
 
-
 #### 获取视频详情
-`GET https://api.bilibili.com/x/web-interface/view`
-
-参数说明：
-* `aid`: av号
+`GET https://api.bilibili.com/x/web-interface/view?aid=`
 
 #### 获取播放源
 `GET https://api.bilibili.com/x/player/playurl?fnval=80&avid=73751088&cid=126162431`
 
 #### 获取UP作品列表
 `GET https://api.bilibili.com/x/space/arc/search?ps=50&mid=uid&pn=1`
+
+注意这个接口如果要传`Referer`就只能传`https://space.bilibili.com`，否则会被拦截。
 
 #### 获取用户收藏列表
 `GET https://api.bilibili.com/x/v3/fav/folder/created/list?pn=1&ps=100&up_mid=`

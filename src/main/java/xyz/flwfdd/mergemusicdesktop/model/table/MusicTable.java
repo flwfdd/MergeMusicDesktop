@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
+import xyz.flwfdd.mergemusicdesktop.DetailController;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
@@ -197,7 +198,7 @@ public class MusicTable {
             File file = Config.getInstance().chooseDir();
             if (file != null) music.downloadImg(file.toPath());
         }));
-        menus.add(new MusicTable.Operation("mdral-info", "详细信息", () -> System.out.println("Detail:" + music)));
+        menus.add(new MusicTable.Operation("mdral-info", "详细信息", () -> DetailController.showDetail(music)));
         return menus;
     }
 

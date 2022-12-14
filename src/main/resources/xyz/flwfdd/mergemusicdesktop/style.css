@@ -1,12 +1,12 @@
-*{
+* {
     -mfx-main: #00ABD6;
     -fx-text-fill: #004354;
     -mfx-auto-clip: true;
     -fx-icon-color: #004354;
-    -mfx-ripple-color:#C2F3FFAA;
+    -mfx-ripple-color: #C2F3FFAA;
 }
 
-.custom-font{
+.custom-font {
     -fx-font-family: "Source Han Serif CN Medium";
     -fx-fill: #004354;
 }
@@ -15,14 +15,18 @@
 Button 按钮
 ********************/
 
-.custom-button{
+.custom-button {
     -fx-font-family: "Source Han Serif CN Medium";
     -fx-background-color: #fffa;
     -fx-background-radius: 6;
     -fx-border-width: 0.5;
     -fx-border-color: #00313D;
     -fx-border-radius: 6;
-    -fx-font-size:15;
+    -fx-font-size: 15;
+}
+
+.custom-button:hover {
+    -fx-border-color: #0087A8;
 }
 
 /********************
@@ -34,7 +38,7 @@ Text Filed 文本输入框
     -fx-font-size: 14;
 }
 
-.custom-text-field{
+.custom-text-field {
     -fx-border-color: #00313D;
     -fx-border-width: 0.5;
     -fx-background-color: #fffa;
@@ -58,6 +62,10 @@ Text Filed 文本输入框
     -fx-border-width: 1;
 }
 
+.custom-text-field:hover {
+    -fx-border-color: #0087A8;
+}
+
 
 /********************
 Combo Box 多选框
@@ -71,6 +79,7 @@ Combo Box 多选框
     -mfx-hover: rgba(41, 212, 255, 0.1);
     -mfx-selected: rgba(41, 212, 255, 0.2);
 }
+
 .mfx-combo-box-cell .data-label {
     -fx-font-family: "Source Han Serif CN Medium";
 }
@@ -79,7 +88,7 @@ Combo Box 多选框
 /********************
 Table 歌曲表格
 ********************/
-.mfx-table-view{
+.mfx-table-view {
     -fx-font-family: "Source Han Serif CN Medium";
     -fx-font-size: 15;
 }
@@ -104,7 +113,7 @@ Table 歌曲表格
     -fx-border-color: transparent;
 }
 
-.mfx-table-column:hover{
+.mfx-table-column:hover {
     -fx-border-color: transparent;
 }
 
@@ -114,13 +123,13 @@ Slider 进度条
 ********************/
 
 #playSlider {
-    -mfx-main-color: rgb(41, 212, 255,0.84);
+    -mfx-main-color: rgb(41, 212, 255, 0.84);
     -mfx-main-color-hover: rgba(41, 212, 255, 0.1);
     -mfx-main-color-pressed: rgba(41, 212, 255, 0.3);
     -mfx-disabled-color: rgb(158, 158, 158);
 }
 
-#playSlider .track{
+#playSlider .track {
     -fx-fill: #00CCFF22;
 }
 
@@ -140,7 +149,7 @@ Slider 进度条
 }
 
 #playSlider .mfx-ripple-generator {
-    -mfx-paused:true;
+    -mfx-paused: true;
 }
 
 /********************
@@ -148,7 +157,7 @@ Tooltip 悬浮提示
 ********************/
 
 .mfx-tooltip .container {
-    -fx-background-color: rgba(255,255,255,0.95);
+    -fx-background-color: rgba(255, 255, 255, 0.95);
     -fx-background-radius: 5;
     -fx-border-color: #00CCFF11;
     -fx-border-radius: 5;
@@ -165,16 +174,16 @@ Tooltip 悬浮提示
 Option button in Table View 表格操作栏
 ********************/
 
-.option-button{
+.option-button {
     -fx-border-width: 0;
     -fx-border-radius: 11%;
-    -fx-background-radius:11%;
+    -fx-background-radius: 11%;
     -fx-background-color: transparent;
     -fx-content-display: graphic-only;
     -fx-min-width: 0;
 }
 
-.option-button:hover{
+.option-button:hover {
     -fx-background-color: #29D4FF44;
 }
 
@@ -189,7 +198,7 @@ Progress Bar 加载条
 
 
 .mfx-progress-bar .bar1,
-.mfx-progress-bar .bar2{
+.mfx-progress-bar .bar2 {
     -fx-fill: #29D4FF66;
 }
 
@@ -198,7 +207,7 @@ Progress Bar 加载条
 Rectangle Toggle Node 导航栏按钮
 ********************/
 
-.mfx-rectangle-toggle-node{
+.mfx-rectangle-toggle-node {
     -fx-background-color: #29D4FF11;
     -fx-background-radius: 0 11 11 0;
     -fx-border-width: 0;
@@ -208,7 +217,7 @@ Rectangle Toggle Node 导航栏按钮
     -fx-padding: 0 0 0 42;
 }
 
-.mfx-rectangle-toggle-node:hover{
+.mfx-rectangle-toggle-node:hover {
     -fx-background-color: #29D4FF33;
 }
 
@@ -217,7 +226,7 @@ Rectangle Toggle Node 导航栏按钮
 }
 
 .mfx-rectangle-toggle-node .mfx-ripple-generator {
-    -mfx-paused:true;
+    -mfx-paused: true;
 }
 
 /********************
@@ -234,12 +243,12 @@ Scroll pane 设置滚动面板
 Control button 播放控件
 ********************/
 
-.control-button{
+.control-button {
     -fx-background-radius: 24%;
     -fx-background-color: #00CCFF22;
 }
 
-.control-button:hover{
+.control-button:hover {
     -fx-background-color: #29D4FF66;
     -fx-background-insets: -2;
 }
@@ -250,31 +259,66 @@ Volume slider 音量条
 ********************/
 
 #volumeSlider {
-    -mfx-main-color: rgb(41, 212, 255,0.84);
+    -mfx-main-color: rgb(41, 212, 255, 0.84);
     -mfx-main-color-hover: rgba(41, 212, 255, 0.1);
     -mfx-main-color-pressed: rgba(41, 212, 255, 0.3);
     -mfx-disabled-color: rgb(158, 158, 158);
 }
 
-#volumeSlider .track{
+#volumeSlider .track {
     -fx-fill: #00CCFF22
 }
 
 #volumeSlider .mfx-ripple-generator {
-    -mfx-paused:true;
+    -mfx-paused: true;
 }
 
 /********************
 Context menu 右键菜单
 ********************/
 
-.mfx-menu-item{
+.mfx-menu-item {
     -fx-font-family: "Source Han Serif CN Medium";
 }
 
-.tooltip{
-    -fx-background-color: rgba(255,255,255,0.95);
+.tooltip {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
     -fx-font-size: 13;
     -fx-font-family: "Source Han Serif CN Medium";
     -fx-text-fill: #00ABD6;
+}
+
+
+/********************
+Detail 详情模态框
+********************/
+
+#closeButton {
+    -fx-background-color: #aef6;
+    -fx-background-radius: 50%;
+}
+
+#closeButton:hover {
+    -fx-background-color: #94EAFF;
+}
+
+.detailTextField {
+    -fx-border-width: 1px;
+    -fx-border-color: transparent;
+    -fx-background-color: #C2F3FFAA;
+    -fx-font-size: 14px;
+    -fx-font-family: "Source Han Serif CN Medium";
+}
+
+.detailTextField .text-field {
+    -fx-highlight-fill: #94EAFF88; /* Selected text highlight */
+}
+
+.detailTextField:hover {
+    -fx-border-color: #94EAFF;
+}
+
+.detailTextField:focus-within {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
 }
