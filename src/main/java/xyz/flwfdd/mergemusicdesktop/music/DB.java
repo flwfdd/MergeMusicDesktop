@@ -15,10 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -164,7 +161,7 @@ public class DB {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT id,name FROM list WHERE id!=1");
-            Map<Integer,String> map=new HashMap<>();
+            Map<Integer,String> map=new TreeMap<>();
             while (rs.next()) {
                 map.put(rs.getInt("id"),rs.getString("name"));
             }
@@ -198,7 +195,7 @@ public class DB {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return -1;
+        return 0;
     }
 
     public void setList(int id,List<Music> musicList){
@@ -221,6 +218,18 @@ public class DB {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute("DELETE FROM list WHERE id="+id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void renameList(int id,String name){
+        String sql = "UPDATE list SET name=? WHERE id=?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1,name);
+            statement.setInt(2,id);
+            statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

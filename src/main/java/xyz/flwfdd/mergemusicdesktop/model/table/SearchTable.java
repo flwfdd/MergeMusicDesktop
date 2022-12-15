@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
@@ -179,6 +180,7 @@ public class SearchTable extends MusicTable {
 
     @Override
     List<Operation> getMenus(Music music) {
+        //右键菜单
         List<Operation> menus = new ArrayList<>();
         Set<String> keySet = new LinkedHashSet<>();
         keySet.add(music.getName());
@@ -188,6 +190,11 @@ public class SearchTable extends MusicTable {
             searchKey.set(key);
             search();
         })));
+        if(music.getType()== Music.Type.ALBUM || music.getType()== Music.Type.LIST)
+            menus.add(new MusicTable.Operation("mdral-favorite", "收藏", () -> {
+                int id= SelectFavoriteController.select();
+                if(id>0)new Thread(()-> FavoriteTable.getInstance().favoriteMusics(id,music.unfold())).start();
+            }));
         if (music.getType() == Music.Type.MUSIC) menus.addAll(super.getMenus(music));
         return menus;
     }

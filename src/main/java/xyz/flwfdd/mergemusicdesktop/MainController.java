@@ -137,6 +137,8 @@ public class MainController {
                 () -> createToggle("mdrmz-queue_music", "列表")).setDefaultRoot(false).get());
         loader.addView(MFXLoaderBean.of("Playing", loadURL("playing-view.fxml")).setBeanToNodeMapper(
                 () -> createToggle("mdral-graphic_eq", "播放")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("Favorite", loadURL("favorite-view.fxml")).setBeanToNodeMapper(
+                () -> createToggle("mdral-favorite_border", "收藏")).setDefaultRoot(false).get());
         loader.addView(MFXLoaderBean.of("Download", loadURL("download-view.fxml")).setBeanToNodeMapper(
                 () -> createToggle("mdral-get_app", "下载")).setDefaultRoot(false).get());
         loader.addView(MFXLoaderBean.of("Config", loadURL("config-view.fxml")).setBeanToNodeMapper(

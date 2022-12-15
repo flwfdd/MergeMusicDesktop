@@ -23,7 +23,7 @@ import xyz.flwfdd.mergemusicdesktop.music.Music;
  * @author flwfdd
  * @version 1.0
  * @date 2022/12/14 14:04
- * @implNote
+ * @implNote 音乐详情弹出框
  */
 
 public class DetailController {
@@ -94,7 +94,6 @@ public class DetailController {
     double yOffset=0;
     SimpleStringProperty mid,name,artists,album,src,img,lrc,translateLrc;
     public void initialize() {
-        System.out.println(2333);
         mid=new SimpleStringProperty();
         name=new SimpleStringProperty();
         artists=new SimpleStringProperty();

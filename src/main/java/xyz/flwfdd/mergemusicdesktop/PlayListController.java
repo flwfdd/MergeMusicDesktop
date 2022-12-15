@@ -7,7 +7,9 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.fxml.FXML;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
+import xyz.flwfdd.mergemusicdesktop.model.table.FavoriteTable;
 import xyz.flwfdd.mergemusicdesktop.model.table.PlayTable;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
@@ -25,6 +27,8 @@ public class PlayListController {
     MFXButton backButton;
 
     @FXML
+    MFXButton favoriteButton;
+    @FXML
     MFXButton clearButton;
 
     PlayTable playTableModel;
@@ -35,10 +39,19 @@ public class PlayListController {
 
         backButton.setOnAction(e-> playTableModel.back());
 
+        favoriteButton.setOnAction(e->{
+            int id= SelectFavoriteController.select();
+            if(id>0) FavoriteTable.getInstance().favoriteMusics(id,playTableModel.getMusicList().stream().toList());
+        });
+
         clearButton.setOnAction(e-> playTableModel.clear());
 
         var tooltip = new MFXTooltip(backButton);
         tooltip.setText("恢复播放列表");
+        tooltip.install();
+
+        tooltip = new MFXTooltip(favoriteButton);
+        tooltip.setText("全部收藏");
         tooltip.install();
 
         tooltip = new MFXTooltip(clearButton);

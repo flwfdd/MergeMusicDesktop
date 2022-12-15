@@ -8,10 +8,7 @@ import xyz.flwfdd.mergemusicdesktop.model.Player;
 import xyz.flwfdd.mergemusicdesktop.music.DB;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author flwfdd
@@ -179,7 +176,12 @@ public class PlayTable extends MusicTable {
                 @Override
                 protected void succeeded() {
                     if (l != null){
-                        musicList.addAll(l);
+                        Set<String> set=new HashSet<>();
+                        musicList.forEach(m->set.add(m.getMid()));
+                        l.forEach(m->{
+                            if(!set.contains(m.getMid()))musicList.add(m);
+                            set.add(m.getMid());
+                        });
                         if(msg)Config.getInstance().setMsg("添加成功OvO");
                     } else if(msg)Config.getInstance().setMsg("添加失败Orz");
                     loading = false;

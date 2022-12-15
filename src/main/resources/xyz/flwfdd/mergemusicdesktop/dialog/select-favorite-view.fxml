@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" spacing="11.0" style="-fx-background-radius: 24px; -fx-background-color: #F0FCFFDD;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" spacing="11.0" style="-fx-background-radius: 24px; -fx-background-color: #fffd; -fx-border-color: #00566B; -fx-border-radius: 24px; -fx-border-width: 0.5px;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController">
    <padding>
       <Insets bottom="24.0" left="11.0" right="11.0" />
    </padding>
@@ -34,18 +34,16 @@
    </HBox>
    <HBox alignment="CENTER_RIGHT" spacing="4.0">
       <VBox.margin>
-         <Insets/>
+         <Insets />
       </VBox.margin>
-      <MFXTextField fx:id="newNameField" floatMode="DISABLED" maxHeight="1.7976931348623157E308"
-                    maxWidth="1.7976931348623157E308" prefColumnCount="4" promptText="新收藏夹名"
-                    styleClass="custom-text-field" HBox.hgrow="ALWAYS">
+      <MFXTextField fx:id="newNameField" floatMode="DISABLED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefColumnCount="4" promptText="新收藏夹名" styleClass="custom-text-field" HBox.hgrow="ALWAYS">
          <padding>
-            <Insets left="11.0" right="11.0"/>
+            <Insets left="11.0" right="11.0" />
          </padding>
       </MFXTextField>
       <MFXButton onAction="#onNew" styleClass="custom-button" text="新建">
          <graphic>
-            <FontIcon iconLiteral="mdral-add" iconSize="24"/>
+            <FontIcon iconLiteral="mdral-add" iconSize="24" />
          </graphic>
       </MFXButton>
    </HBox>
@@ -55,15 +53,19 @@
       </VBox.margin>
    </MFXListView>
    <HBox alignment="CENTER_RIGHT" spacing="11.0">
-      <Label fx:id="msgLabel" maxWidth="1.7976931348623157E308" styleClass="custom-font" text="请选择"
-             HBox.hgrow="ALWAYS">
+      <Label fx:id="msgLabel" maxWidth="1.7976931348623157E308" styleClass="custom-font" text="请选择" HBox.hgrow="ALWAYS">
          <font>
-            <Font size="16.0"/>
+            <Font size="16.0" />
          </font>
       </Label>
+      <MFXButton onAction="#onClose" styleClass="custom-button" text="取消">
+         <graphic>
+            <FontIcon iconLiteral="mdral-close" iconSize="24" />
+         </graphic>
+      </MFXButton>
       <MFXButton onAction="#onOK" styleClass="custom-button" text="确认">
          <graphic>
-            <FontIcon iconLiteral="mdral-done" iconSize="24"/>
+            <FontIcon iconLiteral="mdral-done" iconSize="24" />
          </graphic>
       </MFXButton>
    </HBox>

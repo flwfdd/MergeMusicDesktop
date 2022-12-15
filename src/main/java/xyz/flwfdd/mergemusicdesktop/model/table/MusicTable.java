@@ -12,6 +12,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.dialog.DetailController;
+import xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.music.Music;
 
@@ -191,6 +192,10 @@ public class MusicTable {
     List<Operation> getMenus(Music music) { //右键菜单
         // 针对MUSIC类型的通用设置
         List<Operation> menus = new ArrayList<>();
+        menus.add(new MusicTable.Operation("mdral-favorite", "收藏", () -> {
+            int id= SelectFavoriteController.select();
+            if(id>0)FavoriteTable.getInstance().favoriteMusic(id,music);
+        }));
         menus.add(new MusicTable.Operation("mdral-get_app", "下载音乐", () -> {
             File file = Config.getInstance().chooseDir();
             if (file != null) music.downloadMusic(file.toPath());

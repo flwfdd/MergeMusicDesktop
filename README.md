@@ -139,7 +139,7 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 
 需要`Cookie`，经实验`buvid3=xxx`都可以。
 
-另外注意搜索结果标题关键字会被`<em class="keyword"></em>`包裹，需要特殊处理。
+另外注意搜索结果标题关键字会被`<em class="keyword"></em>`包裹、`&`会被转义成`&amp;`等情况需要特殊处理。
 
 #### 获取视频详情
 `GET https://api.bilibili.com/x/web-interface/view?aid=`

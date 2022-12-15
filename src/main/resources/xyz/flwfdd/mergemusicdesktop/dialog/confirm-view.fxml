@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="424.0" spacing="11.0" style="-fx-background-radius: 24px; -fx-background-color: #fffd; -fx-border-width: 0.5px; -fx-border-radius: 24px; -fx-border-color: #00566B;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.dialog.ConfirmController">
+   <padding>
+      <Insets bottom="24.0" left="11.0" right="11.0" />
+   </padding>
+   <HBox fx:id="headBar" alignment="CENTER_RIGHT">
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+      <padding>
+         <Insets top="11.0" />
+      </padding>
+      <MFXButton id="closeButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onClose" prefHeight="32.0" prefWidth="32.0">
+         <graphic>
+            <FontIcon iconLiteral="mdral-close" iconSize="24" />
+         </graphic>
+      </MFXButton>
+   </HBox>
+   <TextFlow>
+      <Text fx:id="msgText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font">
+         <font>
+            <Font size="16.0"/>
+         </font>
+      </Text>
+   </TextFlow>
+   <HBox alignment="CENTER_RIGHT" spacing="11.0">
+      <MFXButton onAction="#onClose" styleClass="custom-button" text="取消">
+         <graphic>
+            <FontIcon iconLiteral="mdral-close" iconSize="24" />
+         </graphic>
+      </MFXButton>
+      <MFXButton onAction="#onOK" styleClass="custom-button" text="确认">
+         <graphic>
+            <FontIcon iconLiteral="mdral-done" iconSize="24" />
+         </graphic>
+      </MFXButton>
+   </HBox>
+</VBox>
