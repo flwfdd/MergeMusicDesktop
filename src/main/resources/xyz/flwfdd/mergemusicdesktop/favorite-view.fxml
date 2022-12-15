@@ -9,58 +9,46 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox prefHeight="385.0" prefWidth="657.0" spacing="4.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.FavoriteController">
+<VBox alignment="TOP_CENTER" prefHeight="385.0" prefWidth="451.0" spacing="4.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.FavoriteController">
    <padding>
-      <Insets left="11.0" right="11.0" top="24.0"/>
+      <Insets left="11.0" right="11.0" top="24.0" />
    </padding>
-   <Label fx:id="titleLabel" styleClass="custom-font" text="请选择收藏夹awa">
+   <HBox maxWidth="888.0">
       <VBox.margin>
-         <Insets left="55.0" right="55.0"/>
+         <Insets left="42.0" right="42.0"/>
       </VBox.margin>
-      <font>
-         <Font size="24.0"/>
-      </font>
-   </Label>
+      <Label fx:id="titleLabel" styleClass="custom-font" text="请选择收藏夹awa">
+         <font>
+            <Font size="24.0"/>
+         </font>
+      </Label>
+   </HBox>
    <HBox alignment="TOP_CENTER" spacing="4.0" VBox.vgrow="ALWAYS">
-      <MFXButton fx:id="changeButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
-                 minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0"
-                 styleClass="custom-button">
+      <MFXButton fx:id="changeButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="custom-button">
          <graphic>
-            <FontIcon iconLiteral="mdral-library_music" iconSize="24"/>
+            <FontIcon iconLiteral="mdral-library_music" iconSize="24" />
          </graphic>
       </MFXButton>
-      <MFXTableView fx:id="favoriteTable" footerVisible="false" maxHeight="1.7976931348623157E308" maxWidth="888.0"
-                    minWidth="-Infinity" prefWidth="424.0"
-                    style="-fx-border-width: 1 1 0 1; -fx-background-color: #fffc; -fx-border-color: #C9D4D6; -fx-border-radius: 11 11 0 0; -fx-background-radius: 11 11 0 0;"
-                    HBox.hgrow="ALWAYS"/>
+      <MFXTableView fx:id="favoriteTable" footerVisible="false" maxHeight="1.7976931348623157E308" maxWidth="888.0" minWidth="-Infinity" prefWidth="424.0" style="-fx-border-width: 1 1 0 1; -fx-background-color: #fffc; -fx-border-color: #C9D4D6; -fx-border-radius: 11 11 0 0; -fx-background-radius: 11 11 0 0;" HBox.hgrow="ALWAYS" />
       <VBox spacing="11.0">
-         <MFXButton fx:id="renameButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
-                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0"
-                    styleClass="custom-button">
+         <MFXButton fx:id="renameButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="custom-button">
             <graphic>
-               <FontIcon iconLiteral="mdral-edit" iconSize="24"/>
+               <FontIcon iconLiteral="mdral-edit" iconSize="24" />
             </graphic>
          </MFXButton>
-         <MFXButton fx:id="playButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
-                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0"
-                    styleClass="custom-button">
+         <MFXButton fx:id="playButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="custom-button">
             <graphic>
-               <FontIcon iconLiteral="mdrmz-play_arrow" iconSize="24"/>
+               <FontIcon iconLiteral="mdrmz-play_arrow" iconSize="24" />
             </graphic>
          </MFXButton>
-         <MFXButton fx:id="addButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
-                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0"
-                    styleClass="custom-button">
+         <MFXButton fx:id="addButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="custom-button">
             <graphic>
-               <FontIcon iconLiteral="mdral-add" iconSize="24"/>
+               <FontIcon iconLiteral="mdral-add" iconSize="24" />
             </graphic>
          </MFXButton>
-         <MFXButton fx:id="clearButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity"
-                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0"
-                    styleClass="custom-button">
+         <MFXButton fx:id="clearButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="custom-button">
             <graphic>
-               <FontIcon iconLiteral="mdral-delete_outline" iconSize="24"/>
+               <FontIcon iconLiteral="mdral-delete_outline" iconSize="24" />
             </graphic>
          </MFXButton>
       </VBox>

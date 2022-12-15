@@ -221,6 +221,10 @@ public abstract class Music {
     public void resetUnfoldPage() {
     }
 
+    public String getShare(){
+        return "http://mergemusic.cn/#/?mid="+mid;
+    }
+
     @Override
     public String toString() {
         return String.format("%s(%s):%s", mid, type, name);

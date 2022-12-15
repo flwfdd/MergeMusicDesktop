@@ -1,6 +1,7 @@
 package xyz.flwfdd.mergemusicdesktop.model;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -91,6 +92,9 @@ public class Config {
             double x=Double.parseDouble(s);
             return x>=0.01;
         });
+        initConfigItem("mute", "0", "是否静音", false, Type.INT, s -> true);
+        initConfigItem("show_volume", "24", "显示音量", false, Type.DOUBLE, s -> true);
+        initConfigItem("loop_type", "1", "循环模式", false, Type.INT, s -> true);
     }
 
     public void resetConfigItems() {
@@ -117,6 +121,8 @@ public class Config {
         msgProperty = new SimpleStringProperty();
         properties = new Properties();
         configPath = Paths.get(getRootPath(), "config.properties").toString();
+        if(Font.loadFont(Paths.get(getRootPath(),"SourceHanSerifCN-Medium.otf").toUri().toString(),16)==null)
+            System.out.println("load font error");
         initConfigItems();
     }
 

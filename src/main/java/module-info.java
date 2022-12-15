@@ -10,5 +10,6 @@ module xyz.flwfdd.mergemusicdesktop {
 
 
     opens xyz.flwfdd.mergemusicdesktop to javafx.fxml;
+    opens xyz.flwfdd.mergemusicdesktop.dialog to javafx.fxml;
     exports xyz.flwfdd.mergemusicdesktop;
 }

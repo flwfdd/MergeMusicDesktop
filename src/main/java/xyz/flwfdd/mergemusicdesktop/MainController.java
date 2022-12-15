@@ -7,7 +7,6 @@ import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
 import io.github.palexdev.materialfx.utils.others.loader.MFXLoader;
 import io.github.palexdev.materialfx.utils.others.loader.MFXLoaderBean;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableDoubleValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -143,6 +142,8 @@ public class MainController {
                 () -> createToggle("mdral-get_app", "下载")).setDefaultRoot(false).get());
         loader.addView(MFXLoaderBean.of("Config", loadURL("config-view.fxml")).setBeanToNodeMapper(
                 () -> createToggle("mdrmz-settings", "设置")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("About", loadURL("about-view.fxml")).setBeanToNodeMapper(
+                () -> createToggle("mdral-all_inclusive", "关于")).setDefaultRoot(false).get());
 
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream()
@@ -243,32 +244,35 @@ public class MainController {
             else icon.setIconLiteral("mdrmz-play_arrow");
         });
 
-        // 初始化播放顺序
+        // 初始化播放顺序按钮
         var loopType = PlayTable.getInstance().loopTypeProperty();
         loopType.addListener(observable -> {
             FontIcon icon = (FontIcon) loopButton.getGraphic();
             icon.setIconLiteral(loopType.get().getIcon());
         });
-
+        FontIcon icon = (FontIcon) loopButton.getGraphic();
+        icon.setIconLiteral(loopType.get().getIcon());
         loopButton.setOnAction(e -> loopType.set(loopType.get().getNext()));
+    }
+
+    void updateMuteButton(){
+        FontIcon icon = (FontIcon) muteButton.getGraphic();
+        double v = playerInstance.realVolumeProperty().doubleValue();
+        if (v == 0) {
+            icon.setIconLiteral("mdrmz-volume_off");
+        } else if (v <= 33) {
+            icon.setIconLiteral("mdrmz-volume_mute");
+        } else if (v <= 66) {
+            icon.setIconLiteral("mdrmz-volume_down");
+        } else icon.setIconLiteral("mdrmz-volume_up");
     }
 
     void initVolumeController() { //初始化音量控制部分
         volumeSlider.setPopupSupplier(Region::new);
         volumeSlider.valueProperty().bindBidirectional(playerInstance.showVolumeProperty());
         muteButton.setOnAction(e -> playerInstance.setMute(!playerInstance.isMute()));
-
-        playerInstance.realVolumeProperty().addListener(observable -> {
-            FontIcon icon = (FontIcon) muteButton.getGraphic();
-            double v = ((ObservableDoubleValue) observable).get();
-            if (v == 0) {
-                icon.setIconLiteral("mdrmz-volume_off");
-            } else if (v <= 33) {
-                icon.setIconLiteral("mdrmz-volume_mute");
-            } else if (v <= 66) {
-                icon.setIconLiteral("mdrmz-volume_down");
-            } else icon.setIconLiteral("mdrmz-volume_up");
-        });
+        playerInstance.realVolumeProperty().addListener(observable -> updateMuteButton());
+        updateMuteButton();
     }
 
     void initPlayInfoPane() { //设置播放中歌曲的信息

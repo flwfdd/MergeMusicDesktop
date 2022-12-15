@@ -219,6 +219,7 @@ Rectangle Toggle Node 导航栏按钮
 
 .mfx-rectangle-toggle-node:hover {
     -fx-background-color: #29D4FF33;
+    -fx-background-insets: -2;
 }
 
 .mfx-rectangle-toggle-node:selected {

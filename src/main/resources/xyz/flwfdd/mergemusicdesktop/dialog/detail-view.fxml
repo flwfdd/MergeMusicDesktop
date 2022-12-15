@@ -49,6 +49,8 @@
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="MID">
          <font>
@@ -66,12 +68,38 @@
             <Insets bottom="4.0" />
          </GridPane.margin>
       </MFXTextField>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="名字" GridPane.columnIndex="1">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="分享链接" GridPane.columnIndex="1">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <MFXTextField fx:id="nameField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <MFXTextField fx:id="shareField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <padding>
+            <Insets bottom="11.0" left="11.0" right="11.0" top="11.0" />
+         </padding>
+      </MFXTextField>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="平台" GridPane.rowIndex="2">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <MFXTextField fx:id="platformField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.rowIndex="3">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <padding>
+            <Insets bottom="11.0" left="11.0" right="11.0" top="11.0" />
+         </padding>
+      </MFXTextField>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="名字" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <MFXTextField fx:id="nameField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <font>
             <Font size="14.0" />
          </font>
@@ -82,12 +110,12 @@
             <Insets bottom="4.0" />
          </GridPane.margin>
       </MFXTextField>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="作者" GridPane.rowIndex="2">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="作者" GridPane.rowIndex="4">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <MFXTextField fx:id="artistsField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.rowIndex="3">
+      <MFXTextField fx:id="artistsField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.rowIndex="5">
          <font>
             <Font size="14.0" />
          </font>
@@ -98,12 +126,12 @@
             <Insets bottom="4.0" />
          </GridPane.margin>
       </MFXTextField>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="专辑" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="专辑" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <MFXTextField fx:id="albumField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <MFXTextField fx:id="albumField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <font>
             <Font size="14.0" />
          </font>
@@ -114,12 +142,12 @@
             <Insets bottom="4.0" />
          </GridPane.margin>
       </MFXTextField>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="音乐链接" GridPane.rowIndex="4">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="音乐链接" GridPane.rowIndex="6">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <MFXTextField fx:id="srcField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.rowIndex="5">
+      <MFXTextField fx:id="srcField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.rowIndex="7">
          <font>
             <Font size="14.0" />
          </font>
@@ -130,12 +158,12 @@
             <Insets bottom="4.0" />
          </GridPane.margin>
       </MFXTextField>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="图片链接" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="图片链接" GridPane.columnIndex="1" GridPane.rowIndex="6">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <MFXTextField fx:id="imgField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
+      <MFXTextField fx:id="imgField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="7">
          <font>
             <Font size="14.0" />
          </font>
@@ -146,12 +174,12 @@
             <Insets bottom="4.0" />
          </GridPane.margin>
       </MFXTextField>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="原版歌词" GridPane.rowIndex="6">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="原版歌词" GridPane.rowIndex="8">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <MFXTextField fx:id="lrcField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.rowIndex="7">
+      <MFXTextField fx:id="lrcField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.rowIndex="9">
          <font>
             <Font size="14.0" />
          </font>
@@ -162,12 +190,12 @@
             <Insets bottom="4.0" />
          </GridPane.margin>
       </MFXTextField>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="翻译歌词" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="翻译歌词" GridPane.columnIndex="1" GridPane.rowIndex="8">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <MFXTextField fx:id="translateLrcField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="7">
+      <MFXTextField fx:id="translateLrcField" editable="false" floatMode="DISABLED" maxWidth="1.7976931348623157E308" styleClass="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="9">
          <font>
             <Font size="14.0" />
          </font>

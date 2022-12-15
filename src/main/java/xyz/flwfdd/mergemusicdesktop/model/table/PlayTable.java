@@ -36,11 +36,28 @@ public class PlayTable extends MusicTable {
                 case RANDOM -> LIST;
             };
         }
+
+        public static int toInt(LoopType loopType) {
+            return switch (loopType) {
+                case LIST -> 1;
+                case SINGLE -> 2;
+                case RANDOM -> 3;
+            };
+        }
+
+        public static LoopType valueOf(int x) {
+            return switch (x) {
+                case 1 -> LIST;
+                case 2 -> SINGLE;
+                case 3 -> RANDOM;
+                default -> null;
+            };
+        }
     }
 
     static PlayTable instance;
 
-    SimpleObjectProperty<LoopType> loopType = new SimpleObjectProperty<>(LoopType.LIST);
+    SimpleObjectProperty<LoopType> loopType = new SimpleObjectProperty<>();
 
     volatile boolean loading = false;
 
@@ -50,17 +67,20 @@ public class PlayTable extends MusicTable {
 
     final int historyMax = 24;
     Deque<Music> history = new LinkedList<>();
-    Deque<List<Music>> musicListHistory=new LinkedList<>();
-    final int musicListHistoryMax=24;
+    Deque<List<Music>> musicListHistory = new LinkedList<>();
+    final int musicListHistoryMax = 24;
 
-    PlayTable(){
+    PlayTable() {
         super();
 
+        loopType.set(LoopType.valueOf(Config.getInstance().getInt("loop_type")));
+        loopType.addListener(observable -> Config.getInstance().set("loop_type",String.valueOf(LoopType.toInt(loopType.get()))));
+
         // 初始化数据库
-        List<Music>l=DB.getInstance().getList(1);
-        if(l==null)DB.getInstance().createList("play_list");
+        List<Music> l = DB.getInstance().getList(1);
+        if (l == null) DB.getInstance().createList("play_list");
         else musicList.setAll(l);
-        musicList.addListener((InvalidationListener) observable -> new Thread(()-> DB.getInstance().setList(1,musicList)).start());
+        musicList.addListener((InvalidationListener) observable -> new Thread(() -> DB.getInstance().setList(1, musicList)).start());
     }
 
     public void playPref() {
@@ -124,7 +144,7 @@ public class PlayTable extends MusicTable {
         if (history.size() > historyMax) history.removeFirst();
 
         if (music.getType() == Music.Type.MUSIC) {
-            add(music,false);
+            add(music, false);
             Player.getInstance().play(music);
         } else {
             if (loading) return;
@@ -151,16 +171,16 @@ public class PlayTable extends MusicTable {
         }
     }
 
-    public void add(Music music,boolean msg) {
+    public void add(Music music, boolean msg) {
         if (music.getType() == Music.Type.MUSIC) {
             for (Music value : musicList) {
-                if (value.getMid().equals(music.getMid())){
-                    if(msg)Config.getInstance().setMsg("已在列表中啦");
+                if (value.getMid().equals(music.getMid())) {
+                    if (msg) Config.getInstance().setMsg("已在列表中啦");
                     return;
                 }
             }
             musicList.add(music);
-            if(msg)Config.getInstance().setMsg("添加成功OvO");
+            if (msg) Config.getInstance().setMsg("添加成功OvO");
         } else {
             if (loading) return;
             loading = true;
@@ -175,15 +195,15 @@ public class PlayTable extends MusicTable {
 
                 @Override
                 protected void succeeded() {
-                    if (l != null){
-                        Set<String> set=new HashSet<>();
-                        musicList.forEach(m->set.add(m.getMid()));
-                        l.forEach(m->{
-                            if(!set.contains(m.getMid()))musicList.add(m);
+                    if (l != null) {
+                        Set<String> set = new HashSet<>();
+                        musicList.forEach(m -> set.add(m.getMid()));
+                        l.forEach(m -> {
+                            if (!set.contains(m.getMid())) musicList.add(m);
                             set.add(m.getMid());
                         });
-                        if(msg)Config.getInstance().setMsg("添加成功OvO");
-                    } else if(msg)Config.getInstance().setMsg("添加失败Orz");
+                        if (msg) Config.getInstance().setMsg("添加成功OvO");
+                    } else if (msg) Config.getInstance().setMsg("添加失败Orz");
                     loading = false;
                 }
             }).start();
@@ -199,15 +219,15 @@ public class PlayTable extends MusicTable {
         }
     }
 
-    public void clear(){
-        if(musicList.isEmpty())return;
+    public void clear() {
+        if (musicList.isEmpty()) return;
         musicListHistory.addLast(musicList.stream().toList());
-        while(musicListHistory.size()>musicListHistoryMax)musicListHistory.removeFirst();
+        while (musicListHistory.size() > musicListHistoryMax) musicListHistory.removeFirst();
         musicList.clear();
     }
 
-    public void back(){
-        if(musicListHistory.isEmpty())return;
+    public void back() {
+        if (musicListHistory.isEmpty()) return;
         musicList.setAll(musicListHistory.getLast());
         musicListHistory.removeLast();
     }

@@ -78,9 +78,14 @@ public class Player {
     }
 
     Player() {
-        mute = new SimpleBooleanProperty(false);
-        showVolume = new SimpleDoubleProperty(24);
+        mute = new SimpleBooleanProperty();
+        showVolume = new SimpleDoubleProperty();
         realVolume = showVolume.multiply(new When(mute).then(0).otherwise(1));
+
+        mute.set(Config.getInstance().getInt("mute")==1);
+        mute.addListener(observable -> Config.getInstance().set("mute",mute.get()?"1":"0"));
+        showVolume.set(Config.getInstance().getDouble("show_volume"));
+        showVolume.addListener(observable -> Config.getInstance().set("show_volume", String.valueOf(Math.round(showVolume.get()))));
 
         totalTime = new SimpleDoubleProperty(320);
         nowTime = new SimpleDoubleProperty(0);

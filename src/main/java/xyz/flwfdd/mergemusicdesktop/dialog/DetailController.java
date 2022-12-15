@@ -33,6 +33,10 @@ public class DetailController {
     @FXML
     MFXTextField midField;
     @FXML
+    MFXTextField shareField;
+    @FXML
+    MFXTextField platformField;
+    @FXML
     MFXTextField nameField;
     @FXML
     MFXTextField artistsField;
@@ -68,6 +72,8 @@ public class DetailController {
     void setMusic(Music music){
         music.full_load();
         mid.set(music.getMid());
+        share.set(music.getShare());
+        platform.set(music.getMid());
         name.set(music.getName());
         artists.set(String.join(",",music.getArtists()));
         album.set(music.getAlbumName());
@@ -77,6 +83,8 @@ public class DetailController {
         translateLrc.set(music.getTranslateLrc());
 
         midField.setText(music.getMid());
+        shareField.setText(music.getShare());
+        platformField.setText(music.getPlatform().toString());
         nameField.setText(music.getName());
         artistsField.setText(String.join(",",music.getArtists()));
         albumField.setText(music.getAlbumName());
@@ -92,9 +100,11 @@ public class DetailController {
 
     double xOffset=0;
     double yOffset=0;
-    SimpleStringProperty mid,name,artists,album,src,img,lrc,translateLrc;
+    SimpleStringProperty mid,share,platform,name,artists,album,src,img,lrc,translateLrc;
     public void initialize() {
         mid=new SimpleStringProperty();
+        share=new SimpleStringProperty();
+        platform=new SimpleStringProperty();
         name=new SimpleStringProperty();
         artists=new SimpleStringProperty();
         album=new SimpleStringProperty();
@@ -103,6 +113,8 @@ public class DetailController {
         lrc=new SimpleStringProperty();
         translateLrc=new SimpleStringProperty();
         midField.setTrailingIcon(createCopyButton(mid));
+        shareField.setTrailingIcon(createCopyButton(share));
+        platformField.setTrailingIcon(createCopyButton(platform));
         nameField.setTrailingIcon(createCopyButton(name));
         artistsField.setTrailingIcon(createCopyButton(artists));
         albumField.setTrailingIcon(createCopyButton(album));

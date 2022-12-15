@@ -1,6 +1,19 @@
-# MergeMusicDesktop
+![](other/banner.svg)
 
+# MergeMusicDesktop
 > 聚合音乐 桌面端
+
+* 聚合网易云、QQ、B站.... ALL IN ONE !!
+* 美观简洁的 UI 设计
+* 视觉效果佳且具有一定可玩性的音频可视化
+* 桌面跨平台支持（已测试Windows、Ubuntu）
+
+![软件截图](https://img1.imgtp.com/2022/12/16/uuse7F8I.jpg)
+
+~~报告文档还没写完就是说~~
+
+## 序
+这个学期（大二上学期，2022秋）选修了金旭亮老师的 Java 语言程序设计，评分的唯一依据就是课程设计（本来还有期末考但因为疫情取消了）。而课程设计的要求是尽可能使用 JavaFX 编写一个桌面应用程序。我并没有想出更好的点子来，便延续了之前做的网页版 [MergeMusic](http://mergemusic.cn) ，做了一个桌面端出来。
 
 ## UI库的选取
 JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于是就想着寻找一些其他的UI库轮子，正好在浏览[JavaFX 官方网站](https://openjfx.io/)时发现上面列出了一些社区轮子，由于我个人对 Google 的 Material Design 比较情有独钟，就看中了一个叫做 [MaterialFX](https://github.com/palexdev/MaterialFX) 的UI库。
