@@ -15,11 +15,11 @@
    </padding>
    <HBox maxWidth="888.0">
       <VBox.margin>
-         <Insets left="42.0" right="42.0"/>
+         <Insets left="42.0" right="42.0" />
       </VBox.margin>
       <Label fx:id="titleLabel" styleClass="custom-font" text="请选择收藏夹awa">
          <font>
-            <Font size="24.0"/>
+            <Font size="24.0" />
          </font>
       </Label>
    </HBox>
@@ -44,11 +44,6 @@
          <MFXButton fx:id="addButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="custom-button">
             <graphic>
                <FontIcon iconLiteral="mdral-add" iconSize="24" />
-            </graphic>
-         </MFXButton>
-         <MFXButton fx:id="clearButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="42.0" styleClass="custom-button">
-            <graphic>
-               <FontIcon iconLiteral="mdral-delete_outline" iconSize="24" />
             </graphic>
          </MFXButton>
       </VBox>

@@ -153,6 +153,11 @@ public class SearchTable extends MusicTable {
     public void back() {
         if (historySearchCase.isEmpty()) return;
         nowSearchCase.set(historySearchCase.removeLast());
+        if(nowSearchCase.get().key!=null){
+            searchKey.set(nowSearchCase.get().key);
+            searchPlatform.set(nowSearchCase.get().platform);
+            searchType.set(nowSearchCase.get().type);
+        }
         tableView.getSelectionModel().clearSelection();
     }
 

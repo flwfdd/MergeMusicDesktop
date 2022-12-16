@@ -20,6 +20,7 @@ import xyz.flwfdd.mergemusicdesktop.music.DB;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author flwfdd
@@ -60,6 +61,24 @@ public class SelectFavoriteController {
     void onOK() {
         favList.getSelectionModel().getSelectedValues().forEach(v -> selected = getId(v));
         stage.close();
+    }
+
+    @FXML
+    void onDelete() {
+        AtomicInteger id = new AtomicInteger(0);
+        AtomicReference<String> name = new AtomicReference<>();
+        favList.getSelectionModel().getSelectedValues().forEach(x -> {
+            id.set(getId(x));
+            name.set(x.substring(x.indexOf('.') + 1));
+        });
+        if (id.get() != 0) {
+            int size = DB.getInstance().getList(id.get()).size();
+            if (ConfirmController.confirm("当真要删除收藏夹 " + name.get() + "（" + size + "首）" + " ？")){
+                FavoriteTable.getInstance().deleteList(id.get());
+                init();
+            }
+        }
+        System.out.println(favList.getSelectionModel().getSelectedValues());
     }
 
 

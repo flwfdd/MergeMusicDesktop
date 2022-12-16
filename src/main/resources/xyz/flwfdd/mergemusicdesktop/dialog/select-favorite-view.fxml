@@ -58,6 +58,11 @@
             <Font size="16.0" />
          </font>
       </Label>
+      <MFXButton onAction="#onDelete" styleClass="custom-button" text="删除">
+         <graphic>
+            <FontIcon iconLiteral="mdral-delete_outline" iconSize="24" />
+         </graphic>
+      </MFXButton>
       <MFXButton onAction="#onClose" styleClass="custom-button" text="取消">
          <graphic>
             <FontIcon iconLiteral="mdral-close" iconSize="24" />

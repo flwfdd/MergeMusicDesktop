@@ -25,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
@@ -278,6 +279,7 @@ public class MainController {
     void initPlayInfoPane() { //设置播放中歌曲的信息
         var tooltip = new MFXTooltip(infoPane);
         tooltip.setText("MergeMusic!");
+        tooltip.setShowDelay(Duration.seconds(0.11));
         tooltip.install();
         playImage.setOnMouseClicked(e -> toggle("Playing"));
 

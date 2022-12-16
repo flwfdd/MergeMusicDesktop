@@ -8,7 +8,38 @@
 * 视觉效果佳且具有一定可玩性的音频可视化
 * 桌面跨平台支持（已测试Windows、Ubuntu）
 
-![软件截图](https://img1.imgtp.com/2022/12/16/uuse7F8I.jpg)
+![软件截图](https://i.328888.xyz/2022/12/17/48nUk.jpeg)
+
+## 概览
+
+### 如何使用？
+
+* 对于小白 Windows 用户：下载`.zip`包，解压到合适的位置，然后双击`MergeMusicDesktop.exe`运行即可。
+* 对于熟悉 Java 环境的 Windows 用户：下载`.jar`包，双击或使用`java`命令运行（打包环境为JDK19）。
+* 对于小白 Linux 用户：不存在，小白不会用 Linux 。
+* 对于一般 Linux 用户：下载解压`.tar.gz`文件，双击或命令行运行`bin`目录下的文件即可。最好安装一下`ffmpeg`（如`apt install ffmpeg`），否则可能音频解码会失败，另外注意一下整个文件夹是否有可执行权限。
+* 对于熟悉 Java 环境的 Linux 用户：同 Windows ，但注意由于 JavaFX 限制，`.jar`包不通用。
+* 对于 MacOS 用户：我之前用 GitHub Action 打了包但给朋友试了跑不起来。等我有钱了买了 Mac 再说吧....或者你可以v我一台😋
+* 对于非常熟悉 Java 的用户：直接拉源码呗。
+* 对于非常非常非常....熟悉 Java 和 CS 的用户：直接看代码颅内编译。
+
+### 进阶使用指南 | 可能遇到的问题
+
+* 音频可视化不同步：请在设置面板中调节“音频可视化延迟时间”参数。
+* 如何访问会员歌曲或私有歌单：访问 [网易云音乐官网](https://music.163.com/) 或 [QQ音乐官网](https://y.qq.com/) 或 [B站官网](https://www.bilibili.com/)，登录，然后`F12`获取`Cookie`，具体教程网上有很多（比如[这个](https://blog.csdn.net/qq_22903531/article/details/111574385)）。获取`Cookie`后填到设置面板中，保存即生效。
+* 配置文件和缓存：使用设置中的“二向箔”功能可以全部清理。也可以手动到`app`文件夹（或`.jar`包同目录下）找到`music.sqlite`（音乐、收藏夹数据库）、`config.properties`（设置信息）以及`cache`文件夹（音乐图片缓存），可以随意删除，但不要随意修改。
+
+* 关于音频可视化：可以自己探索调节设置中的参数玩玩，带有“采样”字样的需要切换歌曲才会生效。
+* 关于字体：为了良好的显示体验，全局配置了思源宋体并打包了进去（尽管字体文件有`≈10MB`），如果使用`.jar`运行，可以自己下载一个`SourceHanSerifCN-Medium.otf`放在同一目录下。
+* 其他问题：欢迎提 issue o(〃＾▽＾〃)o
+
+### 主要技术细节
+
+开发环境为`IntelliJ IDEA 2022.3` + `JDK19` + `Windows10`，测试还在`Ubuntu 22.04` 以及 `Ubuntu 18.04` 上进行过。
+
+主要基于 `JavaFX` 进行开发并用 `maven` 进行包管理。还使用了 [MaterialFX](https://github.com/palexdev/MaterialFX) 这个 UI 框架（真的挺不错的），另外还有阿里巴巴维护的 `JSON` 处理库 [fastjon](https://github.com/alibaba/fastjson2) 、图标库 [ikonli](https://github.com/kordamp/ikonli)（使用了谷歌的 [Material Icons](https://fonts.google.com/icons?icon.set=Material+Icons) ）。 音乐接口部分还写了一点点 `JUnit` 的单元测试。
+
+打包使用`JDK`自带的`jpackage`，并尝试了一下 GitHub Action ，还真挺爽的，写了一个脚本，可以自动拉取代码和字体文件（因为字体文件太大就没有放到仓库里），并一次性完成多平台的打包。
 
 ~~报告文档还没写完就是说~~
 
@@ -191,7 +222,7 @@ JavaFX 自带的UI样式实在是有点过时，让我比较难以接受，于�
 4. 删除`target`目录中除了打包完整的`.jar`之外的所有文件（否则会被打包进去）
 5. 在项目根目录下运行如下命令（可根据需求修改）
 ```shell
-jpackage --name MergeMusicDesktop --input .\target\ --main-jar .\MergeMusicDesktop-1.0-SNAPSHOT.jar --type app-image --icon .\other\launcher.ico --resource-dir .\other\ --app-version 0.0.0.0 --copyright "Copyright flwfdd All Rights Reserved" --description MergeMusicDesktop-聚合音乐桌面端
+jpackage --name MergeMusicDesktop --input ./target/ --main-jar ./MergeMusicDesktop-1.0-SNAPSHOT.jar --type app-image --icon ./other/icon.ico --resource-dir ./other/ --app-version 0.0.0 --copyright "Copyright flwfdd All Rights Reserved" --description MergeMusicDesktop-聚合音乐桌面端 --java-options -Xmx256m
 ```
 
 

@@ -95,6 +95,7 @@ public class Config {
         initConfigItem("mute", "0", "是否静音", false, Type.INT, s -> true);
         initConfigItem("show_volume", "24", "显示音量", false, Type.DOUBLE, s -> true);
         initConfigItem("loop_type", "1", "循环模式", false, Type.INT, s -> true);
+        initConfigItem("version", "0.0.2", "版本号", false, Type.TEXT, s -> true);
     }
 
     public void resetConfigItems() {

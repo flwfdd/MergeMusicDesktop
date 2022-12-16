@@ -18,12 +18,12 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>19-ea+7</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>19-ea+7</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>io.github.palexdev</groupId>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>19-ea+7</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>

@@ -3,8 +3,9 @@
 <?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" prefHeight="441.0" prefWidth="715.0" style="-fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.DownloadController">
+<VBox alignment="TOP_CENTER" prefHeight="441.0" prefWidth="701.0" style="-fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.DownloadController">
    <MFXScrollPane maxWidth="-Infinity" prefWidth="618.0" style="-fx-background-color: #fff8; -fx-background-radius: 11 11 0 0; -fx-border-radius: 11 11 0 0; -fx-border-width: 0.84; -fx-border-color: #C9D4D6;" VBox.vgrow="ALWAYS">
       <VBox.margin>
          <Insets top="24.0" />
@@ -14,8 +15,10 @@
       </padding>
       <VBox fx:id="downloadBox" spacing="11.0">
          <padding>
-            <Insets bottom="4.0" top="24.0" />
+            <Insets bottom="4.0" top="24.0"/>
          </padding>
+         <Text opacity="0.84" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font"
+               text="Tips：下载记录将在重开 MergeMusicDesktop 后清空（已下载文件不受影响）"/>
       </VBox>
    </MFXScrollPane>
    <padding>

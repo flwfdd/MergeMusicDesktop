@@ -19,9 +19,11 @@ import java.util.Objects;
 public class MainApplication extends Application {
 
     public Stage mainStage;
+    public static Application instance;
 
     @Override
     public void start(Stage stage) throws IOException {
+        instance=this;
         mainStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
 

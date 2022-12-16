@@ -68,6 +68,7 @@ public class PlayTable extends MusicTable {
     final int historyMax = 24;
     Deque<Music> history = new LinkedList<>();
     Deque<List<Music>> musicListHistory = new LinkedList<>();
+    Deque<List<Music>> musicListForward = new LinkedList<>();
     final int musicListHistoryMax = 24;
 
     PlayTable() {
@@ -221,6 +222,7 @@ public class PlayTable extends MusicTable {
 
     public void clear() {
         if (musicList.isEmpty()) return;
+        musicListForward.clear();
         musicListHistory.addLast(musicList.stream().toList());
         while (musicListHistory.size() > musicListHistoryMax) musicListHistory.removeFirst();
         musicList.clear();
@@ -228,8 +230,17 @@ public class PlayTable extends MusicTable {
 
     public void back() {
         if (musicListHistory.isEmpty()) return;
+        musicListForward.addFirst(musicList.stream().toList());
         musicList.setAll(musicListHistory.getLast());
         musicListHistory.removeLast();
+    }
+
+    public void forward(){
+        if(musicListForward.isEmpty())return;
+        musicListHistory.addLast(musicList.stream().toList());
+        while (musicListHistory.size() > musicListHistoryMax) musicListHistory.removeFirst();
+        musicList.setAll(musicListForward.getFirst());
+        musicListForward.removeFirst();
     }
 
     @Override

@@ -6,7 +6,7 @@ import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import xyz.flwfdd.mergemusicdesktop.dialog.ConfirmController;
+import javafx.util.Duration;
 import xyz.flwfdd.mergemusicdesktop.dialog.InputController;
 import xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController;
 import xyz.flwfdd.mergemusicdesktop.model.table.FavoriteTable;
@@ -28,8 +28,6 @@ public class FavoriteController {
     @FXML
     MFXButton changeButton;
     @FXML
-    MFXButton clearButton;
-    @FXML
     MFXButton renameButton;
     @FXML
     MFXButton playButton;
@@ -41,6 +39,7 @@ public class FavoriteController {
     void createTooltip(Node owner,String s){
         var tooltip = new MFXTooltip(owner);
         tooltip.setText(s);
+        tooltip.setShowDelay(Duration.seconds(0.11));
         tooltip.install();
     }
 
@@ -62,16 +61,11 @@ public class FavoriteController {
 
         createTooltip(renameButton,"重命名");
         renameButton.setOnAction(e-> {
-            String s= InputController.input("你的（新收藏夹）名字是？");
+            String s= InputController.input("你的（这个收藏夹的新）名字是？");
             if(!s.isEmpty())favoriteTableModel.rename(s);
         });
 
         createTooltip(addButton,"全部添加到播放列表");
         addButton.setOnAction(e-> favoriteTableModel.addAll());
-
-        createTooltip(clearButton,"删除收藏夹");
-        clearButton.setOnAction(e-> {
-            if(ConfirmController.confirm("当真要删除收藏夹 "+favoriteTableModel.getNowName()+" ？"))favoriteTableModel.deleteList();
-        });
     }
 }

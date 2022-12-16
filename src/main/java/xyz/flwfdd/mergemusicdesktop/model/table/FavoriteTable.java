@@ -82,11 +82,13 @@ public class FavoriteTable extends MusicTable {
         nowID.set(id);
     }
 
-    public void deleteList() {
-        db.deleteList(nowID.get());
-        lists.remove(nowID.get());
-        nowID.set(0);
-        if (!lists.isEmpty()) nowID.set(lists.keySet().stream().toList().get(0));
+    public void deleteList(int id) {
+        db.deleteList(id);
+        lists.remove(id);
+        if(nowID.get()==id){
+            nowID.set(0);
+            if (!lists.isEmpty()) nowID.set(lists.keySet().stream().toList().get(0));
+        }
     }
 
     public void playAll(){

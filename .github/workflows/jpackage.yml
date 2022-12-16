@@ -1,0 +1,74 @@
+name: Package Action
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest,windows-latest]
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: '19'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn -B package
+
+      - name: get fonts
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: 'adobe-fonts/source-han-serif'
+          version: 'tags/2.001R'
+          file: '14_SourceHanSerifCN.zip'
+          target: 'fonts.zip'
+
+      - name: unzip fonts
+        run: unzip fonts.zip -d ./fonts/
+
+      - name: jpackage
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir target_
+          mkdir upload
+          cp ./target/MergeMusicDesktop-1.0-SNAPSHOT.jar ./target_/
+          cp ./fonts/SubsetOTF/CN/SourceHanSerifCN-Medium.otf ./target_/
+          jpackage --name MergeMusicDesktop --input ./target_/ --main-jar ./MergeMusicDesktop-1.0-SNAPSHOT.jar --type app-image --icon ./other/icon.ico --resource-dir ./other/ --app-version ${{inputs.version}} --copyright "Copyright flwfdd All Rights Reserved" --description MergeMusicDesktop-聚合音乐桌面端 --java-options -Xmx256m
+          cp -r ./MergeMusicDesktop/ ./upload/
+
+      - name: jpackage
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          mkdir target_
+          mkdir upload
+          cp ./target/MergeMusicDesktop-1.0-SNAPSHOT.jar ./target_/
+          cp ./fonts/SubsetOTF/CN/SourceHanSerifCN-Medium.otf ./target_/
+          jpackage --name MergeMusicDesktop --input ./target_/ --main-jar ./MergeMusicDesktop-1.0-SNAPSHOT.jar --type app-image --icon ./other/icon.png --resource-dir ./other/ --app-version ${{inputs.version}} --copyright "Copyright flwfdd All Rights Reserved" --description MergeMusicDesktop-聚合音乐桌面端 --java-options -Xmx256m
+          tar -zcvf ./MergeMusicDesktop.tar.gz ./MergeMusicDesktop/ 
+
+      - name: Upload a Build Artifact
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: ${{matrix.os}}
+          path: ./upload/
+
+      - name: Upload a Build Artifact
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: ${{matrix.os}}
+          path: ./MergeMusicDesktop.tar.gz
+

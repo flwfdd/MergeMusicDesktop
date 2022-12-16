@@ -8,7 +8,11 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
+import xyz.flwfdd.mergemusicdesktop.dialog.ConfirmController;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
+
+import java.io.File;
+import java.nio.file.Paths;
 
 /**
  * @author flwfdd
@@ -52,6 +56,26 @@ public class ConfigController {
         buttonBox.getChildren().add(saveButton);
 
         configBox.getChildren().add(buttonBox);
+
+        var fullResetButton = new MFXButton("我需要一块二向箔，情理用", new FontIcon("mdrmz-receipt_long:24"));
+        fullResetButton.getStyleClass().add("custom-button");
+        fullResetButton.setOnAction(e -> {
+            if(ConfirmController.confirm("确定要清除所有设置及缓存数据吗？ MergeMusicDesktop 稍后将关闭，手动重启后即可重获新生。")){
+                String rootPath=Config.getInstance().getRootPath();
+                Paths.get(rootPath,"config.properties").toFile().deleteOnExit();
+                Paths.get(rootPath,"music.sqlite").toFile().deleteOnExit();
+                var cacheDir=Paths.get(rootPath,"cache").toFile();
+                if(cacheDir.exists()){
+                    var x=cacheDir.listFiles();
+                    if(x!=null)for(File file:x){
+                        file.deleteOnExit();
+                    }
+                }
+                cacheDir.deleteOnExit();
+                System.exit(0);
+            }
+        });
+        configBox.getChildren().add(fullResetButton);
     }
 
     public void initialize() {

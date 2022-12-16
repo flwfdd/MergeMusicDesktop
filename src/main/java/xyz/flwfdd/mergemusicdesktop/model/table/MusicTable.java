@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.dialog.DetailController;
 import xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController;
@@ -54,6 +55,7 @@ public class MusicTable {
     static void createTooltip(MFXTableRowCell<Music, String> rowCell) { //创建单元格悬浮提示
         var tooltip = new MFXTooltip(rowCell);
         tooltip.textProperty().bind(rowCell.textProperty());
+        tooltip.setShowDelay(Duration.seconds(0.11));
         tooltip.install();
     }
 
@@ -99,6 +101,7 @@ public class MusicTable {
                     button.setOnMouseClicked(e -> opt.func.run());
                     button.getStyleClass().add("option-button");
                     var tooltip = new MFXTooltip(button, opt.text);
+                    tooltip.setShowDelay(Duration.seconds(0.11));
                     tooltip.install();
                     button.setRippleColor(Color.rgb(87, 221, 255));
                     box.getChildren().add(button);

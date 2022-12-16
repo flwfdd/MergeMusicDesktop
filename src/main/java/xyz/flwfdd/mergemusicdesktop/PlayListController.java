@@ -5,8 +5,10 @@ import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import xyz.flwfdd.mergemusicdesktop.dialog.SelectFavoriteController;
 import xyz.flwfdd.mergemusicdesktop.model.Player;
 import xyz.flwfdd.mergemusicdesktop.model.table.FavoriteTable;
@@ -25,6 +27,8 @@ public class PlayListController {
 
     @FXML
     MFXButton backButton;
+    @FXML
+    MFXButton forwardButton;
 
     @FXML
     MFXButton favoriteButton;
@@ -33,30 +37,32 @@ public class PlayListController {
 
     PlayTable playTableModel;
 
+    void createTooltip(Node node, String s) { //创建单元格悬浮提示
+        var tooltip = new MFXTooltip(node);
+        tooltip.setText(s);
+        tooltip.setShowDelay(Duration.seconds(0.11));
+        tooltip.install();
+    }
+
     public void initialize() {
         playTableModel = PlayTable.getInstance();
         playTableModel.bind(playTable);
 
         backButton.setOnAction(e-> playTableModel.back());
+        createTooltip(backButton,"回退播放列表");
+
+        forwardButton.setOnAction(e-> playTableModel.forward());
+        createTooltip(forwardButton,"撤销回退播放列表");
 
         favoriteButton.setOnAction(e->{
             int id= SelectFavoriteController.select();
             if(id>0) FavoriteTable.getInstance().favoriteMusics(id,playTableModel.getMusicList().stream().toList());
         });
+        createTooltip(favoriteButton,"全部收藏");
 
         clearButton.setOnAction(e-> playTableModel.clear());
+        createTooltip(clearButton,"清空播放列表");
 
-        var tooltip = new MFXTooltip(backButton);
-        tooltip.setText("恢复播放列表");
-        tooltip.install();
-
-        tooltip = new MFXTooltip(favoriteButton);
-        tooltip.setText("全部收藏");
-        tooltip.install();
-
-        tooltip = new MFXTooltip(clearButton);
-        tooltip.setText("清空播放列表");
-        tooltip.install();
 
         // 在列表中标注正在播放的
         var playingMusic = Player.getInstance().playingMusicProperty();

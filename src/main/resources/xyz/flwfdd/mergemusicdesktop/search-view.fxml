@@ -8,11 +8,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox alignment="CENTER" prefHeight="466.0" prefWidth="479.0" spacing="11.0" style="-fx-font-size: 14px; -fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.SearchController">
+<VBox alignment="CENTER" prefHeight="466.0" prefWidth="669.0" spacing="11.0" style="-fx-font-size: 14px; -fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.SearchController">
     <padding>
         <Insets left="24.0" right="24.0" top="24.0" />
     </padding>
@@ -28,17 +27,7 @@
             <Insets right="4.0" />
          </HBox.margin>
       </MFXButton>
-      <MFXTextField fx:id="searchKey" floatingText="关键词" floatingTextGap="0.0" graphicTextGap="0.0" maxWidth="1.7976931348623157E308" prefColumnCount="4" styleClass="custom-text-field" textLimit="42" HBox.hgrow="ALWAYS">
-         <textFill>
-            <Color green="0.6639999747276306" blue="0.8299999833106995" />
-         </textFill>
-         <HBox.margin>
-            <Insets left="4.0" right="4.0" />
-         </HBox.margin>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </MFXTextField>
+      <MFXTextField fx:id="searchKey" floatingText="关键词" floatingTextGap="0.0" graphicTextGap="0.0" maxWidth="1.7976931348623157E308" prefColumnCount="4" styleClass="custom-text-field" textLimit="42" HBox.hgrow="ALWAYS" />
       <MFXComboBox fx:id="searchPlatform" floatingText="平台" floatingTextGap="0.0" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" styleClass="custom-text-field">
          <HBox.margin>
             <Insets left="4.0" right="2.0" />

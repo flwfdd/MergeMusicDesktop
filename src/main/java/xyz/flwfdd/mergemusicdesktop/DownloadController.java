@@ -13,6 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 import xyz.flwfdd.mergemusicdesktop.model.Config;
 
@@ -55,6 +56,7 @@ public class DownloadController {
 
             var tooltip = new MFXTooltip(nameLabel);
             tooltip.setText(tooltipText);
+            tooltip.setShowDelay(Duration.seconds(0.11));
             tooltip.install();
 
             var progressLabel = new Label("0%");

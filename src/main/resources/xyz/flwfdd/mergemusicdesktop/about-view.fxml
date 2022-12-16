@@ -9,70 +9,60 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox alignment="CENTER" prefHeight="564.0" prefWidth="780.0" spacing="11.0" style="-fx-background-color: transparent;"
-      stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="xyz.flwfdd.mergemusicdesktop.AboutController">
-   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-               prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: transparent;">
-      <Circle fx:id="c0" fill="#e5fbffa8" layoutX="200.0" layoutY="200.0" radius="224.0" stroke="BLACK"
-              strokeType="INSIDE" strokeWidth="0.0"/>
-      <Circle fx:id="c1" fill="#ffffffd6" layoutX="200.0" layoutY="200.0" radius="125.0" stroke="#00d0ff3d"
-              strokeType="INSIDE" strokeWidth="0.0"/>
-      <Circle fx:id="c2" fill="#00d0ff4d" layoutX="200.0" layoutY="200.0" radius="100.0" stroke="BLACK"
-              strokeType="INSIDE" strokeWidth="0.0"/>
-      <Circle fx:id="c3" fill="#00d0ff4d" layoutX="200.0" layoutY="200.0" radius="75.0" stroke="BLACK"
-              strokeType="INSIDE" strokeWidth="0.0"/>
-      <Circle fx:id="c4" fill="#00d0ff4d" layoutX="200.0" layoutY="200.0" radius="50.0" stroke="BLACK"
-              strokeType="INSIDE" strokeWidth="0.0"/>
+<VBox alignment="CENTER" prefHeight="564.0" prefWidth="780.0" spacing="11.0" style="-fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.flwfdd.mergemusicdesktop.AboutController">
+   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: transparent;">
+      <Circle fx:id="c0" fill="#e5fbffa8" layoutX="200.0" layoutY="200.0" radius="224.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Circle fx:id="c1" fill="#ffffffd6" layoutX="200.0" layoutY="200.0" radius="125.0" stroke="#00d0ff3d" strokeType="INSIDE" strokeWidth="0.0" />
+      <Circle fx:id="c2" fill="#00d0ff4d" layoutX="200.0" layoutY="200.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Circle fx:id="c3" fill="#00d0ff4d" layoutX="200.0" layoutY="200.0" radius="75.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Circle fx:id="c4" fill="#00d0ff4d" layoutX="200.0" layoutY="200.0" radius="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <VBox alignment="CENTER" layoutX="-50.0" layoutY="-50.0" prefHeight="500.0" prefWidth="500.0">
          <padding>
-            <Insets bottom="11.0" left="11.0" right="11.0" top="11.0"/>
+            <Insets bottom="11.0" left="11.0" right="11.0" top="11.0" />
          </padding>
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="聚合音乐 桌面端">
             <font>
-               <Font size="42.0"/>
+               <Font size="42.0" />
             </font>
          </Text>
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="MergeMusicDesktop">
             <font>
-               <Font size="42.0"/>
+               <Font size="42.0" />
             </font>
          </Text>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="Version 0.0.1">
+         <Text fx:id="versionText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="Version 0.0.0">
             <font>
-               <Font size="16.0"/>
+               <Font size="16.0" />
             </font>
          </Text>
          <TextFlow textAlignment="CENTER">
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="欢迎访问">
                <font>
-                  <Font size="17.0"/>
+                  <Font size="17.0" />
                </font>
             </Text>
-            <Hyperlink onAction="#onGitHub" style="-fx-font-size: 17px;" styleClass="custom-font"
-                       text="GitHub">
+            <Hyperlink fx:id="githubLink" style="-fx-font-size: 17px;" styleClass="custom-font" text="GitHub">
                <font>
-                  <Font size="17.0"/>
+                  <Font size="17.0" />
                </font>
             </Hyperlink>
-            <Hyperlink onAction="#onWebsite" style="-fx-font-size: 17px;" styleClass="custom-font" text="官网">
+            <Hyperlink fx:id="websiteLink" style="-fx-font-size: 17px;" styleClass="custom-font" text="官网">
                <font>
-                  <Font size="17.0"/>
+                  <Font size="17.0" />
                </font>
             </Hyperlink>
          </TextFlow>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font"
-               text="（其实是大二上学期 Java 课的结课设计(∂ω∂)">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="（其实是大二上学期 Java 课的结课设计(∂ω∂)">
             <font>
-               <Font size="14.0"/>
+               <Font size="14.0" />
             </font>
          </Text>
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="custom-font" text="Powered by flwfdd（范滇东）">
             <font>
-               <Font size="16.0"/>
+               <Font size="16.0" />
             </font>
             <VBox.margin>
-               <Insets top="11.0"/>
+               <Insets top="11.0" />
             </VBox.margin>
          </Text>
       </VBox>
