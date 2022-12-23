@@ -107,6 +107,7 @@ public class PlayingController {
             } catch (Exception ignored) {
             }
         });
+        lrcMap.put(-1.0,"");
         return lrcMap;
     }
 

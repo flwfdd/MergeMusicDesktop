@@ -49,7 +49,7 @@ public class SelectFavoriteController {
     @FXML
     void onNew() {
         if (newNameField.getText().isBlank()) {
-            msgLabel.setText("不能为空！");
+            msgLabel.setText("名字不能为空！");
             return;
         }
         int id = FavoriteTable.getInstance().newList(newNameField.getText());
@@ -78,7 +78,6 @@ public class SelectFavoriteController {
                 init();
             }
         }
-        System.out.println(favList.getSelectionModel().getSelectedValues());
     }
 
 

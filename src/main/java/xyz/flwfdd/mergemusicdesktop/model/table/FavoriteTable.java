@@ -1,6 +1,7 @@
 package xyz.flwfdd.mergemusicdesktop.model.table;
 
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -123,21 +124,30 @@ public class FavoriteTable extends MusicTable {
         return menus;
     }
 
+    void updateTitle(){
+        if (nowID.get() == 0) {
+            title.set("请选择收藏夹awa");
+        } else {
+            title.set(getNowName() + "（共" + musicList.size() + "首）");
+        }
+    }
+
     FavoriteTable() {
         super();
 
         lists = new TreeMap<>();
         lists = db.getLists();
 
+        updateTitle();
         nowID.addListener(observable -> {
+            updateTitle();
             if (nowID.get() == 0) {
                 musicList.clear();
-                title.set("请选择收藏夹awa");
             } else {
                 musicList.setAll(db.getList(nowID.get()));
-                title.set(getNowName() + "（共" + musicList.size() + "首）");
             }
         });
+        musicList.addListener((InvalidationListener) observable -> updateTitle());
 
         if (lists.isEmpty()) nowID.set(0);
         else nowID.set(lists.keySet().stream().toList().get(0));

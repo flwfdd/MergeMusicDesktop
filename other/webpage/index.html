@@ -9,7 +9,7 @@
 <html>
 
 <head>
-    <!--Code by. 范滇东-->
+    <!--b by. 范滇东-->
     <title>MergeMusicDesktop</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -98,10 +98,10 @@
 </div>
 <div style="margin-bottom:200px"></div>
 
-<h2 style="margin-bottom:0px;">🥳即刻 <a
-        href="https://github.com/flwfdd/MergeMusicDesktop/releases/"
-        target="_blank">下载 Windows 版</a> 尝鲜😋</h2>
-<del>我相信会用 Linux 的人自己一定也能找到 GitHub Release</del>
+<h1 style="margin-bottom:-11px;">🥳即刻 <a
+        href="https://s0g-my.sharepoint.com/:f:/g/personal/bit101_s0g_onmicrosoft_com/ElLgy9PF6y9Ct3E2CHI449UB2a4EiLqiNHYIiaVxQTMdZQ?e=PVlPFB"
+        target="_blank">下载</a> 尝鲜😋</h1>
+<p>windows 用户下载 .zip 文件即可</p>
 <h2>🥰欢迎访问 <a href="https://github.com/flwfdd/MergeMusicDesktop" target="_blank">GitHub</a>
     赏颗Star🤩</h2>
 <h2>也康康 <a href="http://mergemusic.cn" target="_blank">MergeMusic</a> 网页版</h2>
@@ -116,17 +116,80 @@
 <br/>
 <img src="https://i.328888.xyz/2022/12/17/48nUk.jpeg" alt="软件截图" style="width:84%;border-radius:2%"/>
 
-<h2>有何特点？</h2>
-<p>
-    美观简洁的 UI 设计<br/>
-    聚合网易云、QQ、B站.... All in One !!<br/>
-    视觉效果佳且具有一定可玩性的音频可视化<br/>
-    桌面跨平台支持（已测试Windows、Ubuntu）<br/>
-</p>
+<div style="text-align:left;width:92%;margin:auto;">
+    <h2>有何特点？</h2>
+    <ul>
+        <li>聚合网易云、QQ、B站.... ALL IN ONE !!</li>
+        <li>美观简洁的 UI 设计</li>
+        <li>视觉效果佳且具有一定可玩性的音频可视化</li>
+        <li>桌面跨平台支持（已测试Windows、Ubuntu）</li>
+    </ul>
 
 
-<h2>如何使用？</h2>
-<p>对于</p>
+    <h2 id="如何使用？">如何使用？</h2>
+    <ul>
+        <li>对于小白 Windows 用户：下载<b>.zip</b>包，解压到合适的位置，然后双击<b>MergeMusicDesktop.exe</b>运行即可。</li>
+        <li>对于熟悉 Java 环境的 Windows 用户：下载<b>.jar</b>包，双击或使用<b>java</b>命令运行（打包环境为JDK19）。</li>
+        <li>对于小白 Linux 用户：不存在，小白不会用 Linux 。</li>
+        <li>对于一般 Linux 用户：下载解压<b>.tar.gz</b>文件，双击或命令行运行<b>bin</b>目录下的文件即可。最好安装一下<b>ffmpeg</b>（如<b>apt
+            install ffmpeg</b>），否则可能音频解码会失败，另外注意一下整个文件夹是否有可执行权限。
+        </li>
+        <li>对于熟悉 Java 环境的 Linux 用户：同 Windows ，但注意由于 JavaFX 限制，<b>.jar</b>包不通用。</li>
+        <li>对于 MacOS 用户：我之前用 GitHub Action 打了包但给朋友试了跑不起来。等我有钱了买了 Mac
+            再说吧....或者你可以v我一台😋
+        </li>
+        <li>对于非常熟悉 Java 的用户：直接拉源码呗。</li>
+        <li>对于非常非常非常....熟悉 Java 和 CS 的用户：直接看代码颅内编译。</li>
+    </ul>
+
+    <h2 id="进阶使用指南--可能遇到的问题">进阶使用指南 | 可能遇到的问题</h2>
+    <ul>
+        <li><p>音频可视化不同步：请在设置面板中调节“音频可视化延迟时间”参数。</p>
+        </li>
+        <li><p>如何访问会员歌曲或私有歌单：访问 <a href="https://music.163.com/">网易云音乐官网</a> 或 <a
+                href="https://y.qq.com/">QQ音乐官网</a> 或 <a href="https://www.bilibili.com/">B站官网</a>，登录，然后<b>F12</b>获取<b>Cookie</b>，具体教程网上有很多（比如<a
+                href="https://blog.csdn.net/qq_22903531/article/details/111574385">这个</a>）。获取<b>Cookie</b>后填到设置面板中，保存即生效。
+        </p>
+        </li>
+        <li><p>配置文件和缓存：使用设置中的“二向箔”功能可以全部清理。也可以手动到<b>app</b>文件夹（或<b>.jar</b>包同目录下）找到<b>music.sqlite</b>（音乐、收藏夹数据库）、<b>config.properties</b>（设置信息）以及<b>cache</b>文件夹（音乐图片缓存），可以随意删除，但不要随意修改。
+        </p>
+        </li>
+        <li><p>关于音频可视化：可以自己探索调节设置中的参数玩玩，带有“采样”字样的需要切换歌曲才会生效。</p>
+        </li>
+        <li><p>
+            关于字体：为了良好的显示体验，全局配置了思源宋体并打包了进去（尽管字体文件有<b>≈10MB</b>），如果使用<b>.jar</b>运行，可以自己下载一个<b>SourceHanSerifCN-Medium.otf</b>放在同一目录下。
+        </p>
+        </li>
+        <li><p>其他问题：欢迎提 issue o(〃＾▽＾〃)o</p>
+        </li>
+    </ul>
+
+    <h2 id="主要技术细节">主要技术细节</h2>
+    <p>开发环境为<b>IntelliJ IDEA 2022.3</b> + <b>JDK19</b> + <b>Windows10</b>，测试还在<b>Ubuntu 22.04</b> 以及 <b>Ubuntu
+        18.04</b> 上进行过。</p>
+    <p>主要基于 <b>JavaFX</b> 进行开发并用 <b>maven</b> 进行包管理。还使用了 <a
+            href="https://github.com/palexdev/MaterialFX">MaterialFX</a> 这个 UI 框架（真的挺不错的），另外还有阿里巴巴维护的
+        <b>JSON</b> 处理库 <a href="https://github.com/alibaba/fastjson2">fastjon</a> 、图标库 <a
+                href="https://github.com/kordamp/ikonli">ikonli</a>（使用了谷歌的 <a
+                href="https://fonts.google.com/icons?icon.set=Material+Icons">Material Icons</a> ）。 音乐接口部分还写了一点点
+        <b>JUnit</b> 的单元测试。</p>
+    <p>打包使用<b>JDK</b>自带的<b>jpackage</b>，并尝试了一下 GitHub Action
+        ，还真挺爽的，写了一个脚本，可以自动拉取代码和字体文件（因为字体文件太大就没有放到仓库里），并一次性完成多平台的打包。
+    </p>
+
+    <br>
+    <br>
+</div>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?f6627ae55edc4357088a565392e33fb4";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
 
 </body>
 
