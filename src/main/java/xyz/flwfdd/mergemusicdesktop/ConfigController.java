@@ -57,7 +57,7 @@ public class ConfigController {
 
         configBox.getChildren().add(buttonBox);
 
-        var fullResetButton = new MFXButton("我需要一块二向箔，情理用", new FontIcon("mdrmz-receipt_long:24"));
+        var fullResetButton = new MFXButton("我需要一块二向箔，清理用", new FontIcon("mdrmz-receipt_long:24"));
         fullResetButton.getStyleClass().add("custom-button");
         fullResetButton.setOnAction(e -> {
             if(ConfirmController.confirm("确定要清除所有设置及缓存数据吗？ MergeMusicDesktop 稍后将关闭，手动重启后即可重获新生。")){

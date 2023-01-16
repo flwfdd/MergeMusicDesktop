@@ -116,6 +116,8 @@ public abstract class Music {
         } else {
             src = music.src;
             img = music.img;
+            lrc = music.lrc;
+            translateLrc = music.translateLrc;
         }
     }
 
@@ -221,8 +223,8 @@ public abstract class Music {
     public void resetUnfoldPage() {
     }
 
-    public String getShare(){
-        return "http://mergemusic.cn/#/?mid="+mid;
+    public String getShare() {
+        return "http://mergemusic.cn/#/?mid=" + mid;
     }
 
     @Override
