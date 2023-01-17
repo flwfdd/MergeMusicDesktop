@@ -199,10 +199,12 @@ public class PlayTable extends MusicTable {
                     if (l != null) {
                         Set<String> set = new HashSet<>();
                         musicList.forEach(m -> set.add(m.getMid()));
+                        var ll=new ArrayList<Music>();
                         l.forEach(m -> {
-                            if (!set.contains(m.getMid())) musicList.add(m);
+                            if (!set.contains(m.getMid())) ll.add(m);
                             set.add(m.getMid());
                         });
+                        musicList.addAll(ll);
                         if (msg) Config.getInstance().setMsg("添加成功OvO");
                     } else if (msg) Config.getInstance().setMsg("添加失败Orz");
                     loading = false;

@@ -111,7 +111,7 @@ public abstract class Music {
             if (albumName == null) albumName = "";
             if (platform == Platform.BILI) src = Music.db.cacheMusicSrc(this);
             img = getLowImg();
-            db.updateMusic(this);
+            db.updateMusic(this,true);
             db.cacheMusic(this);
         } else {
             src = music.src;
@@ -124,10 +124,7 @@ public abstract class Music {
     abstract List<Music> custom_unfold(); //展开音乐列表
 
     public List<Music> unfold() {
-        List<Music> l = custom_unfold();
-        if (l == null) return null;
-        l.forEach(music -> db.updateMusic(music));
-        return l;
+        return custom_unfold();
     }
 
     public void downloadImg(Path path) {

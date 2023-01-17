@@ -127,30 +127,38 @@ public class DB {
         }
     }
 
-    public void updateMusic(Music music) {
+    public void updateMusic(Music music,boolean replaceLyrics) {
         // 更新数据库
         if (music.getType() != Music.Type.MUSIC) return;
-        String sql = """
+        String sql;
+        if(replaceLyrics){
+            sql = """
                 INSERT INTO music (mid,name,lrc,translate_lrc,album_name,artists,refresh_time)
                 VALUES (?,?,?,?,?,?,?)
                 ON CONFLICT DO UPDATE SET mid=?,name=?,lrc=?,translate_lrc=?,album_name=?,artists=?,refresh_time=?;
                 """;
+        } else {
+            sql = """
+                INSERT INTO music (mid,name,lrc,translate_lrc,album_name,artists,refresh_time)
+                VALUES (?,?,?,?,?,?,?)
+                ON CONFLICT DO UPDATE SET mid=?,name=?,album_name=?,artists=?,refresh_time=?;
+                """;
+        }
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, music.getMid());
-            statement.setString(2, music.getName());
-            statement.setString(3, music.getLrc());
-            statement.setString(4, music.getTranslateLrc());
-            statement.setString(5, music.getAlbumName());
-            statement.setString(6, list2String(music.getArtists()));
-            statement.setInt(7, (int) (System.currentTimeMillis() / 1000));
-            statement.setString(8, music.getMid());
-            statement.setString(9, music.getName());
-            statement.setString(10, music.getLrc());
-            statement.setString(11, music.getTranslateLrc());
-            statement.setString(12, music.getAlbumName());
-            statement.setString(13, list2String(music.getArtists()));
-            statement.setInt(14, (int) (System.currentTimeMillis() / 1000));
+            int c=1;
+            for(int i=0;i<2;i++){
+                statement.setString(c++, music.getMid());
+                statement.setString(c++, music.getName());
+                if(replaceLyrics || i==0){
+                    statement.setString(c++, music.getLrc());
+                    statement.setString(c++, music.getTranslateLrc());
+                }
+                statement.setString(c++, music.getAlbumName());
+                statement.setString(c++, list2String(music.getArtists()));
+                statement.setInt(c++, (int) (System.currentTimeMillis() / 1000));
+            }
+
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -199,15 +207,17 @@ public class DB {
     }
 
     public void setList(int id,List<Music> musicList){
+        List<Music> musicList1=musicList.stream().toList(); //创建副本防止高频更新出现问题
         String sql = "UPDATE list SET musics=? WHERE id=?;";
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, list2String(musicList.stream().map(Music::getMid).toList()));
+            statement.setString(1, list2String(musicList1.stream().map(Music::getMid).toList()));
             statement.setInt(2, id);
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        musicList1.forEach(music -> updateMusic(music,false));
     }
 
     public void deleteList(int id){
@@ -365,7 +375,7 @@ public class DB {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if (music != null) updateMusic(music);
+        if (music != null) updateMusic(music,true);
         return music;
     }
 

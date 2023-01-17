@@ -36,7 +36,7 @@
       <VBox.margin>
          <Insets />
       </VBox.margin>
-      <MFXTextField fx:id="newNameField" floatMode="DISABLED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefColumnCount="4" promptText="新收藏夹名" styleClass="custom-text-field" HBox.hgrow="ALWAYS">
+      <MFXTextField fx:id="newNameField" floatMode="DISABLED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefColumnCount="4" promptText="新收藏夹名" styleClass="custom-text-field" textLimit="124" HBox.hgrow="ALWAYS">
          <padding>
             <Insets left="11.0" right="11.0" />
          </padding>
