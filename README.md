@@ -8,7 +8,7 @@
 * 视觉效果佳且具有一定可玩性的音频可视化
 * 桌面跨平台支持（已测试Windows、Ubuntu）
 
-![软件截图](https://i.328888.xyz/2022/12/17/48nUk.jpeg)
+![软件截图](https://s2.loli.net/2023/09/05/PXMAoOtBlETpvzU.jpg)
 
 ## 概览
 
